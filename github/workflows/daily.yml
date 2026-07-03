@@ -1,0 +1,13 @@
+name: Daily Acebot Rebuild
+
+on:
+  schedule:
+    - cron: '0 14 * * *'   # 10:00 AM ET daily (14:00 UTC)
+  workflow_dispatch:       # lets you hit "Run workflow" manually
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Netlify build hook
+        run: curl -X POST -d {} https://api.netlify.com/build_hooks/6a4847cd2d4039cbf2b7ff5e
