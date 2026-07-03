@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ACEBOT TERMINAL v4.7.3</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --terminal-green: #2ecc71;
+        --terminal-dim: #27ae60;
+        --terminal-bg: #000000;
+        --terminal-glow: rgba(46, 204, 113, 0.4);
+        --crt-bg: #050505;
+    }
+    
+    * {
+        font-family: 'VT323', monospace, monospace;
+        cursor: default;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    body {
+        background: var(--terminal-bg);
+        color: var(--terminal-green);
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        text-rendering: optimizeLegibility;
+    }
+    
+    /* CRT Effects - RESTORED SCANLINES + DITHERING */
+    .crt {
+        position: relative;
+        background: var(--crt-bg);
+        text-shadow: 0 0 2px var(--terminal-glow);
+    }
+    
+    /* Scanlines Layer */
+    .crt::before {
+        content: "";
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: repeating-linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.15),
+            rgba(0, 0, 0, 0.15) 1px,
+            transparent 1px,
+            transparent 2px
+        );
+        opacity: 0.04;
+        z-index: 9998;
+        pointer-events: none;
+        animation: scanlineScroll 6s linear infinite;
+    }
+    
+    /* Dithering Dot Matrix Layer */
+    .crt::after {
+        content: "";
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-image: radial-gradient(
+            circle at center,
+            rgba(46, 204, 113, 0.8) 0.5px,
+            transparent 0.5px
+        );
+        background-size: 3px 3px;
+        opacity: 0.02;
+        z-index: 9997;
+        pointer-events: none;
+        mix-blend-mode: overlay;
+    }
+    
+    /* Flicker Layer */
+    .screen-flicker {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(10, 10, 10, 0.1);
+        opacity: 0;
+        z-index: 9999;
+        pointer-events: none;
+        animation: flicker 0.15s infinite;
+    }
+    
+    @keyframes scanlineScroll {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(4px); }
+    }
+    
+    @keyframes flicker {
+        0%, 100% { opacity: 0.05; }
+        5% { opacity: 0.1; }
+        10% { opacity: 0.03; }
+        15% { opacity: 0.15; }
+        20% { opacity: 0.04; }
+        25% { opacity: 0.12; }
+        30% { opacity: 0.06; }
+        35% { opacity: 0.08; }
+        40% { opacity: 0.04; }
+        45% { opacity: 0.13; }
+        50% { opacity: 0.05; }
+        55% { opacity: 0.02; }
+        60% { opacity: 0.09; }
+        65% { opacity: 0.14; }
+        70% { opacity: 0.05; }
+        75% { opacity: 0.07; }
+        80% { opacity: 0.11; }
+        85% { opacity: 0.04; }
+        90% { opacity: 0.08; }
+        95% { opacity: 0.06; }
+    }
+    
+    /* Ghosting Transition */
+    .ghosting-transition {
+        animation: ghostTrail 0.3s ease-out;
+    }
+    
+    @keyframes ghostTrail {
+        0% { 
+            filter: brightness(1.5);
+            text-shadow: 0 0 20px var(--terminal-glow), 2px 0 4px var(--terminal-green), -2px 0 4px var(--terminal-green);
+        }
+        50% {
+            filter: brightness(1.2);
+            text-shadow: 0 0 10px var(--terminal-glow), 1px 0 2px var(--terminal-green), -1px 0 2px var(--terminal-green);
+        }
+        100% { 
+            filter: brightness(1);
+            text-shadow: 0 0 2px var(--terminal-glow);
+        }
+    }
+    
+    /* Blinking cursor */
+    .cursor::after {
+        content: "█";
+        animation: blink 1s step-end infinite;
+    }
+    
+    @keyframes blink {
+        0%, 49% { opacity: 1; }
+        50%, 100% { opacity: 0; }
+    }
+    
+    /* Boot sequence */
+    .boot-line {
+        opacity: 0;
+        animation: fadeIn 0.1s forwards;
+    }
+    
+    @keyframes fadeIn {
+        to { opacity: 1; }
+    }
+    
+    /* Logo animation */
+    .logo-blink {
+        animation: logoBlink 0.3s steps(1) 3;
+    }
+    
+    @keyframes logoBlink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+    }
+    
+    /* Button styles */
+    .terminal-btn {
+        border: 2px solid var(--terminal-green);
+        background: transparent;
+        color: var(--terminal-green);
+        padding: 8px 16px;
+        text-transform: uppercase;
+        transition: all 0.2s;
+        text-shadow: 0 0 2px var(--terminal-glow);
+        cursor: pointer;
+        position: relative;
+    }
+    
+    .terminal-btn:hover:not(:disabled) {
+        background: var(--terminal-green);
+        color: var(--terminal-bg);
+        box-shadow: 0 0 8px var(--terminal-glow);
+        text-shadow: none;
+    }
+    
+    .terminal-btn:disabled {
+        border-color: var(--terminal-dim);
+        color: var(--terminal-dim);
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .terminal-btn:active:not(:disabled) {
+        transform: scale(0.98);
+    }
+    
+    /* Menu item */
+    .menu-item {
+        border-left: 3px solid transparent;
+        transition: all 0.2s;
+        cursor: pointer;
+        padding-left: 12px;
+    }
+    
+    .menu-item:hover {
+        border-left-color: var(--terminal-green);
+        background: rgba(46, 204, 113, 0.1);
+        padding-left: 16px;
+    }
+    
+    /* Modal */
+    .modal-overlay {
+        background: rgba(0, 0, 0, 0.95);
+    }
+    
+    .trashinator {
+        border: 3px solid var(--terminal-green);
+        box-shadow: 0 0 20px var(--terminal-glow), inset 0 0 20px rgba(46, 204, 113, 0.1);
+        animation: trashinatorShake 0.5s ease-in-out;
+    }
+    
+    @keyframes trashinatorShake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+    
+    /* Cooldown bar */
+    .cooldown-bar {
+        background: var(--terminal-green);
+        height: 4px;
+        transition: width 1s linear;
+        box-shadow: 0 0 4px var(--terminal-glow);
+    }
+    
+    /* Meme Easter Egg */
+    .meme-screen {
+        background: var(--terminal-bg);
+        background-image: 
+            repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(46, 204, 113, 0.03) 1px, rgba(46, 204, 113, 0.03) 2px),
+            url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><text x="10" y="50" font-family="monospace" font-size="12" fill="%232ecc71" opacity="0.1">erm idk</text></svg>');
+    }
+    
+    .meme-image {
+        position: absolute;
+        opacity: 0.3;
+        mix-blend-mode: screen;
+        pointer-events: none;
+        animation: memeFloat 20s infinite ease-in-out;
+    }
+    
+    @keyframes memeFloat {
+        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+        25% { transform: translate(20px, -20px) rotate(5deg); }
+        50% { transform: translate(-10px, 10px) rotate(-3deg); }
+        75% { transform: translate(15px, 15px) rotate(2deg); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 390px) {
+        .ascii-logo {
+            font-size: 7px;
+            line-height: 7px;
+        }
+        .meme-image {
+            width: 150px !important;
+        }
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: var(--terminal-bg);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: var(--terminal-dim);
+        border: 1px solid var(--terminal-green);
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--terminal-green);
+    }
+</style>
+</head>
+<body class="crt">
+    <div class="screen-flicker"></div>
+    
+    <!-- Audio Elements - No external dependencies -->
+    <audio id="buyAudio" preload="auto">
+        <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav">
+    </audio>
+    
+    <!-- Boot Screen -->
+    <div id="bootScreen" class="fixed inset-0 z-50 bg-black p-4 md:p-8 overflow-y-auto">
+        <div id="bootContent" class="text-lg md:text-xl"></div>
+    </div>
+
+    <!-- Main Terminal -->
+    <div id="mainTerminal" class="hidden h-screen flex flex-col">
+        <!-- Header -->
+        <div class="border-b-2 border-[var(--terminal-green)] px-4 py-2 flex justify-between items-center bg-black/80">
+            <div class="text-lg md:text-xl">
+                <span class="text-[var(--terminal-dim)]">[</span>ACEBOT TERMINAL v4.7.3<span class="text-[var(--terminal-dim)]">]</span>
+            </div>
+            <div class="text-sm md:text-lg">
+                <span id="systemTime"></span>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 overflow-hidden flex flex-col md:flex-row">
+            <!-- Sidebar Menu -->
+            <div id="sidebar" class="w-full md:w-64 border-r-0 md:border-r-2 border-b-2 md:border-b-0 border-[var(--terminal-green)] p-4 bg-black/60">
+                <div class="mb-6">
+                    <div class="text-xl mb-2 text-[var(--terminal-dim)]">SYSTEM://</div>
+                    <div class="text-sm text-[var(--terminal-dim)]">USER: GUEST</div>
+                    <div class="text-sm text-[var(--terminal-dim)]">ACCESS: FREE TIER</div>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="text-lg mb-3 text-[var(--terminal-dim)]">SELECT_LEAGUE:</div>
+                    <div class="menu-item py-2" data-league="MLB">
+                        <span class="text-xl">[1]</span> MLB_ANALYTICS
+                    </div>
+                    <div class="menu-item py-2" data-league="NBA">
+                        <span class="text-xl">[2]</span> NBA_ANALYTICS <span class="text-[var(--terminal-dim)]">[LOCKED]</span>
+                    </div>
+                    <div class="menu-item py-2" data-league="NFL">
+                        <span class="text-xl">[3]</span> NFL_ANALYTICS <span class="text-[var(--terminal-dim)]">[LOCKED]</span>
+                    </div>
+                    <div class="menu-item py-2 text-xs text-[var(--terminal-dim)]" data-league="MEME">
+                        <span class="text-xl">[9]</span> ???
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-[var(--terminal-dim)]">
+                    <div class="text-sm text-[var(--terminal-dim)] mb-2">DAILY_QUOTA:</div>
+                    <div class="text-2xl mb-1"><span id="pullsRemaining">10</span>/10</div>
+                    <div class="text-xs text-[var(--terminal-dim)]">PULLS_REMAINING</div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="text-xs text-[var(--terminal-dim)] mb-1">COOLDOWN_TIMER:</div>
+                    <div id="cooldownDisplay" class="text-lg">READY</div>
+                    <div class="w-full bg-[var(--terminal-bg)] border border-[var(--terminal-dim)] mt-1">
+                        <div id="cooldownBar" class="cooldown-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard -->
+            <div class="flex-1 flex flex-col overflow-hidden">
+                <!-- Dashboard Header -->
+                <div id="dashboardHeader" class="border-b border-[var(--terminal-dim)] px-4 py-3 flex justify-between items-center bg-black/40">
+                    <div class="text-xl">
+                        <span id="currentLeague">MLB</span>_DASHBOARD
+                    </div>
+                    <button id="pullButton" class="terminal-btn text-sm md:text-base">
+                        [ PULL AGAIN ]
+                    </button>
+                </div>
+
+                <!-- Dashboard Content -->
+                <div id="dashboardContent" class="flex-1 overflow-auto p-4">
+                    <div id="mlbDashboard" class="h-full">
+                        <div class="text-center py-8">
+                            <div class="text-2xl mb-4">INITIALIZING MLB MODULE...</div>
+                            <div class="text-lg text-[var(--terminal-dim)] mb-8">LOADING_ACEBOT_ENGINE</div>
+                            <div class="border-2 border-[var(--terminal-green)] p-8 max-w-4xl mx-auto">
+                                <div class="text-left space-y-2">
+                                    <div>> SYSTEM: ACEBOT MLB ANALYTICS v2.1</div>
+                                    <div>> STATUS: ONLINE</div>
+                                    <div>> DATA_FEED: LIVE</div>
+                                    <div>> LAST_UPDATE: <span id="lastUpdate"></span></div>
+                                    <div class="pt-4 border-t border-[var(--terminal-dim)] mt-4">
+                                        <div class="mb-2">TODAY'S TOP PLAYS:</div>
+                                        <div id="playsData" class="space-y-1 text-sm"></div>
+                                    </div>
+                                    <div class="pt-4 text-[var(--terminal-dim)]">
+                                        <div>[ DASHBOARD HTML WOULD BE EMBEDDED HERE ]</div>
+                                        <div>REPLACE THIS DIV WITH: iframe src="container:///mnt/data/dashboard.html"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Meme Easter Egg Screen -->
+                    <div id="memeScreen" class="hidden h-full meme-screen relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center z-10">
+                            <div class="text-center">
+                                <div class="text-6xl md:text-8xl mb-4 opacity-50">erm idk</div>
+                                <div class="text-2xl md:text-4xl opacity-30 mb-8">¯\_(ツ)_/¯</div>
+                                <div class="text-sm text-[var(--terminal-dim)]">PRESS [ESC] TO RETURN</div>
+                            </div>
+                        </div>
+                        <!-- Overlapping meme elements -->
+                        <div class="meme-image" style="top: 10%; left: 5%; font-size: 40px; transform: rotate(-15deg);">🤔</div>
+                        <div class="meme-image" style="top: 60%; left: 70%; font-size: 50px; transform: rotate(20deg);">💀</div>
+                        <div class="meme-image" style="top: 30%; left: 60%; font-size: 35px; transform: rotate(-5deg);">📉</div>
+                        <div class="meme-image" style="top: 70%; left: 10%; font-size: 45px; transform: rotate(10deg);">???</div>
+                        <div class="meme-image" style="top: 40%; left: 30%; font-size: 30px; transform: rotate(25deg); animation-delay: -5s;">idk</div>
+                        <div class="meme-image" style="top: 20%; left: 80%; font-size: 40px; transform: rotate(-10deg); animation-delay: -10s;">bro</div>
+                        <div class="meme-image" style="top: 80%; left: 40%; font-size: 35px; transform: rotate(15deg); animation-delay: -15s;">erm</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="border-t-2 border-[var(--terminal-green)] px-4 py-2 flex justify-between items-center text-sm bg-black/80">
+            <div>[F1]HELP [F2]REFRESH [ESC]EXIT</div>
+            <div class="text-[var(--terminal-dim)]">FREE_TIER_MODE</div>
+        </div>
+    </div>
+
+    <!-- Trashinator Modal -->
+    <div id="trashinatorModal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center p-4">
+        <div class="trashinator bg-black p-6 md:p-8 max-w-lg w-full">
+            <div class="text-center mb-6">
+                <pre class="text-xs md:text-sm leading-tight mb-4">
+ _____                _     _             _             
+|_   _| __ __ _ ___| |__ (_)_ __   __ _| |_ ___  _ __ 
+  | || '__/ _` / __| '_ \| | '_ \ / _` | __/ _ \| '__|
+  | || | | (_| \__ \ | | | | | | | (_| | || (_) | |   
+  |_||_|  \__,_|___/_| |_|_|_| |_|\__,_|\__\___/|_|   
+                </pre>
+                <div class="text-2xl mb-2">DAILY LIMIT REACHED!</div>
+                <div class="text-[var(--terminal-dim)] mb-6">YOU'VE USED ALL 10 FREE PULLS TODAY</div>
+            </div>
+            
+            <div class="border-t border-b border-[var(--terminal-dim)] py-4 mb-6">
+                <div class="text-lg mb-2">UPGRADE TO ACEBOT PRO:</div>
+                <div class="space-y-1 text-sm">
+                    <div>✓ UNLIMITED DAILY PULLS</div>
+                    <div>✓ NBA + NFL ACCESS</div>
+                    <div>✓ PRIORITY DATA FEED</div>
+                    <div>✓ ADVANCED ALGORITHMS</div>
+                    <div>✓ NO COOLDOWNS</div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-3">
+                <button id="upgradeBtn" class="terminal-btn flex-1">
+                    [ UPGRADE NOW - $29/MO ]
+                </button>
+                <button id="closeTrashinator" class="terminal-btn">
+                    [ CLOSE ]
+                </button>
+            </div>
+            
+            <div class="text-xs text-[var(--terminal-dim)] text-center mt-4">
+                QUOTA RESETS AT 00:00 EST
+            </div>
+        </div>
+    </div>
+
+<script>
+    // State Management
+    const STATE = {
+        booted: false,
+        currentLeague: 'MLB',
+        pullsRemaining: 10,
+        lastPullTime: 0,
+        cooldownActive: false,
+        cooldownSeconds: 600,
+        bootSequenceComplete: false,
+        memeMode: false
+    };
+
+    // Storage Keys
+    const STORAGE_KEY = 'acebot_terminal_state';
+    const STORAGE_DATE_KEY = 'acebot_last_reset';
+
+    // Load state from localStorage
+    function loadState() {
+        const today = new Date().toDateString();
+        const lastReset = localStorage.getItem(STORAGE_DATE_KEY);
+        
+        if (lastReset !== today) {
+            localStorage.setItem(STORAGE_DATE_KEY, today);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                pullsRemaining: 10,
+                lastPullTime: 0
+            }));
+        }
+        
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const data = JSON.parse(saved);
+            STATE.pullsRemaining = data.pullsRemaining ?? 10;
+            STATE.lastPullTime = data.lastPullTime ?? 0;
+        }
+    }
+
+    // Save state to localStorage
+    function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            pullsRemaining: STATE.pullsRemaining,
+            lastPullTime: STATE.lastPullTime
+        }));
+    }
+
+    // Apply ghosting effect on screen changes
+    function triggerGhosting() {
+        document.body.classList.add('ghosting-transition');
+        setTimeout(() => {
+            document.body.classList.remove('ghosting-transition');
+        }, 300);
+    }
+
+    // HURRY UP N BUY audio trigger
+    function playBuySound() {
+        const audio = document.getElementById('buyAudio');
+        // Synthetic "HURRY UP N BUY" using Web Audio API - no external files
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+            oscillator.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.2);
+            
+            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            
+            oscillator.start(audioCtx.currentTime);
+            oscillator.stop(audioCtx.currentTime + 0.3);
+        } catch(e) {
+            console.log('Audio not supported');
+        }
+    }
+
+    // Boot Sequence
+    const bootLines = [
+        'ACEBOT TERMINAL v4.7.3 (c) 2024 ACE ANALYTICS',
+        'INITIALIZING BOOT SEQUENCE...',
+        'CHECKING SYSTEM INTEGRITY... [OK]',
+        'LOADING KERNEL MODULES... [OK]',
+        'MOUNTING DATA DRIVES... [OK]',
+        'ESTABLISHING SECURE CONNECTION... [OK]',
+        'SYNCING WITH ACEBOT SERVERS... [OK]',
+        'LOADING USER PROFILE... [GUEST]',
+        'ALLOCATING MEMORY... [64MB]',
+        'STARTING ANALYTICS ENGINE... [OK]',
+        'VERIFYING SUBSCRIPTION... [FREE_TIER]',
+        'APPLYING CRT FILTERS... [OK]',
+        'FINALIZING BOOT SEQUENCE...',
+        '',
+        'WELCOME TO ACEBOT TERMINAL',
+        'TYPE [HELP] FOR COMMANDS',
+        '',
+        'PRESS ANY KEY TO CONTINUE...'
+    ];
+
+    const asciiLogo = `
+ █████╗  ██████╗███████╗██████╗  ██████╗ ████████╗
+██╔══██╗██╔════╝██╔════╝██╔══██╗██╔═══██╗╚══██╔══╝
+███████║██║     █████╗  ██████╔╝██║   ██║   ██║   
+██╔══██║██║     ██╔══╝  ██╔══██╗██║   ██║   ██║   
+██║  ██║╚██████╗███████╗██████╔╝╚██████╔╝   ██║   
+╚═╝  ╚═╝ ╚═════╝╚══════╝╚═════╝  ╚═════╝    ╚═╝   
+          TERMINAL ANALYTICS SYSTEM v4.7.3
+    `;
+
+    async function runBootSequence() {
+        const bootContent = document.getElementById('bootContent');
+        let delay = 0;
+        
+        for (let i = 0; i < bootLines.length; i++) {
+            await new Promise(resolve => setTimeout(resolve, delay));
+            const line = document.createElement('div');
+            line.className = 'boot-line';
+            line.style.animationDelay = '0s';
+            line.textContent = bootLines[i];
+            bootContent.appendChild(line);
+            bootContent.parentElement.scrollTop = bootContent.parentElement.scrollHeight;
+            delay = i < 3 ? 300 : i < 11 ? 150 : 100;
+        }
+        
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const logoDiv = document.createElement('pre');
+        logoDiv.className = 'ascii-logo logo-blink text-sm md:text-base leading-tight my-4';
+        logoDiv.textContent = asciiLogo;
+        bootContent.appendChild(logoDiv);
+        
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        return new Promise(resolve => {
+            const handler = () => {
+                document.removeEventListener('keydown', handler);
+                document.removeEventListener('click', handler);
+                resolve();
+            };
+            document.addEventListener('keydown', handler);
+            document.addEventListener('click', handler);
+        });
+    }
+
+    async function bootComplete() {
+        triggerGhosting();
+        document.getElementById('bootScreen').classList.add('hidden');
+        document.getElementById('mainTerminal').classList.remove('hidden');
+        STATE.bootSequenceComplete = true;
+        updateUI();
+        updateCooldown();
+        loadMLBData();
+        startClock();
+    }
+
+    function startClock() {
+        const updateTime = () => {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: false });
+            const dateStr = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+            document.getElementById('systemTime').textContent = `${dateStr} ${timeStr}`;
+        };
+        updateTime();
+        setInterval(updateTime, 1000);
+    }
+
+    function updateUI() {
+        document.getElementById('pullsRemaining').textContent = STATE.pullsRemaining;
+        if (!STATE.memeMode) {
+            document.getElementById('currentLeague').textContent = STATE.currentLeague;
+        }
+        
+        const pullBtn = document.getElementById('pullButton');
+        if (STATE.pullsRemaining <= 0) {
+            pullBtn.disabled = true;
+            pullBtn.textContent = '[ LIMIT REACHED ]';
+        } else if (STATE.cooldownActive) {
+            pullBtn.disabled = true;
+        } else {
+            pullBtn.disabled = false;
+            pullBtn.textContent = '[ PULL AGAIN ]';
+        }
+    }
+
+    function updateCooldown() {
+        const now = Date.now();
+        const timeSinceLastPull = now - STATE.lastPullTime;
+        const cooldownMs = STATE.cooldownSeconds * 1000;
+        
+        if (timeSinceLastPull < cooldownMs && STATE.lastPullTime > 0) {
+            STATE.cooldownActive = true;
+            const remaining = Math.ceil((cooldownMs - timeSinceLastPull) / 1000);
+            const minutes = Math.floor(remaining / 60);
+            const seconds = remaining % 60;
+            document.getElementById('cooldownDisplay').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            const progress = ((cooldownMs - timeSinceLastPull) / cooldownMs) * 100;
+            document.getElementById('cooldownBar').style.width = `${progress}%`;
+            
+            setTimeout(updateCooldown, 1000);
+        } else {
+            STATE.cooldownActive = false;
+            document.getElementById('cooldownDisplay').textContent = 'READY';
+            document.getElementById('cooldownBar').style.width = '0%';
+            updateUI();
+        }
+    }
+
+    async function handlePull() {
+        if (STATE.pullsRemaining <= 0) {
+            showTrashinator();
+            return;
+        }
+        
+        if (STATE.cooldownActive) {
+            return;
+        }
+        
+        STATE.pullsRemaining--;
+        STATE.lastPullTime = Date.now();
+        saveState();
+        
+        const btn = document.getElementById('pullButton');
+        btn.textContent = '[ PROCESSING... ]';
+        btn.disabled = true;
+        
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        triggerGhosting();
+        loadMLBData();
+        updateUI();
+        updateCooldown();
+    }
+
+    function loadMLBData() {
+        const now = new Date().toLocaleString();
+        document.getElementById('lastUpdate').textContent = now;
+        
+        const plays = [
+            '> LAD @ ATL - OVER 8.5 [CONF: 87%]',
+            '> NYY @ BOS - NYY ML [CONF: 82%]',
+            '> HOU @ TEX - UNDER 9.0 [CONF: 79%]',
+            '> SD @ SF - SD +1.5 [CONF: 76%]',
+            '> NYM @ PHI - PHI ML [CONF: 74%]'
+        ];
+        
+        const playsDiv = document.getElementById('playsData');
+        playsDiv.innerHTML = '';
+        plays.forEach((play, i) => {
+            setTimeout(() => {
+                const div = document.createElement('div');
+                div.textContent = play;
+                div.style.opacity = '0';
+                div.style.animation = 'fadeIn 0.3s forwards';
+                playsDiv.appendChild(div);
+            }, i * 100);
+        });
+    }
+
+    function showTrashinator() {
+        playBuySound();
+        document.getElementById('trashinatorModal').classList.remove('hidden');
+    }
+
+    function hideTrashinator() {
+        triggerGhosting();
+        document.getElementById('trashinatorModal').classList.add('hidden');
+    }
+
+    function showMemeScreen() {
+        triggerGhosting();
+        STATE.memeMode = true;
+        document.getElementById('mlbDashboard').classList.add('hidden');
+        document.getElementById('memeScreen').classList.remove('hidden');
+        document.getElementById('currentLeague').textContent = '???';
+    }
+
+    function hideMemeScreen() {
+        triggerGhosting();
+        STATE.memeMode = false;
+        document.getElementById('memeScreen').classList.add('hidden');
+        document.getElementById('mlbDashboard').classList.remove('hidden');
+        document.getElementById('currentLeague').textContent = STATE.currentLeague;
+    }
+
+    function handleMenuClick(e) {
+        const item = e.target.closest('.menu-item');
+        if (!item) return;
+        
+        const league = item.dataset.league;
+        
+        if (league === 'MEME') {
+            showMemeScreen();
+            return;
+        }
+        
+        if (league === 'NBA' || league === 'NFL') {
+            alert('[ACCESS DENIED] - UPGRADE TO PRO FOR ' + league + ' ACCESS');
+            return;
+        }
+        
+        triggerGhosting();
+        STATE.currentLeague = league;
+        updateUI();
+    }
+
+    // Event Listeners
+    document.getElementById('pullButton').addEventListener('click', handlePull);
+    document.getElementById('closeTrashinator').addEventListener('click', hideTrashinator);
+    document.getElementById('upgradeBtn').addEventListener('click', () => {
+        playBuySound();
+        alert('REDIRECT TO CHECKOUT... [DEMO]');
+    });
+    document.getElementById('sidebar').addEventListener('click', handleMenuClick);
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (STATE.memeMode) {
+                hideMemeScreen();
+            } else {
+                hideTrashinator();
+            }
+        }
+    });
+
+    // Initialize
+    async function init() {
+        loadState();
+        await runBootSequence();
+        await bootComplete();
+    }
+
+    init();
+</script>
+<script>(function(){document.addEventListener("click",function(e){var a=e.target.closest("[data-product-id]");if(!a)return;e.preventDefault();var pid=a.getAttribute("data-product-id");if(pid)parent.postMessage({type:"ecto-artifact-link-click",productId:pid},"*")})})();</script>
+<script>(function(){document.addEventListener("click",function(e){var a=e.target.closest("[data-product-id]");if(!a)return;e.preventDefault();var pid=a.getAttribute("data-product-id");if(pid)parent.postMessage({type:"ecto-artifact-link-click",productId:pid},"*")})})();</script>
+</body>
+</html>
