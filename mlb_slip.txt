@@ -1,0 +1,15 @@
+📋 BET SLIP
+========================================
+STL @ CHC | ML: CHC -131 | K Proj: 4.0K/4.9K | K Props: Pallante 3.5 | O/U: —
+PIT @ WSH | ML: WSH -143 | K Proj: 5.2K/5.8K | K Props: Keller 3.5; Griffin 6.5 | O/U: Over 9.5 (edge 11.3%)
+MIN @ NYY | ML: NYY -186 | K Proj: 2.8K/5.8K | K Props: Paredes 3.5; Cole 5.5 | O/U: Under 9.5 (edge 11.3%)
+BAL @ CIN | ML: BAL -122 | K Proj: 5.2K/5.6K | K Props: Rogers 5.5; Singer 4.5 | O/U: —
+CHW @ CLE | ML: CLE -143 | K Proj: 5.0K/7.0K | K Props: Kay 5.5; Williams 5.5 | O/U: Over 8.5 (edge 20.5%)
+NYM @ ATL | ML: ATL -119 | K Proj: 6.6K/5.0K | K Props: Scott 4.5; Holmes 4.5 | O/U: Under 9.5 (edge 32.2%)
+SFG @ COL | ML: SFG -156 | K Proj: 6.1K/4.0K | K Props: Feltner 3.5 | O/U: —
+TBR @ HOU | ML: TBR -110 | K Proj: 3.2K/6.3K | K Props: Martinez 4.5; Arrighetti 5.5 | O/U: Over 8.5 (edge 19.8%)
+BOS @ LAA | ML: LAA -112 | K Proj: 4.5K/7.7K | K Props: Bennett 4.5; Detmers 7.5 | O/U: Under 8.5 (edge 10.5%)
+MIA @ OAK | ML: OAK -131 | K Proj: 4.9K/8.0K | K Props: Phillips 4.5; Perkins 5.5 | O/U: —
+MIL @ ARI | ML: MIL -168 | K Proj: 6.9K/3.6K | K Props: Harrison 5.5; Cabrera 3.5 | O/U: Over 8.5 (edge 7.8%)
+SDP @ LAD | ML: LAD -252 | K Proj: 5.3K/6.1K | K Props: King 4.5; Ohtani 6.5 | O/U: —
+TOR @ SEA | ML: TOR -131 | K Proj: 8.1K/6.0K | K Props: Cease 7.5; Castillo 4.5 | O/U: Under 7.5 (edge 18.7%)
