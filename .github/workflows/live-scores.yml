@@ -1,9 +1,9 @@
 name: Update Live MLB Scores
 
 on:
-  # Fixed: GitHub uses UTC, '22-23,0-6' = 6pm-2am ET
   schedule:
-    - cron: '*/15 22-23,0-6 * * *'
+    - cron: '*/15 14-23 * * *'   # 10am-7pm ET
+    - cron: '*/15 0-7 * * *'     # 8pm-3am ET
   workflow_dispatch:
 
 jobs:
