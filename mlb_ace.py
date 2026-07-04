@@ -1726,7 +1726,7 @@ def _confidence_score(edge, n_books, sim_sd, proj_total):
     stability_pts = min(30.0, max(0.0, 30.0 - (cv - 0.30) * 100.0))
     return round(min(100.0, edge_pts + books_pts + stability_pts), 1)
 
-def evaluate_total(g, league_rpg, cfg, seed=None):
+def evaluate_total(g, league_rpg, cfg, seed=None, day=None):
     env = weather_factor(g["temp"]) * (g["wind_factor"] or 1.0)
 
     # ── Lineup quality adjustment ─────────────────────────────────────────────
@@ -1954,22 +1954,49 @@ def evaluate_total(g, league_rpg, cfg, seed=None):
         return res
 
     thr = cfg["edge_threshold"]
+    matchup = "%s@%s" % (_abbr(g["away_name"]), _abbr(g["home_name"]))
+    line_history = _load_line_history()
+    line_move, odds_move, is_opening = _track_line_movement(
+        day or date.today().strftime("%Y-%m-%d"),
+        matchup, "Over/Under", g["line"],
+        g.get("over_odds"), line_history)
+    _save_line_history(line_history)
+    move_note = None
+
     if edge_over >= thr and edge_over >= edge_under:
         best_odds = g.get("best_over") or g["over_odds"]
+        move_note = _line_movement_note("Over", line_move)
+        stake = min(cfg["max_stake_pct"],
+                    cfg["kelly_fraction"] * kelly_fraction(p_over, best_odds))
+        # Halve stake when market has moved TOWARD the pick (sharp money
+        # already agrees -- edge may already be priced in)
+        if move_note and "market agrees" in move_note:
+            stake *= 0.5
+        reason = _reason(g, "Over")
+        if move_note:
+            reason = reason + " | " + move_note
         res.update({"pick": "Over", "edge": edge_over, "confidence": p_over,
                     "odds": best_odds, "best_book": g.get("best_over_book", ""),
-                    "stake_pct": min(cfg["max_stake_pct"],
-                                     cfg["kelly_fraction"] * kelly_fraction(p_over, best_odds)),
-                    "reason": _reason(g, "Over"),
+                    "stake_pct": stake,
+                    "reason": reason,
+                    "line_move": line_move,
                     "confidence_score": _confidence_score(
                         edge_over, g.get("n_books", 1), sim["sd"], sim["proj_total"])})
     elif edge_under >= thr:
         best_odds = g.get("best_under") or g["under_odds"]
+        move_note = _line_movement_note("Under", line_move)
+        stake = min(cfg["max_stake_pct"],
+                    cfg["kelly_fraction"] * kelly_fraction(p_under, best_odds))
+        if move_note and "market agrees" in move_note:
+            stake *= 0.5
+        reason = _reason(g, "Under")
+        if move_note:
+            reason = reason + " | " + move_note
         res.update({"pick": "Under", "edge": edge_under, "confidence": p_under,
                     "odds": best_odds, "best_book": g.get("best_under_book", ""),
-                    "stake_pct": min(cfg["max_stake_pct"],
-                                     cfg["kelly_fraction"] * kelly_fraction(p_under, best_odds)),
-                    "reason": _reason(g, "Under"),
+                    "stake_pct": stake,
+                    "reason": reason,
+                    "line_move": line_move,
                     "confidence_score": _confidence_score(
                         edge_under, g.get("n_books", 1), sim["sd"], sim["proj_total"])})
     else:
@@ -2568,6 +2595,13 @@ def main(argv):
                     help="skip auto-grading previously ungraded picks")
     args = ap.parse_args(argv)
 
+    # Normalize "today" (case-insensitive) to an actual YYYY-MM-DD string.
+    # Without this, any caller that passes --date today (e.g. a Netlify build
+    # script, a cron job, a Shortcut) crashes with a ValueError on the
+    # int(args.date.split("-")[0]) line below, since "today" has no "-" chars.
+    if args.date.lower() == "today":
+        args.date = date.today().strftime("%Y-%m-%d")
+
     cfg = load_config()
     if args.sims:
         cfg["n_sims"] = args.sims
@@ -2577,7 +2611,7 @@ def main(argv):
 
     games_eval = []
     for g in games_raw:
-        r = evaluate_total(g, league_rpg, cfg)
+        r = evaluate_total(g, league_rpg, cfg, day=args.date)
         games_eval.append((g, r))
 
     json_data = _build_dashboard_json(games_eval, args.date)
@@ -2599,4 +2633,3 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv[1:])
-
