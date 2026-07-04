@@ -1,35 +1,70 @@
 name: Update Live MLB Scores
 
 on:
+  # Fixed: GitHub uses UTC, '22-23,0-6' = 6pm-2am ET
   schedule:
-    - cron: '*/15 22-6 * * *'  # Every 15min from 6pm-2am ET during games
-  workflow_dispatch:  # Lets you run manually
+    - cron: '*/15 22-23,0-6 * * *'
+  workflow_dispatch:
 
 jobs:
   update:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # This lets the Action push commits
-      
+      contents: write
+
     steps:
-      - name: Checkout repo
+      - name: Checkout repo (full history)
         uses: actions/checkout@v4
-        
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          
+
       - name: Install dependencies
-        run: pip install -r requirements.txt
-        
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pytz
+
       - name: Run live scores script
-        run: python live_mlb_scores.py
-        
-      - name: Commit and push if changed
+        id: run-script
+        run: |
+          set -o pipefail
+          python live_mlb_scores.py 2>&1 | tee live_mlb_run.log
+          echo "SCRIPT_EXIT=$?" >> $GITHUB_OUTPUT
+          
+          if [ -f mlb_live.json ]; then
+            echo "--- mlb_live.json exists ---"
+            ls -lh mlb_live.json
+            python -c "import json; d=json.load(open('mlb_live.json')); print(f\"Games: {d['game_count']}, Updated: {d['last_updated']}\")"
+          else
+            echo "ERROR: mlb_live.json NOT created"
+            exit 1
+          fi
+
+      - name: Commit and push
+        env:
+          PAT: ${{ secrets.GITHUB_PAT }}
         run: |
           git config user.name "Live Scores Bot"
           git config user.email "actions@github.com"
           git add mlb_live.json
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update live scores $(date -u +'%H:%M UTC')"
-          git push
+          
+          if git diff --staged --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          
+          git commit -m "Update live scores $(date -u +'%H:%M UTC')"
+          
+          if [ -n "$PAT" ]; then
+            git remote set-url origin https://$PAT@github.com/${{ github.repository }}.git
+          fi
+          
+          git push origin HEAD:main || {
+            echo "PUSH FAILED - check branch protection"
+            exit 1
+          }
