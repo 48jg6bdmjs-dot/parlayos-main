@@ -7,3 +7,5 @@
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
+/mlb_live.json
+  Cache-Control: no-cache, no-store, must-revalidate
