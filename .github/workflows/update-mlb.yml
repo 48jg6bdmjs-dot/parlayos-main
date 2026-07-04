@@ -1,0 +1,38 @@
+name: Update MLB Data Daily
+
+on:
+  schedule:
+    # Runs at 11:00 AM ET = 15:00 UTC during season
+    - cron: '0 15 * * *'
+    # Runs at 4:00 PM ET = 20:00 UTC for late line moves  
+    - cron: '0 20 * * *'
+  workflow_dispatch: # Lets you run it manually from GitHub mobile
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          
+      - name: Run ACE Engine
+        run: python mlb_ace.py
+        
+      - name: Commit updated data
+        run: |
+          git config user.name "ACEBOT Auto-Update"
+          git config user.email "actions@github.com"
+          git add mlb_data.json mlb_line_history.json picks_log.csv mlb_slip.txt
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update MLB data $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
