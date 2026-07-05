@@ -1283,19 +1283,15 @@
                 <span class="title-bar-text">MLB DASHBOARD</span>
             </div>
             <div class="ticker-wrap">
-                <div class="ticker">
-                    <span>NYY 5 - BOS 3 FINAL | LAD 2 - SF 4 7TH | CHC 0 - STL 1 3RD | ATL 7 - NYM 6 FINAL | HOU 3 - TEX 3 9TH | </span>
-                    <span>NYY 5 - BOS 3 FINAL | LAD 2 - SF 4 7TH | CHC 0 - STL 1 3RD | ATL 7 - NYM 6 FINAL | HOU 3 - TEX 3 9TH | </span>
+                <div class="ticker" id="ticker">
+                    <span></span>
+                    <span></span>
                 </div>
             </div>
             <div class="header">MLB DASHBOARD</div>
-            <div class="mlb-content" id="games-container">
-                <div id="games-list">
-                    <div class="game-box" id="games-loading-msg">
-                        <span>LOADING LIVE DATA...</span><span class="game-status">--:--</span>
-                    </div>
-                </div>
-                <button class="refresh-btn" id="refresh-games">[ REFRESH DATA ]</button>
+            <div class="mlb-content">
+                <div id="games-container" style="display:flex;flex-direction:column;gap:12px;"></div>
+                <button id="refresh-games" class="menu-btn">[ REFRESH DATA ]</button>
                 <button class="refresh-btn" data-target="picks-screen" style="border-color:#FFD700;color:#FFD700;margin-top:4px;">[ VIEW TODAY'S 6 PICKS ]</button>
             </div>
             <div class="footer">
@@ -1342,13 +1338,7 @@
                     <thead>
                         <tr><th>TEAM</th><th>W</th><th>L</th><th>PCT</th><th>GB</th></tr>
                     </thead>
-                    <tbody>
-                        <tr><td>ATL</td><td>101</td><td>61</td><td>.623</td><td>-</td></tr>
-                        <tr><td>PHI</td><td>90</td><td>72</td><td>.556</td><td>11.0</td></tr>
-                        <tr><td>MIA</td><td>84</td><td>78</td><td>.519</td><td>17.0</td></tr>
-                        <tr><td>NYM</td><td>74</td><td>88</td><td>.457</td><td>27.0</td></tr>
-                        <tr><td>WSH</td><td>71</td><td>91</td><td>.438</td><td>30.0</td></tr>
-                    </tbody>
+                    <tbody id="standings-body"></tbody>
                 </table>
             </div>
             <div class="footer">
@@ -1460,14 +1450,7 @@
     }
 
     // ── PICKS DATA ──
-    const picksData = [
-        { team:'NYY @ BOS', pick:'NYY -1.5',  rating:'A+', desc:'YANKEES PITCHING ADVANTAGE. BULLPEN RESTED.' },
-        { team:'LAD @ SF',  pick:'UNDER 8.5', rating:'A+', desc:'TWO ACES ON MOUND. WIND BLOWING IN.' },
-        { team:'CHC @ STL', pick:'CHC ML',    rating:'A',  desc:'CUBS HOT STREAK. CARDINALS SLUMPING.' },
-        { team:'ATL @ NYM', pick:'ATL -1.5',  rating:'A+', desc:'BRAVES DOMINANT AT HOME. METS STRUGGLING.' },
-        { team:'HOU @ TEX', pick:'OVER 9.0',  rating:'A',  desc:'BOTH LINEUPS HOT. WEAK BULLPENS.' },
-        { team:'TB  @ TOR', pick:'TB ML',     rating:'A+', desc:'RAYS PITCHING DEPTH SUPERIOR.' }
-    ];
+    const picksData = [];
 
     // ── SCREEN NAV ──
     function showScreen(id) {
@@ -1802,87 +1785,6 @@
             showOverlay('ACCESS DENIED — UPGRADE TO PRO');
         });
 
-        // ── ACEBOT LIVE DATA LOADER ─────────────────────────────────────────
-        async function loadLiveData() {
-            const btn = document.getElementById('refresh-games');
-            if (btn) { btn.textContent = '[ LOADING... ]'; btn.disabled = true; }
-
-            try {
-                // 1. Fetch both files in parallel
-                const GITHUB_RAW = 'https://raw.githubusercontent.com/48jg6bdmjs-dot/acebot-terminal/main/';
-                const [liveRes, picksRes] = await Promise.all([
-                    fetch(GITHUB_RAW + 'mlb_live.json?v=' + Date.now(), { cache: 'no-store' }),
-                    fetch(GITHUB_RAW + 'mlb_data.json?v=' + Date.now(), { cache: 'no-store' })
-                ]);
-
-                if (!liveRes.ok) throw new Error('mlb_live.json not found: ' + liveRes.status);
-
-                const liveData = await liveRes.json();
-                const picksData = picksRes.ok ? await picksRes.json() : { games: [] };
-
-                // 2. Build a quick lookup for picks by matchup
-                const picksMap = new Map(
-                    (picksData.games || []).map(p => [p.matchup, p])
-                );
-
-                // 3. Render each game — pregame shows time + ACE pick, live shows score
-                const container = document.getElementById('games-list');
-                if (container) {
-                    container.innerHTML = (liveData.games || []).slice(0, 10).map((g, i) => {
-                        const status = (g.status || g.display || '').toUpperCase();
-                        const isPregame = status.includes('PM') || status.includes('AM') ||
-                                          status.includes('SCHEDULED') || status.includes('PREGAME') ||
-                                          status.includes('TODAY') || status === '';
-                        const pick = picksMap.get(g.matchup);
-                        let rightSide;
-                        if (isPregame) {
-                            const time = g.display || status || 'TBD';
-                            const pickText = pick?.pick ? ` • ${pick.pick} ${pick.edge_pct ? '(' + pick.edge_pct + '%)' : ''}` : '';
-                            rightSide = `${time}${pickText}`;
-                        } else {
-                            rightSide = g.display || status;
-                        }
-                        return `<div class="game-box">
-                            <span>[${i + 1}] ${g.matchup}</span>
-                            <span class="game-status">${rightSide}</span>
-                        </div>`;
-                    }).join('');
-                }
-
-                // 4. Update scrolling ticker
-                if (liveData.games && liveData.games.length) {
-                    const tickerText = liveData.games.map(g =>
-                        `${g.matchup || (g.away + ' @ ' + g.home)}: ${g.display || g.status}`
-                    ).join(' | ') + ' | ';
-                    document.querySelectorAll('.ticker span').forEach(s => { s.textContent = tickerText; });
-                }
-
-                // 5. Update last-sync timestamp
-                const ts = document.getElementById('last-updated');
-                if (ts && liveData.last_updated) ts.textContent = new Date(liveData.last_updated).toLocaleTimeString();
-
-                console.log(`✓ Loaded ${(liveData.games || []).length} games, merged with ${picksMap.size} picks`);
-                showOverlay('DATA REFRESHED', 800);
-                beep(850, 0.06);
-
-            } catch (err) {
-                console.error('Live fetch failed:', err);
-                const container = document.getElementById('games-list');
-                if (container) {
-                    container.innerHTML =
-                        `<div class="game-box" style="border-color:rgba(255,95,87,0.5);">
-                            <span>NO LIVE DATA</span>
-                            <span class="game-status" style="color:#FF5F57;">CHECK CONNECTION</span>
-                        </div>`;
-                }
-            } finally {
-                if (btn) { btn.textContent = '[ REFRESH DATA ]'; btn.disabled = false; }
-            }
-        }
-
-        // Run on load + every 60s + hook up refresh button
-        loadLiveData();
-        setInterval(loadLiveData, 60000);
         document.getElementById('refresh-games').addEventListener('click', () => loadLiveData());
 
         // Pixel cat — 9 taps trigger video
@@ -1967,6 +1869,39 @@
         });
 
         // Run verbose boot
+        async function loadLiveData(){
+  const btn=document.getElementById('refresh-games');
+  const container=document.getElementById('games-container');
+  if(!container)return;
+  if(btn){btn.textContent='[ LOADING... ]';btn.disabled=true;}
+  try{
+    const LIVE_URL='https://raw.githubusercontent.com/48jg6bdmjs-dot/acebot-terminal/main/mlb_live.json';
+    const PICKS_URL='https://raw.githubusercontent.com/48jg6bdmjs-dot/acebot-terminal/main/mlb_data.json';
+    const [liveRes,picksRes]=await Promise.all([
+      fetch(LIVE_URL+'?v='+Date.now(),{cache:'no-store'}),
+      fetch(PICKS_URL+'?v='+Date.now(),{cache:'no-store'})
+    ]);
+    const liveData=await liveRes.json();
+    const picksData=picksRes.ok?await picksRes.json():{games:[]};
+    const picksMap=new Map((picksData.games||[]).map(p=>[p.matchup,p]));
+
+    container.innerHTML=(liveData.games||[]).slice(0,10).map((g,i)=>{
+      const status=(g.display||g.status||'').toUpperCase();
+      const isPregame=status.includes('PM')||status.includes('AM')||status.includes('SCHEDULED')||status.includes('PREGAME')||status===''||status.includes('TODAY');
+      const pick=picksMap.get(g.matchup);
+      let rightText=isPregame?`${g.display||status}${pick?.pick?' • '+pick.pick:''}`:(g.display||status);
+      return `<div class="game-box"><span>[${i+1}] ${g.matchup}</span><span class="game-status">${rightText}</span></div>`;
+    }).join('');
+
+    if(liveData.games&&liveData.games.length){
+      const tickerText=liveData.games.map(g=>`${g.matchup}: ${g.display||g.status}`).join(' | ')+' | ';
+      document.querySelectorAll('#ticker span').forEach(s=>{s.textContent=tickerText;});
+    }
+  }catch(err){console.error('loadLiveData failed',err);}
+  finally{if(btn){btn.textContent='[ REFRESH DATA ]';btn.disabled=false;}}
+}
+loadLiveData();
+setInterval(loadLiveData,60000);
         runBoot();
     }
 
