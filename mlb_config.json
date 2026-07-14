@@ -1,0 +1,10 @@
+{
+  "edge_threshold": 0.055,
+  "min_total_line": 6.5,
+  "max_total_line": 13.0,
+  "n_sims": 100000,
+  "kelly_fraction": 0.25,
+  "max_stake_pct": 0.05,
+  "_basis": "137 graded totals, ROI +12.3% (auto-tuned 2026-07-13)",
+  "_updated": "2026-07-13"
+}

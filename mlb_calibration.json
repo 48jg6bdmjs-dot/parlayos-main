@@ -1,0 +1,9 @@
+{
+  "fitted_on": "2026-07-12",
+  "n": 289,
+  "mean_implied": 0.5298804706121629,
+  "actual_win_rate": 0.47058823529411764,
+  "platt_a": 0.8915169504526704,
+  "platt_b": -0.23153708515364585,
+  "note": "Applies to market_prob only. Recompute as more graded picks accumulate \u2014 this is a snapshot fit, not a permanent constant."
+}
