@@ -1,7 +1,7 @@
 name: Daily ParlayOS Update
 on:
   schedule:
-    - cron: '0 9 * * *'    # Runs daily at 9:00 UTC
+    - cron: '12 0 * * *'    # Runs daily at 12:00 UTC
   workflow_dispatch:        # Allows manual trigger
 
 jobs:
