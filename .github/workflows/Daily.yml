@@ -1,9 +1,9 @@
 name: Daily ParlayOS Update
 on:
   schedule:
-    - cron: '0 0 * * *'    # Runs daily at midnight UTC
-    - cron: '0 12 * * *'   # Runs daily at noon UTC
-  workflow_dispatch:        # Allows manual trigger
+    - cron: '0 0 * * *'    # Runs daily at 00:00 UTC (midnight)
+    - cron: '0 12 * * *'   # Runs daily at 12:00 UTC (noon)
+  workflow_dispatch:        # Allows manual trigger from GitHub UI
 
 jobs:
   run-script:
@@ -18,7 +18,7 @@ jobs:
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
-          git config.user.email "github-actions[bot]"
-          git add config.json picks_logs/
-          git diff --staged --quiet || git commit -m "auto"
+          git config user.email "github-actions[bot]"
+          git add config.json picks_logs/ parlayos.html
+          git diff --staged --quiet || git commit -m "auto-update: picks, config, and live HTML data"
           git push
