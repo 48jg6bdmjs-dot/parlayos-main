@@ -2,7 +2,7 @@ name: Daily ParlayOS Update
 on:
   schedule:
     - cron: '0 9 * * *'    # Runs daily at 9:00 UTC
-  workflow_dispatch:        # Allows manual trigger (FIXED: moved up)
+  workflow_dispatch:        # Allows manual trigger
 
 jobs:
   run-script:
@@ -10,12 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
-        with:               # FIXED: indented under the 'uses' line
+        with:
           python-version: '3.10'
       - run: pip install -r requirements.txt
       - run: python mlb_ace.py && python mlb_backtest.py
       - name: Commit and push changes
-        run: |              # FIXED: 'run' is properly indented under the step name
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]"
           git add config.json picks_logs/
