@@ -16,8 +16,8 @@ jobs:
       - run: python mlb_ace.py && python mlb_backtest.py
       - name: Commit and push changes
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]"
-          git add config.json picks_logs/
-          git diff --staged --quiet || git commit -m "auto"
+          git config user.name "github-ace"
+          git config.user.email "github-ace@example.com"
+          git add config.json picks_logs/ parlayos.html
+          git diff --staged --quiet || git commit -m "auto-update: picks, config, and live HTML data"
           git push
