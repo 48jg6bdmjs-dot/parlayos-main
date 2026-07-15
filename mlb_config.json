@@ -5,6 +5,6 @@
   "n_sims": 100000,
   "kelly_fraction": 0.25,
   "max_stake_pct": 0.05,
-  "_basis": "137 graded totals, ROI +12.3% (auto-tuned 2026-07-13)",
-  "_updated": "2026-07-13"
+  "_basis": "137 graded totals, ROI +12.3% (auto-tuned 2026-07-15)",
+  "_updated": "2026-07-15"
 }
