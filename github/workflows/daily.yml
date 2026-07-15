@@ -18,6 +18,6 @@ jobs:
         run: |
           git config user.name "github-ace"
           git config.user.email "github-ace@example.com"
-          git add mlb_config.json picks_logs/ parlayos.html
+          git add mlb_config.json picks_logs.csv/ parlayos.html
           git diff --staged --quiet || git commit -m "auto-update: picks, config, and live HTML data"
           git push
