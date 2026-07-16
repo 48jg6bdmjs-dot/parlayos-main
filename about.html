@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ParlayOS — About &amp; How the Odds Actually Work</title>
+<style>
+  :root {
+    --ink: #1c2230; --muted: #5b6a84; --bg: #f4f6fb; --bg-2: #e7ebf5;
+    --accent: #5c7cff; --danger: #ff2f4a; --good: #22c55e; --radius: 18px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    color: var(--ink); line-height: 1.6; padding: 24px 16px 80px;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700;
+    color: var(--muted); text-decoration: none; margin-bottom: 24px;
+  }
+  h1 { font-size: 28px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 10px; }
+  .lede { font-size: 15.5px; color: var(--muted); margin-bottom: 28px; max-width: 60ch; }
+  .card {
+    background: rgba(255,255,255,0.78); border: 1px solid rgba(255,255,255,0.9);
+    border-radius: var(--radius); padding: 22px; margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(23,37,73,0.06);
+  }
+  h2 { font-size: 19px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 6px; }
+  .sub { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+  p { font-size: 14.5px; color: #34405a; margin: 0 0 12px; }
+
+  /* Diagram: bar chart, pure CSS, real computed numbers */
+  .chart { display: flex; flex-direction: column; gap: 10px; margin: 18px 0; }
+  .chart-row { display: grid; grid-template-columns: 52px 1fr 74px; align-items: center; gap: 10px; }
+  .chart-label { font-family: monospace; font-size: 12px; font-weight: 700; color: var(--muted); text-align: right; }
+  .chart-track { position: relative; height: 22px; background: rgba(28,34,48,0.06); border-radius: 6px; overflow: hidden; }
+  .chart-fill { position: absolute; left:0; top:0; bottom:0; border-radius: 6px; background: linear-gradient(90deg, var(--accent), #8fa3ff); }
+  .chart-fill.warn { background: linear-gradient(90deg, #ffbd2e, #ff8a3d); }
+  .chart-fill.danger { background: linear-gradient(90deg, var(--danger), #ff6d84); }
+  .chart-pct { font-family: monospace; font-size: 12.5px; font-weight: 800; }
+  .legend { display: flex; gap: 16px; font-size: 12px; color: var(--muted); margin-top: 4px; flex-wrap: wrap; }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+  .callout {
+    background: rgba(255,47,74,0.06); border: 1px solid rgba(255,47,74,0.2);
+    border-radius: 14px; padding: 16px 18px; font-size: 14px; color: #8a1428; margin-top: 16px;
+  }
+  .callout b { color: #c81e39; }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13.5px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid rgba(28,34,48,0.08); }
+  th { font-family: monospace; font-size: 11px; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+  td.num, th.num { text-align: right; font-family: monospace; }
+
+  .stake-example {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px;
+  }
+  @media (max-width: 520px) { .stake-example { grid-template-columns: 1fr; } }
+  .stake-box {
+    background: rgba(255,255,255,0.7); border: 1px solid rgba(28,34,48,0.1);
+    border-radius: 14px; padding: 14px 16px;
+  }
+  .stake-box .amt { font-size: 24px; font-weight: 900; margin: 4px 0; }
+  .stake-box .lbl { font-family: monospace; font-size: 10.5px; letter-spacing: 0.08em; color: var(--muted); }
+  .stake-box.full .amt { color: var(--danger); }
+  .stake-box.reduced .amt { color: var(--good); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="/">&larr; Back to ParlayOS</a>
+  <h1>About ParlayOS</h1>
+  <p class="lede">
+    ParlayOS is a picks and analytics tool built by someone who bets his own parlays and got tired
+    of staking them all the same way. This page exists to make one thing unmistakably clear before
+    you subscribe: a model percentage on a single game is not the same number as your chance of
+    winning a parlay built from several of them.
+  </p>
+
+  <div class="card" id="diagram">
+    <h2>A "73% model" pick is not a 73% parlay</h2>
+    <div class="sub">Real math, not a marketing number — same formula used by the app's own
+      parlay probability calculator.</div>
+    <p>
+      Every percentage you see next to a single pick in ParlayOS — the "73.1% model" pill, an
+      edge percentage, an O/U confidence bar — describes that <strong>one leg only</strong>. It is
+      the model's estimate that <em>that specific game or prop</em> lands the way ParlayOS thinks it
+      will. It says nothing on its own about a parlay.
+    </p>
+    <p>
+      A parlay only pays if <strong>every single leg</strong> hits. Combining legs means
+      multiplying their probabilities together, and that number falls off far faster than most
+      people expect. Below is what actually happens to your real win probability as you add legs,
+      even when every individual leg is a genuinely solid pick:
+    </p>
+
+    <div class="chart" id="chart-strong">
+      <div class="sub" style="margin-bottom:2px;">If every leg is a strong 65% pick:</div>
+    </div>
+    <div class="chart" id="chart-strong-bars"></div>
+
+    <div class="chart" id="chart-typical-bars" style="margin-top: 22px;">
+      <div class="sub" style="margin-bottom:10px;">If every leg is a typical favorite (57%):</div>
+    </div>
+
+    <div class="legend">
+      <span><i class="dot" style="background:var(--accent)"></i>1&ndash;3 legs</span>
+      <span><i class="dot" style="background:#ffbd2e"></i>4&ndash;6 legs</span>
+      <span><i class="dot" style="background:var(--danger)"></i>7+ legs</span>
+    </div>
+
+    <div class="callout">
+      Even stacking eight <b>genuinely strong 65% picks</b> together — not coin flips, real
+      model-favored picks — leaves you with roughly a <b>3% chance</b> the whole ticket cashes. At
+      a more typical 57%-per-leg favorite, eight legs is closer to <b>1-in-90</b>. This isn't a
+      flaw in the model; it's what "AND-ing together" several real, independent probabilities
+      always does. See a fully worked example with real sportsbook odds in
+      <a href="/legal#odds-explainer">our disclaimer page</a>.
+    </div>
+  </div>
+
+  <div class="card" id="staking">
+    <h2>Why the app's own picks get staked smaller as parlays get longer</h2>
+    <div class="sub">The founder's approach to sizing bets on long parlays</div>
+    <p>
+      Because the real odds above are what they are, the person who built ParlayOS does not stake a
+      12-leg parlay the same way he'd stake a straight bet or a 2-leg parlay. Once a parlay stretches
+      past around <strong>6 legs</strong>, he sizes it at a small fraction of his normal unit —
+      informally, betting it "in dimes" (roughly a tenth of a full stake) rather than a full unit —
+      specifically because the realistic hit rate on a 7+ leg ticket is low even when every
+      individual leg genuinely looks good.
+    </p>
+    <p>This is standard bankroll-management practice among disciplined parlay bettors generally,
+      not something unique to ParlayOS — long parlays are treated as a small, high-variance
+      slice of a bankroll, not a core strategy sized like a normal bet.</p>
+
+    <div class="stake-example">
+      <div class="stake-box full">
+        <div class="lbl">FULL UNIT ($100) ON A 10-LEG PARLAY</div>
+        <div class="amt">Reckless</div>
+        <div class="sub" style="margin:0;">At ~57%/leg, roughly a 1-in-276 shot. A full-size stake
+          here risks a meaningful chunk of a bankroll on a very long shot.</div>
+      </div>
+      <div class="stake-box reduced">
+        <div class="lbl">~$10 (ONE-TENTH UNIT) ON THE SAME PARLAY</div>
+        <div class="amt">Sized to the odds</div>
+        <div class="sub" style="margin:0;">Same 1-in-276 shot, same potential multiplier on
+          payout — but the amount actually at risk matches how unlikely the ticket really is.</div>
+      </div>
+    </div>
+
+    <p style="margin-top:14px;">
+      Nothing here guarantees any parlay — long or short — will hit. Sizing a bet smaller doesn't
+      change its probability, only how much of your bankroll is at risk if it doesn't land. See
+      <a href="/legal#billing">billing terms</a> and the
+      <a href="/legal#no-advice">full disclaimer</a> for what ParlayOS is and isn't.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>What ParlayOS actually is</h2>
+    <p>
+      A subscription analytics tool that surfaces model-estimated edges, real team/pitcher/player
+      data, and a parlay builder with honest combined-odds math built in — including the same
+      probability calculator shown above, wired directly into the app's Paste Slip feature so you
+      see a real combined percentage before you ever place a bet anywhere.
+    </p>
+    <p>ParlayOS does not accept wagers and is not a sportsbook. Read the full
+      <a href="/legal">Terms, Privacy &amp; Disclaimers</a> page before subscribing.</p>
+  </div>
+</div>
+
+<script>
+  // Real computed numbers — p^n at p=0.65 and p=0.57, legs 1,2,3,4,5,6,7,8,10,12.
+  // Kept in JS (not hardcoded HTML) so the math is inspectable/reproducible,
+  // matching the same formula used elsewhere in ParlayOS's own probability
+  // calculator (americanToImplied-style combined product).
+  function buildChart(mountId, p, legs){
+    const mount = document.getElementById(mountId);
+    legs.forEach(n => {
+      const combined = Math.pow(p, n) * 100;
+      const display = combined < 0.01 ? '<0.01' : combined < 1 ? combined.toFixed(2) : combined.toFixed(1);
+      const barWidth = Math.max(combined, 0.6); // floor so tiny bars are still visible as a sliver
+      const cls = n <= 3 ? '' : n <= 6 ? 'warn' : 'danger';
+      const row = document.createElement('div');
+      row.className = 'chart-row';
+      row.innerHTML = `
+        <div class="chart-label">${n} leg${n===1?'':'s'}</div>
+        <div class="chart-track"><div class="chart-fill ${cls}" style="width:${Math.min(barWidth,100)}%"></div></div>
+        <div class="chart-pct">${display}%</div>`;
+      mount.appendChild(row);
+    });
+  }
+  buildChart('chart-strong-bars', 0.65, [1,2,3,4,5,6,7,8,10,12]);
+  buildChart('chart-typical-bars', 0.57, [1,2,3,4,5,6,7,8,10,12]);
+</script>
+</body>
+</html>
