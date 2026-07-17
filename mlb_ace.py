@@ -35,7 +35,7 @@ MLB_TEAM_IDS = {
 }
 
 
-# Ballpark coordinates â€” used so weather reflects the ACTUAL game location,
+# Ballpark coordinates ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â used so weather reflects the ACTUAL game location,
 # not a hardcoded NYC default that was silently applied to every game.
 STADIUM_LOCATIONS = {
     'ARI': (33.4453, -112.0667), 'ATL': (33.8907, -84.4677), 'BAL': (39.2838, -76.6217),
@@ -51,7 +51,7 @@ STADIUM_LOCATIONS = {
 }
 
 
-# Park factors â€” publicly published, stable multi-year run-scoring indices
+# Park factors ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â publicly published, stable multi-year run-scoring indices
 # (100 = neutral; >100 favors offense, <100 favors pitching). These are
 # well-established real baseball statistics, not estimates. Primarily
 # used for the O/U total (park effects are roughly symmetric between the
@@ -73,29 +73,29 @@ LINE_HISTORY_PATH = os.path.join(HERE, "mlb_line_history.json")
 # Drop file for the "Paste Slip" feature in parlayos.html: the browser can't
 # write to disk directly, so the UI's "Download slip file" button saves this
 # exact filename via a normal browser download. Moving/saving it into the
-# same directory as mlb_ace.py is what connects the two â€” this script checks
+# same directory as mlb_ace.py is what connects the two ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â this script checks
 # for it on every run, logs every leg found inside as a pick, then renames it
 # to a timestamped .imported file so the same slip is never logged twice.
 PENDING_SLIP_PATH = os.path.join(HERE, "pending_slip.txt")
 
 # picks_log.csv and parlayos_picks.csv used to be two separate files written
-# in parallel on every pick â€” picks_log.csv held the rich betting-tracker
+# in parallel on every pick ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â picks_log.csv held the rich betting-tracker
 # schema (CLV, slip results, Kelly stake, etc.), parlayos_picks.csv held a
 # clean subset with team abbreviations for the UI. They'd drifted apart (some
 # runs only wrote to one file, not both) and any downstream reader (backtest,
 # UI) had to know which file had which columns. They're now merged into one
-# file â€” picks_log.csv â€” that carries the full superset schema, including
+# file ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â picks_log.csv ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â that carries the full superset schema, including
 # the abbr_home/abbr_away/abbr_pick columns parlayos_picks.csv used to own.
 # PARLAYOS_LOG_PATH is kept as an alias pointing at the SAME file so any
 # existing code (or a separate backtest script) that still references the
 # old constant name keeps working without a second on-disk copy.
 PICKS_LOG_PATH    = os.path.join(HERE, "picks_log.csv")
-PARLAYOS_LOG_PATH = PICKS_LOG_PATH  # alias â€” single unified file now
+PARLAYOS_LOG_PATH = PICKS_LOG_PATH  # alias ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â single unified file now
 PARLAYOS_LOG_COLS = ["timestamp","date","home","away","abbr_home","abbr_away","pick","abbr_pick","odds","model_prob","edge","home_pitcher","away_pitcher"]
 # Individual edge-term values from calculate_win_probability, logged
 # per-pick so mlb_fit_weights.py can eventually fit a real per-factor
 # regression against graded outcomes instead of the hand-set constants
-# below. Column names mirror EDGE_COMPONENT_COLS in mlb_fit_weights.py â€”
+# below. Column names mirror EDGE_COMPONENT_COLS in mlb_fit_weights.py ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
 # keep both lists in sync if either changes.
 EDGE_COMPONENT_COLS = [
     "c_team_edge", "c_pitcher_fip_edge", "c_pitcher_era_edge", "c_pitcher_whip_edge",
@@ -105,7 +105,7 @@ EDGE_COMPONENT_COLS = [
 ]
 # Full column set for the unified log, in a stable, readable order. Any
 # columns present in an existing on-disk file but not listed here are still
-# preserved â€” this list only controls ordering for freshly written files.
+# preserved ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â this list only controls ordering for freshly written files.
 PICKS_LOG_COLS = [
     "timestamp","date","home","away","abbr_home","abbr_away","pick","abbr_pick",
     "pitcher","home_pitcher","away_pitcher","odds","model_prob","edge","edge_pct",
@@ -137,11 +137,11 @@ _HTML = """PGh0bWw+PGhlYWQ+PHRpdGxlPkFjZWJvdCBEYXNoYm9hcmQ8L3RpdGxlPjwvaGVhZD48Y
 # nba_ace.py) instead of being hardcoded here. Previously this was a
 # plaintext key baked directly into a source file that gets uploaded/
 # shared/potentially committed to a repo alongside the rest of the
-# codebase â€” anyone with a copy of this file had a live, usable key
+# codebase ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â anyone with a copy of this file had a live, usable key
 # regardless of whether they were meant to. Falls back to the OLD
 # hardcoded value ONLY if sports_config.json is missing or malformed, so
 # this doesn't silently break an existing setup that hasn't created the
-# config file yet â€” but the config file is now the source of truth going
+# config file yet ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â but the config file is now the source of truth going
 # forward, and this fallback should be considered temporary/transitional.
 def _load_odds_api_key():
     try:
@@ -152,14 +152,14 @@ def _load_odds_api_key():
             return key
     except (FileNotFoundError, json.JSONDecodeError, KeyError):
         pass
-    print("  sports_config.json not found/malformed â€” falling back to the "
+    print("  sports_config.json not found/malformed ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â falling back to the "
           "previously-hardcoded key. Create sports_config.json (see "
           "nfl_ace.py/nba_ace.py) to remove this fallback.")
     return "16b0a233c6bbe7492dc168a1a46ec469"
 
 ODDS_API_KEY = _load_odds_api_key()
 
-# League-average fallbacks (2024 MLB) â€” used ONLY when a specific fetch
+# League-average fallbacks (2024 MLB) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â used ONLY when a specific fetch
 # fails, never silently substituted for a "successful" real value.
 LEAGUE_AVG_ERA  = 4.25
 LEAGUE_AVG_WHIP = 1.32
@@ -169,20 +169,20 @@ LEAGUE_AVG_OPS  = .720
 MLB_STATS_BASE = "https://statsapi.mlb.com/api/v1"
 
 def _f(s, d=None):
-    """Lenient float parse â€” returns d (default None) instead of raising."""
+    """Lenient float parse ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â returns d (default None) instead of raising."""
     try:
         return float(str(s).strip())
     except (ValueError, TypeError, AttributeError):
         return d
 WEATHER_API = "https://api.open-meteo.com/v1/forecast"
 NUM_SIMULATIONS = 100000  # currently unused by calculate_win_probability (see its
-                          # docstring â€” the Monte Carlo step this fed was the source
+                          # docstring ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the Monte Carlo step this fed was the source
                           # of the overconfidence bug and was removed). Left as a
                           # config knob in case a real outcome-based simulation
                           # replaces it later; changing n_sims in config has no
                           # effect on picks right now.
 
-# â”€â”€ Simple file cache (TTL-based) â€” team/pitcher stats don't change
+# ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Simple file cache (TTL-based) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â team/pitcher stats don't change
 # meaningfully within a few hours, so caching cuts redundant API calls
 # substantially on a script that fetches per-game, per-pitcher, per-team.
 import pickle
@@ -194,7 +194,7 @@ def get_cached(key, ttl=3600, required_keys=None):
     """
     required_keys: if given, a cached dict missing ANY of these keys is
     treated as a cache miss rather than trusted as-is. This is what should
-    have existed from the start â€” without it, adding a new field to a
+    have existed from the start ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â without it, adding a new field to a
     cached shape (e.g. the has_data flags) causes old on-disk cache entries
     from a prior run to silently reappear with the OLD shape and raise a
     KeyError deep inside code that assumes the NEW shape is guaranteed.
@@ -206,7 +206,7 @@ def get_cached(key, ttl=3600, required_keys=None):
                 data = pickle.load(f)
             if required_keys and isinstance(data, dict):
                 if not all(k in data for k in required_keys):
-                    return None  # stale schema â€” treat as a miss, will be re-fetched
+                    return None  # stale schema ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â treat as a miss, will be re-fetched
             return data
     except Exception:
         pass
@@ -223,12 +223,12 @@ def set_cache(key, data):
 
 def load_config():
     """
-    Load mlb_config.json â€” including the thresholds mlb_backtest.py tunes
+    Load mlb_config.json ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â including the thresholds mlb_backtest.py tunes
     from realised results. These were previously loaded, printed, and then
     NEVER used: min_edge was explicitly commented "Disabled" and every game
     was force-set to qualifies=True regardless of edge; min_total_line/
     max_total_line weren't even read. That meant mlb_backtest.py's tuning
-    was write-only â€” it updated mlb_config.json based on real performance,
+    was write-only ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â it updated mlb_config.json based on real performance,
     but nothing downstream ever read those two keys back into a filtering
     decision, so the tuning had no effect on which picks were shown. All
     three are now actually applied to the qualifies flag in the main loop
@@ -265,7 +265,7 @@ class PredictionEngine:
     def fetch_live_odds(self) -> List:
         """
         Fetch live MLB odds from The Odds API.
-        Now requests BOTH h2h (moneyline) and totals (O/U) markets â€” the O/U
+        Now requests BOTH h2h (moneyline) and totals (O/U) markets ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the O/U
         total line shown in the UI and used to gate qualifies was previously
         pure random.random() with zero connection to a real posted line.
         Requesting "totals" here is what makes a real line available to
@@ -285,7 +285,7 @@ class PredictionEngine:
     def fetch_team_form(self, team_id: int, opp_id: int) -> Dict:
         """
         Fetch real team form from MLB Stats API. Every field below is a real
-        API-derived number â€” the previous version returned three of four
+        API-derived number ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the previous version returned three of four
         fields as hardcoded constants (4.5, 0.5, 4.0) regardless of team,
         which silently canceled their contribution to the model (both teams
         always got identical fake values, so the edge from these factors
@@ -336,7 +336,7 @@ class PredictionEngine:
         except Exception as e:
             print(f"  team season hitting fetch failed ({team_id}): {e}")
 
-        # Real team ERA (proxy for pitching strength â€” true bullpen-only ERA
+        # Real team ERA (proxy for pitching strength ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â true bullpen-only ERA
         # would need reliever-specific split filtering, noted as a known
         # simplification rather than faked precision)
         team_era = 4.25
@@ -384,7 +384,7 @@ class PredictionEngine:
         """
         Fetch real pitcher stats from MLB Stats API, cached by pitcher ID.
         Includes has_data: False whenever a league-average fallback is used
-        (no pitcher_id, empty splits, or a fetch error) â€” this flag matters:
+        (no pitcher_id, empty splits, or a fetch error) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â this flag matters:
         a rookie/call-up/return-from-IL pitcher with genuinely no stats this
         season is NOT the same as "exactly league average," and comparing a
         fabricated average against the opponent's real (possibly below-
@@ -411,13 +411,13 @@ class PredictionEngine:
             stat = splits[0]["stat"]
             innings = float(stat.get("inningsPitched", 0) or 0)
             if innings < 5:
-                # Fewer than 5 IP this season is too small a sample to trust â€”
+                # Fewer than 5 IP this season is too small a sample to trust ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
                 # treat the same as "no data" rather than let a tiny, noisy
                 # sample swing the model.
                 return {"era": LEAGUE_AVG_ERA, "whip": LEAGUE_AVG_WHIP, "k_per_9": LEAGUE_AVG_K9,
                         "fip": LEAGUE_AVG_FIP, "has_data": False}
 
-            # FIP (Fielding Independent Pitching) â€” a real, standard sabermetric
+            # FIP (Fielding Independent Pitching) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a real, standard sabermetric
             # stat that isolates outcomes a pitcher fully controls (HR, BB, HBP,
             # K), removing defense/sequencing luck that ERA doesn't separate
             # out. Generally considered MORE predictive of a pitcher's true
@@ -433,11 +433,11 @@ class PredictionEngine:
             whip_raw = float(stat.get("whip", LEAGUE_AVG_WHIP) or LEAGUE_AVG_WHIP)
             k9_raw   = float(stat.get("strikeoutsPer9Inn", LEAGUE_AVG_K9) or LEAGUE_AVG_K9)
 
-            # â”€â”€ Small-sample shrinkage â€” the previous rule was a hard cliff
+            # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Small-sample shrinkage ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the previous rule was a hard cliff
             #    at 5 IP: below it, league average; at or above it, the RAW
             #    number got full weight, identical to a full, reliable season.
             #    That cliff is exactly how the model could "lean on bad
-            #    pitchers" â€” a starter with one or two rough outings (e.g.
+            #    pitchers" ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a starter with one or two rough outings (e.g.
             #    13 IP at a 9.00 ERA, coming off injury) clears 5 IP easily
             #    and then gets treated as seriously as a pitcher with 100+
             #    trustworthy innings, letting one bad start swing a pick as
@@ -499,11 +499,11 @@ class PredictionEngine:
         Calculate win probability using MLB Stats API data.
         Requires game["home_id"]/["away_id"]/["home_pitcher_id"]/["away_pitcher_id"]
         to be REAL MLB IDs (0 or missing IDs cause both sides' lookups to fail
-        identically, silently zeroing out edges â€” a real bug from an earlier
+        identically, silently zeroing out edges ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a real bug from an earlier
         version where the caller passed hardcoded 0s for every game).
 
         Every factor below only contributes when BOTH sides have real data
-        for that specific comparison (has_data flags) â€” a missing value is
+        for that specific comparison (has_data flags) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a missing value is
         never compared against a fallback, which previously let an unknown
         pitcher look "average" against a real, below-average opponent and
         silently tilt picks toward whichever side had less data.
@@ -516,18 +516,18 @@ class PredictionEngine:
         home_bat = fetch_real_team_batting(game["home_id"])
         away_bat = fetch_real_team_batting(game["away_id"])
 
-        # â”€â”€ Starting pitcher quality â€” the single most predictive factor
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Starting pitcher quality ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the single most predictive factor
         #    for an individual MLB game. FIP, ERA, WHIP, and K/9 each
         #    capture a different real dimension. FIP (Fielding Independent
         #    Pitching) isolates outcomes the pitcher fully controls (HR,
         #    BB, HBP, K) and removes defense/sequencing luck that ERA
-        #    bakes in â€” generally regarded as MORE predictive of a
+        #    bakes in ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â generally regarded as MORE predictive of a
         #    pitcher's true talent than ERA, so it now carries the largest
         #    single weight, with ERA still contributing a smaller amount
         #    (ERA does capture some real signal ERA-only models miss, even
         #    if noisier). Weights were previously fixed from an earlier
         #    miscalibration where team form (0.35) was weighted ~12x more
-        #    than starting pitcher ERA (0.03) â€” a team's generic last-10
+        #    than starting pitcher ERA (0.03) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a team's generic last-10
         #    record (a mix of ALL their different starters) could
         #    completely swamp a massive, real quality gap between TODAY's
         #    two actual starters, which is backwards.
@@ -537,7 +537,7 @@ class PredictionEngine:
         pitcher_whip_edge = (away_p["whip"] - home_p["whip"]) * 0.05 if has_pitchers else 0.0
         pitcher_k9_edge   = (home_p["k_per_9"] - away_p["k_per_9"]) * 0.01 if has_pitchers else 0.0
 
-        # â”€â”€ Team offense (OPS) â€” previously fetched (fetch_real_team_batting)
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Team offense (OPS) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â previously fetched (fetch_real_team_batting)
         #    for DISPLAY only and never used in the model at all. A great
         #    starting pitcher means little if the team's own lineup can't
         #    score; ignoring offense meant the model was effectively
@@ -552,11 +552,11 @@ class PredictionEngine:
             except (ValueError, TypeError):
                 has_offense = False
 
-        # â”€â”€ Team form / bullpen / recent run production â”€â”€
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Team form / bullpen / recent run production ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
         team_edge = ((home_form["last_10_wl"] - away_form["last_10_wl"]) * 0.10
                      if home_form["last10_has_data"] and away_form["last10_has_data"] else 0.0)
 
-        # Bullpen quality â€” prefers the relief-ONLY FIP split (isolates the
+        # Bullpen quality ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â prefers the relief-ONLY FIP split (isolates the
         # pen's own peripherals from starters' innings), a genuinely distinct
         # signal from team-wide season stats. Falls back to season team ERA
         # only when the relief-only sample is too small.
@@ -566,17 +566,17 @@ class PredictionEngine:
         if bullpen_fip_available:
             bullpen_edge = (away_bp["fip"] - home_bp["fip"]) * 0.05
 
-        # â”€â”€ Season run differential (offense + pitching combined) â”€â”€
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Season run differential (offense + pitching combined) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
         #    runs_per_game (season offense) and team_era (season pitching,
         #    used here only as bullpen_edge's FALLBACK) were previously two
-        #    separately-weighted terms â€” but a team's season runs-scored and
+        #    separately-weighted terms ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â but a team's season runs-scored and
         #    season runs-allowed are the two halves of the SAME fact: full-
         #    season run differential, the standard single best full-season
         #    proxy for team quality. Adding them independently double-counted
         #    that one fact instead of treating it as one signal.
         #
         #    Note this also partially (not fully) overlaps with offense_edge
-        #    above, which already captures season-long offense via OPS â€”
+        #    above, which already captures season-long offense via OPS ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
         #    runs_per_game and OPS are correlated (both are "is this offense
         #    good," just measured differently: OPS is context-free hitting
         #    quality, runs/game folds in lineup construction, opponents
@@ -593,7 +593,7 @@ class PredictionEngine:
             away_run_diff = away_form["runs_per_game"] - away_form["team_era"]
             season_form_edge = (home_run_diff - away_run_diff) * 0.035
         elif has_season_offense:
-            # Offense-only fallback (no season ERA available) â€” weight cut
+            # Offense-only fallback (no season ERA available) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â weight cut
             # from the original runs_edge's 0.02 to 0.012, since offense_edge
             # (OPS) above already covers most of this same "season offense
             # quality" signal on its own, larger weight (0.55 on an OPS-scale
@@ -608,7 +608,7 @@ class PredictionEngine:
             season_form_edge = 0.0
 
         if not bullpen_fip_available:
-            # No real relief-only data â€” season_form_edge above already
+            # No real relief-only data ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â season_form_edge above already
             # carries the season-ERA signal, so bullpen_edge stays at 0
             # rather than adding that same season-ERA fact a second time
             # under a different name.
@@ -616,9 +616,9 @@ class PredictionEngine:
 
         h2h_edge = (home_form["h2h_pct"] - 0.5) * 0.05  # naturally 0 when no h2h games exist yet
 
-        # â”€â”€ Weather: temperature gets a real, modest directional term (warm
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Weather: temperature gets a real, modest directional term (warm
         #    air carries fly balls further, aiding offense broadly for both
-        #    teams roughly equally â€” that symmetry is why it's small and
+        #    teams roughly equally ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â that symmetry is why it's small and
         #    unsigned toward either side). Wind speed deliberately does NOT
         #    get a directional win-probability term: without knowing each
         #    park's precise orientation relative to today's wind direction,
@@ -626,13 +626,13 @@ class PredictionEngine:
         #    fabricating a signal I can't actually verify. High wind DOES
         #    real-world increase a game's unpredictability, but doing that
         #    properly needs an actual outcome simulation (run distributions,
-        #    not a probability-threshold trick â€” see the note below), so
+        #    not a probability-threshold trick ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see the note below), so
         #    it's left out for now rather than faked.
         weather_edge = 0.02 if weather["temp_f"] > 80 else (-0.02 if weather["temp_f"] < 50 else 0)
 
         home_field_edge = 0.02  # standard, well-established real MLB home-field advantage
 
-        # â”€â”€ Rest/fatigue â€” real signal from the schedule API, no scraping
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Rest/fatigue ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â real signal from the schedule API, no scraping
         #    needed. Zero-rest teams (played yesterday) carry a modest real
         #    disadvantage vs a rested opponent. Symmetric and small: this is
         #    a secondary factor, not decisive on its own.
@@ -644,14 +644,14 @@ class PredictionEngine:
         elif home_rest["played_yesterday"] and not away_rest["played_yesterday"]:
             rest_edge = -0.015
 
-        # â”€â”€ Lineup handedness (platoon advantage) â€” scraped from Rotowire's
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Lineup handedness (platoon advantage) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â scraped from Rotowire's
         #    daily lineups, since the MLB Stats API doesn't expose who's
         #    ACTUALLY confirmed to start today. Batters generally perform
         #    somewhat better against opposite-handed pitching; a lineup
         #    stacked with same-handed bats against today's starter is a
         #    small real disadvantage. Gated to 0 if the scrape fails or
         #    lineups aren't posted yet (normal until a few hours before
-        #    game time) â€” never guessed at.
+        #    game time) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â never guessed at.
         tid2abbr = {v: k for k, v in MLB_TEAM_IDS.items()}
         home_abbr = tid2abbr.get(game["home_id"], "")
         away_abbr = tid2abbr.get(game["away_id"], "")
@@ -671,7 +671,7 @@ class PredictionEngine:
                 away_platoon = (away_opp - away_same) / 9.0
                 lineup_edge = (home_platoon - away_platoon) * 0.025
 
-        # â”€â”€ Injury burden â€” scraped from MLB.com's official injury report.
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Injury burden ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â scraped from MLB.com's official injury report.
         #    Coarse (headline count per team, not precise player-by-player
         #    IL tracking) but real and live. Gated to 0 if either team's
         #    section can't be found on the page.
@@ -686,14 +686,14 @@ class PredictionEngine:
                     injury_edge = (away_inj["headline_count"] - home_inj["headline_count"]) * 0.004
                     injury_edge = max(-0.03, min(0.03, injury_edge))  # cap a coarse signal's influence
 
-        # â”€â”€ Bullpen fatigue â€” prefers real reliever pitch-count load from
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Bullpen fatigue ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â prefers real reliever pitch-count load from
         #    the last 2 days' boxscores over the coarse played-yesterday
         #    proxy, falling back to that proxy when boxscore data isn't
         #    available for either side.
         home_load = fetch_bullpen_pitch_load(game["home_id"])
         away_load = fetch_bullpen_pitch_load(game["away_id"])
         if home_load["has_data"] and away_load["has_data"]:
-            # ~150 pitches over 2 days â‰ˆ a genuinely heavy bullpen workload;
+            # ~150 pitches over 2 days ÃƒÂ¢Ã¢â‚¬Â°Ã‹â€  a genuinely heavy bullpen workload;
             # scaled and capped small since day-to-day usage is noisy and
             # this should nudge the model, not dominate it.
             load_diff = (away_load["pitches"] - home_load["pitches"]) / 150.0
@@ -708,34 +708,34 @@ class PredictionEngine:
                      + weather_edge + home_field_edge + rest_edge + lineup_edge + injury_edge
                      + fatigue_edge + (game["market_prob"] - 0.5) * 0.15)
 
-        # â”€â”€ Final probability = base_prob itself, clamped to a sane range.
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Final probability = base_prob itself, clamped to a sane range.
         #
         #    Every edge term above was designed as a direct percentage-point
         #    nudge off a 50/50 baseline (that's what weights like *0.12,
         #    *0.10, *0.05 mean), so base_prob already IS the model's
-        #    probability estimate â€” nothing further should be done to it.
+        #    probability estimate ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â nothing further should be done to it.
         #
         #    The PREVIOUS version instead ran base_prob through
         #    NUM_SIMULATIONS draws of random.gauss(base_prob, sim_std) and
         #    counted how often the draw exceeded 0.5. That's mathematically
-        #    just the normal CDF Î¦((base_prob-0.5)/sim_std) computed the
-        #    slow way â€” and because sim_std (~0.08) is SMALL relative to
+        #    just the normal CDF ÃƒÅ½Ã‚Â¦((base_prob-0.5)/sim_std) computed the
+        #    slow way ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â and because sim_std (~0.08) is SMALL relative to
         #    how far base_prob can drift once a dozen-plus edge terms
         #    stack in the same direction, that CDF saturates fast: a
         #    base_prob of 0.60 (a real, defensible ~10-point edge) became
-        #    Î¦(0.10/0.08) â‰ˆ 89%, and 0.65 became â‰ˆ 97%. THIS is what was
+        #    ÃƒÅ½Ã‚Â¦(0.10/0.08) ÃƒÂ¢Ã¢â‚¬Â°Ã‹â€  89%, and 0.65 became ÃƒÂ¢Ã¢â‚¬Â°Ã‹â€  97%. THIS is what was
         #    producing picks that clustered at "95.0% model" with 30-40%+
-        #    edges â€” a moderate, legitimate edge was being mathematically
+        #    edges ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a moderate, legitimate edge was being mathematically
         #    amplified into manufactured near-certainty by the simulation
         #    step itself, not by any single input claiming 95%.
         #
         #    Real single-game MLB win probabilities are almost never
         #    outside ~15-85% even for a genuine ace-vs-replacement
-        #    mismatch â€” nine innings carries enormous inherent variance
+        #    mismatch ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â nine innings carries enormous inherent variance
         #    that no quality gap fully erases. The clamp below is a
         #    sanity bound, not a substitute for real calibration (that
         #    still needs backtesting against actual outcomes, which this
-        #    script doesn't do â€” flagged previously as separate, larger
+        #    script doesn't do ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â flagged previously as separate, larger
         #    work). If these bounds feel too wide or too narrow once you
         #    see it against real results, they're just two numbers here.
 
@@ -744,7 +744,7 @@ class PredictionEngine:
         # mlb_fit_weights.py's eventual full multi-factor regression,
         # without changing this function's return type or touching any
         # call site. Every one of these already exists as a local variable
-        # above â€” this just makes them visible outside the function too.
+        # above ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â this just makes them visible outside the function too.
         game["_edge_components"] = {
             "c_team_edge": team_edge, "c_pitcher_fip_edge": pitcher_fip_edge,
             "c_pitcher_era_edge": pitcher_era_edge, "c_pitcher_whip_edge": pitcher_whip_edge,
@@ -782,7 +782,7 @@ def load_picks_log():
     """
     Load the single unified picks_log.csv. Tolerant of an old-schema file
     (missing abbr_* columns, or any other column absent from PICKS_LOG_COLS)
-    â€” missing columns are added as empty rather than raising, since a
+    ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â missing columns are added as empty rather than raising, since a
     backtest script reading this same file shouldn't break just because a
     column was added later.
     """
@@ -802,7 +802,7 @@ def _abbr(name: str) -> str:
 
 def write_pick_to_log(pick_dict: dict):
     """
-    Single writer for every pick â€” replaces the old pair of
+    Single writer for every pick ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â replaces the old pair of
     write_pick_to_log() + write_parlayos_pick(), which wrote the SAME pick
     to two different files (picks_log.csv with the full tracker schema,
     parlayos_picks.csv with just team abbreviations) and had drifted apart
@@ -825,7 +825,7 @@ def write_pick_to_log(pick_dict: dict):
 
 def write_parlayos_pick(g: dict):
     """
-    Back-compat shim â€” older code (or a separate backtest script) may still
+    Back-compat shim ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â older code (or a separate backtest script) may still
     call write_parlayos_pick() by name. It now just delegates to the single
     unified writer above instead of writing a second file, so nothing
     duplicates and nothing drifts out of sync again.
@@ -833,9 +833,9 @@ def write_parlayos_pick(g: dict):
     write_pick_to_log(g)
 
 
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 # PASTE SLIP IMPORT
-# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 # parlayos.html's "Paste Slip" panel parses pasted slip text client-side for
 # an instant preview, then offers a "Download slip file" button that saves
 # pending_slip.txt via a normal browser download (a static HTML page can't
@@ -843,7 +843,7 @@ def write_parlayos_pick(g: dict):
 # script is what connects the two. Every run checks for it and logs
 # whatever legs it can parse, then archives the file so nothing is ever
 # double-logged. The parser here is intentionally independent from the
-# browser-side one â€” they don't share code â€” so it's re-documented in full
+# browser-side one ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â they don't share code ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â so it's re-documented in full
 # rather than assumed to match; if the two drift, this is the one that
 # actually decides what lands in picks_log.csv.
 
@@ -852,11 +852,11 @@ _OU_RE = re.compile(r'\b(OVER|UNDER)\s+(\d+(?:\.\d+)?)', re.IGNORECASE)
 _K_PROP_RE = re.compile(r'\b(\d+(?:\.\d+)?)\s*K\b', re.IGNORECASE)
 _MATCHUP_RE = re.compile(r'\b([A-Z]{2,4})\s*@\s*([A-Z]{2,4})\b')
 
-# â”€â”€ Anchor-based parser â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Anchor-based parser ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 # A real sportsbook slip copy/paste (tested against actual DraftKings/
 # FanDuel-style "My Bets" screens) puts EACH leg's pick description,
 # market keyword, and odds on three SEPARATE lines, with NO blank line
-# between one leg and the next â€” the whole slip is one continuous block:
+# between one leg and the next ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the whole slip is one continuous block:
 #   PIT Pirates
 #   Moneyline
 #   -126
@@ -865,7 +865,7 @@ _MATCHUP_RE = re.compile(r'\b([A-Z]{2,4})\s*@\s*([A-Z]{2,4})\b')
 #   -156
 #   ...
 # An earlier version of this parser split on blank lines, which is wrong
-# for this â€” a real slip pasted this way produced ZERO recognized legs
+# for this ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a real slip pasted this way produced ZERO recognized legs
 # (every line looked like an isolated fragment with no odds attached).
 # The fix: don't try to find where one leg "block" ends and the next
 # begins at all. Instead scan for ANCHOR lines that unambiguously mark a
@@ -902,7 +902,7 @@ def _parse_sportsbook_slip(text: str):
     """
     Scans every line for a market anchor and reconstructs each leg from
     the lines immediately around it. Returns a list of pick dicts. This
-    is the PRIMARY parse strategy â€” it's what real copy-pasted sportsbook
+    is the PRIMARY parse strategy ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â it's what real copy-pasted sportsbook
     slips (DraftKings, FanDuel, and similar "My Bets" screens) actually
     look like, tested against real examples.
     """
@@ -943,7 +943,7 @@ def _parse_sportsbook_slip(text: str):
                 "pick": f"{player_name} {line} K",
                 "market": "K Prop",
                 "odds": None,
-                # A book's "N+" threshold means "N or more" â€” expressed as
+                # A book's "N+" threshold means "N or more" ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â expressed as
                 # a standard Over line, that's N-0.5 (e.g. "4+" == over 3.5).
                 "line": (threshold_n - 0.5) if threshold_n is not None else None,
             })
@@ -956,7 +956,7 @@ def _parse_sportsbook_slip(text: str):
 
 def _split_into_leg_blocks(text: str):
     """
-    Groups the pasted text into logical "leg blocks" â€” the unit that gets
+    Groups the pasted text into logical "leg blocks" ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the unit that gets
     parsed into one pick. Real sportsbook slips very often split a single
     leg's pick description, team name, and odds across separate lines
     (e.g. a mobile app copy-paste), while ParlayOS's own export puts one
@@ -966,7 +966,7 @@ def _split_into_leg_blocks(text: str):
     legs, so: split on blank lines first, and only fall back to one-line-
     per-leg if the whole paste has no blank lines to split on at all
     (which is exactly what ParlayOS's own hyphen-prefixed export looks
-    like â€” every real leg already starts with "- ", so treating each of
+    like ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â every real leg already starts with "- ", so treating each of
     those as its own block is correct there too).
     """
     raw_lines = [l for l in text.splitlines()]
@@ -987,7 +987,7 @@ def _split_into_leg_blocks(text: str):
             blocks.append(current)
         return blocks
     else:
-        # No blank lines anywhere â€” treat each non-blank line as its own
+        # No blank lines anywhere ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â treat each non-blank line as its own
         # block (matches ParlayOS's own "- leg per line" export format).
         return [[l] for l in non_blank]
 
@@ -997,7 +997,7 @@ def _parse_leg_block(lines: list):
     Parses one leg block (1+ lines belonging to the same pick) into a pick
     dict, or None. Joins the block into one string and reuses the same
     token-extraction rules as before (odds regex, O/U regex, K-prop regex,
-    matchup regex) â€” merging multi-line blocks first is what fixes the
+    matchup regex) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â merging multi-line blocks first is what fixes the
     "-110 ends up alone on its own broken pick" problem, since the odds
     token and the pick description are now in the same string to search.
     """
@@ -1029,10 +1029,10 @@ def _parse_leg_block(lines: list):
         market = "K Prop"
         pick_desc = joined
         if odds_match:
-            pick_desc = pick_desc.replace(odds_match.group(1), '').strip(' â€¢-')
+            pick_desc = pick_desc.replace(odds_match.group(1), '').strip(' ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢-')
         if matchup:
-            pick_desc = pick_desc.replace(matchup.group(0), '').strip(' â€¢-')
-        pick_desc = pick_desc.strip(' â€¢-') or joined
+            pick_desc = pick_desc.replace(matchup.group(0), '').strip(' ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢-')
+        pick_desc = pick_desc.strip(' ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢-') or joined
         line_val = _f(ou_match.group(2))
     elif ou_match:
         market = "Total"
@@ -1042,14 +1042,14 @@ def _parse_leg_block(lines: list):
         market = "Moneyline"
         pick_desc = joined
         if odds_match:
-            pick_desc = pick_desc.replace(odds_match.group(1), '').strip(' â€¢-')
+            pick_desc = pick_desc.replace(odds_match.group(1), '').strip(' ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢-')
         if matchup:
-            pick_desc = pick_desc.replace(matchup.group(0), '').strip(' â€¢-')
+            pick_desc = pick_desc.replace(matchup.group(0), '').strip(' ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢-')
         pick_desc = pick_desc.strip()
         line_val = None
 
     if odds is None and not ou_match:
-        # No odds AND no O/U pattern anywhere in the whole block â€” too
+        # No odds AND no O/U pattern anywhere in the whole block ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â too
         # ambiguous to trust (a lone team name with no number attached
         # anywhere, a promo line, etc.). Skip rather than guess.
         return None
@@ -1071,11 +1071,11 @@ def import_pending_slip():
     """
     Checks for pending_slip.txt next to this script. If present, tries two
     parse strategies in order:
-      1. _parse_sportsbook_slip() â€” anchor-based, correct for real
+      1. _parse_sportsbook_slip() ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â anchor-based, correct for real
          sportsbook copy/paste (team name, market keyword, and odds each
          on their own line, no blank lines between legs). This is the
          common real-world case and is tried FIRST.
-      2. _split_into_leg_blocks() + _parse_leg_block() â€” correct for
+      2. _split_into_leg_blocks() + _parse_leg_block() ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â correct for
          ParlayOS's own "Copy slip" export format (one complete leg per
          line, hyphen-prefixed). Only tried if strategy 1 finds nothing,
          since a real sportsbook paste will never match ParlayOS's own
@@ -1085,7 +1085,7 @@ def import_pending_slip():
     the file is renamed to pending_slip_YYYYMMDD_HHMMSS.imported so the
     same slip can never be logged twice even if the file is left in place.
 
-    Called at the start of main() â€” every run of mlb_ace.py picks up any
+    Called at the start of main() ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â every run of mlb_ace.py picks up any
     slip that was dropped since the last run, no separate command needed.
     """
     if not os.path.exists(PENDING_SLIP_PATH):
@@ -1107,12 +1107,12 @@ def import_pending_slip():
         parse_strategy = "parlayos-export"
 
     if not legs:
-        print(f"  {PENDING_SLIP_PATH} found but no parseable legs inside â€” leaving file in place for review.")
+        print(f"  {PENDING_SLIP_PATH} found but no parseable legs inside ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â leaving file in place for review.")
         return 0
 
     print(f"  Parsed {len(legs)} leg(s) using the '{parse_strategy}' strategy.")
     now = datetime.now()
-    # One shared ID for every leg in THIS pasted slip â€” this is what lets
+    # One shared ID for every leg in THIS pasted slip ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â this is what lets
     # mlb_backtest.py later compute the parlay's real all-or-nothing result
     # (every leg must win) instead of only being able to report each leg's
     # individual win rate in isolation, which hides exactly the "9 of 10
@@ -1147,7 +1147,7 @@ def import_pending_slip():
         print(f"  Logged {len(legs)} legs but could not archive {PENDING_SLIP_PATH}: {e}")
         print(f"  Delete it manually or it may be re-imported on the next run.")
     else:
-        print(f"âœ“ Imported {len(legs)} leg(s) from pasted slip â†’ {PICKS_LOG_PATH}")
+        print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Imported {len(legs)} leg(s) from pasted slip ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {PICKS_LOG_PATH}")
         print(f"  Archived as {os.path.basename(archive_path)}")
     return len(legs)
 
@@ -1236,13 +1236,13 @@ def fetch_today_probable_pitchers():
         print(f"  Probable pitcher fetch failed: {e}")
     return out
 
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-# WEB SCRAPERS â€” injuries + lineup handedness
+# ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
+# WEB SCRAPERS ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â injuries + lineup handedness
 #
 # These pull data the MLB Stats API doesn't expose: which specific
 # players are actually confirmed to start today's lineup (handedness
 # composition) and team-level injury burden. Both were verified by
-# manually fetching the live pages before writing this code â€” but I
+# manually fetching the live pages before writing this code ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â but I
 # could not execute a live requests.get() from my own sandbox (no
 # network access there), so this is best-effort: the exact HTML
 # structure may have shifted by the time you run it, and both sites
@@ -1251,12 +1251,12 @@ def fetch_today_probable_pitchers():
 # CSS class names, which tends to be more resilient to redesigns,
 # but is still not guaranteed. Every failure mode here degrades to
 # "no data" (contributes 0 to the model) rather than crashing or
-# fabricating a value â€” same discipline as the rest of this file.
+# fabricating a value ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â same discipline as the rest of this file.
 #
 # Both require `beautifulsoup4` (pip install beautifulsoup4 --break-system-packages
 # if not already present) and a browser-like User-Agent header, since
 # many sites block the default python-requests UA.
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
 
 _SCRAPE_HEADERS = {
     "User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -1268,10 +1268,10 @@ _SCRAPE_HEADERS = {
 def fetch_confirmed_lineup(away_abbr: str, home_abbr: str) -> dict:
     """
     Scrapes Rotowire's daily lineups page for TODAY's confirmed/expected
-    batting order â€” full player identities (position, name, hand), not
+    batting order ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â full player identities (position, name, hand), not
     just handedness counts. Returns {} on any failure (BeautifulSoup
     missing, page structure changed, matchup not found / lineups not
-    posted yet â€” normal until a few hours before first pitch).
+    posted yet ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â normal until a few hours before first pitch).
 
     On success:
         {
@@ -1330,7 +1330,7 @@ def fetch_confirmed_lineup(away_abbr: str, home_abbr: str) -> dict:
         home_batters = extract_batters(home_block[:1500])
 
         if len(away_batters) < 5 or len(home_batters) < 5:
-            # Too few parsed â€” likely mis-aligned window, don't trust it.
+            # Too few parsed ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â likely mis-aligned window, don't trust it.
             return {}
 
         result = {
@@ -1366,7 +1366,7 @@ def search_player_id(name: str, team_id: int = None) -> int:
     Resolves a scraped (often abbreviated, e.g. "M. Harris") player name
     to a real MLB person ID via the Stats API search endpoint. If team_id
     is given and multiple candidates match, prefers the one currently on
-    that team. Returns None if no confident match is found â€” never
+    that team. Returns None if no confident match is found ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â never
     guesses at an ID, since a WRONG player's stats would be worse than
     no stats at all.
     """
@@ -1432,7 +1432,7 @@ def fetch_full_lineup_with_stats(away_abbr: str, home_abbr: str, away_id: int, h
     Combines fetch_confirmed_lineup() + player ID resolution + individual
     stat fetching into the complete per-batter data needed for display.
     Any batter whose name can't be resolved to a real player ID, or whose
-    stats can't be fetched, is included with pos/name/hand only â€” stats
+    stats can't be fetched, is included with pos/name/hand only ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â stats
     fields simply absent, never fabricated.
     """
     lineup = fetch_confirmed_lineup(away_abbr, home_abbr)
@@ -1458,7 +1458,7 @@ def fetch_full_lineup_with_stats(away_abbr: str, home_abbr: str, away_id: int, h
 def fetch_team_injury_count(team_full_name: str) -> dict:
     """
     Scrapes MLB.com's official injury report for a rough per-team injury
-    burden signal. This is NOT a precise player-by-player IL tracker â€”
+    burden signal. This is NOT a precise player-by-player IL tracker ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
     it counts how many injury-related headlines are currently listed
     under a team's section, which is a coarse but real, live proxy for
     "how banged up is this team right now." Returns {} on any failure.
@@ -1485,7 +1485,7 @@ def fetch_team_injury_count(team_full_name: str) -> dict:
         soup = BeautifulSoup(r.text, "html.parser")
 
         # MLB.com's injury report groups headlines under an <h3> with the
-        # team nickname (e.g. "Blue Jays", "Orioles" â€” not the full "New
+        # team nickname (e.g. "Blue Jays", "Orioles" ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â not the full "New
         # York Yankees"), followed by a handful of <a> headline links
         # before the next <h3>. Match on the nickname (last word(s) of
         # the full team name) since that's what the page actually uses.
@@ -1515,7 +1515,7 @@ def fetch_team_injury_count(team_full_name: str) -> dict:
         node = start_node.find_next()
         while node is not None and node is not end_node:
             href = node.get('href', '') if node.name == 'a' else ''
-            # Exclude "More" links (â€¦/news/topic/team-injury-report), which
+            # Exclude "More" links (ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦/news/topic/team-injury-report), which
             # aggregate rather than represent an individual headline.
             if href.startswith('https://www.mlb.com/news/') and '/topic/' not in href:
                 count += 1
@@ -1534,7 +1534,7 @@ def fetch_bullpen_stats(team_id: int) -> dict:
     """
     Real bullpen-ONLY FIP/ERA/WHIP, using the MLB Stats API's documented
     situation-code split system: stats=statSplits with sitCodes="rp"
-    ("as a reliever" â€” confirmed against the API's own situationCodes
+    ("as a reliever" ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â confirmed against the API's own situationCodes
     list, alongside "sp" for "as a starter"). This replaces the
     whole-staff team ERA that calculate_win_probability previously used
     as a bullpen proxy, which mixed starters' innings into a number
@@ -1583,20 +1583,20 @@ def fetch_bullpen_stats(team_id: int) -> dict:
 
 def fetch_bullpen_pitch_load(team_id: int, days_back: int = 2) -> dict:
     """
-    Real reliever pitch-count aggregation from boxscores â€” an upgrade on
+    Real reliever pitch-count aggregation from boxscores ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â an upgrade on
     fetch_bullpen_fatigue()'s played-yesterday proxy below. For each of
     the team's completed games in the last `days_back` days, pulls that
     game's boxscore and reads the team's OWN "pitchers" array (appearance
-    order per MLB's GUMBO schema â€” index 0 is always the starter) to sum
+    order per MLB's GUMBO schema ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â index 0 is always the starter) to sum
     numberOfPitches for everyone EXCEPT the starter. Explicitly reads
     from teams[side] where side is resolved per-game from whether this
-    team was home or away in THAT game â€” a naive version of this that
+    team was home or away in THAT game ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a naive version of this that
     always reads teams["home"] would silently attribute the wrong team's
     relievers whenever the team being checked was actually away that day.
 
     Returns {"pitches": int, "has_data": bool}. has_data=False on any
     fetch error or when no completed games fall in the window (e.g. an
-    off day) â€” callers should treat that as "no signal," not "rested."
+    off day) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â callers should treat that as "no signal," not "rested."
     """
     if not team_id:
         return {"pitches": 0, "has_data": False}
@@ -1646,7 +1646,7 @@ def fetch_bullpen_pitch_load(team_id: int, days_back: int = 2) -> dict:
 
 def fetch_bullpen_fatigue(team_id: int) -> float:
     """
-    Bullpen fatigue proxy â€” returns a factor in [0.9, 1.0], 1.0 = fully
+    Bullpen fatigue proxy ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â returns a factor in [0.9, 1.0], 1.0 = fully
     rested, 0.9 = played yesterday. FALLBACK ONLY as of the pitch-count
     upgrade above: calculate_win_probability() now prefers
     fetch_bullpen_pitch_load()'s real reliever pitch counts and only
@@ -1679,7 +1679,7 @@ def fetch_pitcher_hand(pitcher_id: int) -> str:
 
 def fetch_team_rest_status(team_id: int) -> dict:
     """
-    Real fatigue signal from the MLB Stats API â€” no scraping, no new data
+    Real fatigue signal from the MLB Stats API ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â no scraping, no new data
     source. Checks whether a team played a game YESTERDAY (0 days rest
     before today) vs having had at least one day off. A team on zero rest
     facing a well-rested opponent is a modest, real, well-documented
@@ -1756,14 +1756,14 @@ def _picks_to_v6_games(picks: List) -> List:
         abbr_a = TEAM_ABBR.get(away, away[:3].upper())
         abbr_b = TEAM_ABBR.get(home, home[:3].upper())
 
-        # â”€â”€ Real probable pitchers for this matchup (if today) â”€â”€
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Real probable pitchers for this matchup (if today) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
         real = probables.get((abbr_a, abbr_b), {})
         away_pitcher = real.get('away_name') or p.get('away_pitcher', 'TBD')
         home_pitcher = real.get('home_name') or p.get('home_pitcher', 'TBD')
         away_pid = real.get('away_id')
         home_pid = real.get('home_id')
 
-        # â”€â”€ Real game start time â€” was previously hardcoded to
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Real game start time ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â was previously hardcoded to
         #    time.time()+3600 (literally "whenever this script happens to
         #    run, plus an hour"), which would display a wrong time on
         #    every card regardless of the game's actual schedule. Now
@@ -1780,7 +1780,7 @@ def _picks_to_v6_games(picks: List) -> List:
                 # in MLB's gameDate means UTC, but the format string here
                 # just consumes the literal "Z" character without attaching
                 # tzinfo). Calling .timestamp() on that naive value silently
-                # assumes it's already LOCAL time, not UTC â€” on a system
+                # assumes it's already LOCAL time, not UTC ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â on a system
                 # west of UTC this shifts every game time forward, which is
                 # exactly why West Coast evening games were showing up as
                 # "Fri 12-2 AM" instead of "Thu evening." Fix: explicitly
@@ -1799,21 +1799,21 @@ def _picks_to_v6_games(picks: List) -> List:
             except (ValueError, TypeError) as e:
                 print(f"  game_date parse failed ({game_date_str}): {e}")
         if start_at_ms is None:
-            # No real schedule data for this matchup â€” fall back to "unknown"
+            # No real schedule data for this matchup ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â fall back to "unknown"
             # rather than fabricating a plausible-looking but fake time.
             start_at_ms = int(time.time() * 1000)
 
-        # â”€â”€ Real pitcher season stats â”€â”€
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Real pitcher season stats ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
         pa = pitcher_stats_for(away_pid)
         pb = pitcher_stats_for(home_pid)
 
-        # â”€â”€ Real team batting season stats â”€â”€
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Real team batting season stats ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
         tid_a = MLB_TEAM_IDS.get(abbr_a)
         tid_b = MLB_TEAM_IDS.get(abbr_b)
         bat_a = team_stats_for(tid_a)
         bat_b = team_stats_for(tid_b)
 
-        # â”€â”€ Total line: real posted line preferred, OPS-based estimate fallback â”€â”€
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Total line: real posted line preferred, OPS-based estimate fallback ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
         real_line = p.get('line')
         if real_line is not None:
             total = round(float(real_line), 1)
@@ -1830,15 +1830,15 @@ def _picks_to_v6_games(picks: List) -> List:
             _pf = PARK_FACTORS.get(abbr_b, 100) / 100.0
             total = round(max(6.0, min(13.0, 8.5 * (_ops_a + _ops_b) / (2 * _lg_ops) * _pf)), 1)
 
-        # â”€â”€ Over/Under direction â€” real expected-runs model â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Over/Under direction ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â real expected-runs model ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
         # Replaces random.random() with a genuine signal:
         #
-        # Expected combined runs = (SP run rate Ã— estimated IP Ã— opp offense factor)
+        # Expected combined runs = (SP run rate ÃƒÆ’Ã¢â‚¬â€ estimated IP ÃƒÆ’Ã¢â‚¬â€ opp offense factor)
         #   for both starters + both bullpens, scaled by park factor.
         # The direction (OVER/UNDER) is whichever side the model estimate falls on
         # relative to the posted total. Edge is computed via a normal-CDF
-        # approximation: total MLB run distributions have Ïƒ â‰ˆ 1.5 runs around
-        # any model estimate, so a 0.75-run gap â†’ ~17% edge, a 1.5-run gap â†’ ~32%.
+        # approximation: total MLB run distributions have ÃƒÂÃ†â€™ ÃƒÂ¢Ã¢â‚¬Â°Ã‹â€  1.5 runs around
+        # any model estimate, so a 0.75-run gap ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ ~17% edge, a 1.5-run gap ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ ~32%.
         #
         # All ERA values in pa/pb have already been shrunk toward league average
         # proportional to IP sample size (via fetch_real_pitcher_stats), so
@@ -1851,7 +1851,7 @@ def _picks_to_v6_games(picks: List) -> List:
         _EST_SP_IP       = 5.5   # median modern SP start
         _EST_BULL_IP     = 3.5   # pen innings after SP leaves
         _RUN_SIGMA       = 1.5   # std dev of actual MLB game totals
-        _MARKET_VIG_PROB = 110.0 / 210.0  # -110 both sides â†’ 52.38% implied
+        _MARKET_VIG_PROB = 110.0 / 210.0  # -110 both sides ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ 52.38% implied
 
         def _erf_approx(x):
             # Horner-form rational approximation (Abramowitz & Stegun 7.1.26)
@@ -1878,7 +1878,7 @@ def _picks_to_v6_games(picks: List) -> List:
         bull_runs_b = (_LEAGUE_AVG_ERA / 9.0) * _EST_BULL_IP * (ops_fa / _LEAGUE_AVG_OPS)
         model_total_ou = (sp_runs_a + sp_runs_b + bull_runs_a + bull_runs_b) * park_f
 
-        ou_gap = model_total_ou - total  # positive â†’ OVER; negative â†’ UNDER
+        ou_gap = model_total_ou - total  # positive ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ OVER; negative ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ UNDER
         if ou_gap >= 0:
             ou_pick      = 'OVER'
             ou_model_prob = 1.0 - _normal_cdf(-ou_gap / _RUN_SIGMA)
@@ -1888,7 +1888,7 @@ def _picks_to_v6_games(picks: List) -> List:
         ou_pick_str = f'{ou_pick} {total}'
         ou_edge = round(ou_model_prob - _MARKET_VIG_PROB, 4)
 
-        # K-line â€” grounded in the away pitcher's real K/9 rate over an
+        # K-line ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â grounded in the away pitcher's real K/9 rate over an
         # estimated ~6 innings per start, instead of a pure random line.
         league_avg_k9 = 8.6
         pa_k9 = pa.get('k9') if pa else None
@@ -1920,22 +1920,22 @@ def _picks_to_v6_games(picks: List) -> List:
             'modelProb': round(model_prob, 3),
             'mlPriceAmerican': odds,
             'marketProb': round(1/ml_price_dec, 3) if ml_price_dec > 0 else 0.5,
-            # â”€â”€ qualifies now passes through the REAL flag computed in the
+            # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ qualifies now passes through the REAL flag computed in the
             #    main loop (edge vs config min_edge, total vs the tuned
-            #    line band) instead of being hardcoded True here â€” this was
+            #    line band) instead of being hardcoded True here ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â this was
             #    a second, disconnected place the flag got force-set,
             #    independent of the one in the main loop that writes to
             #    picks_log.csv, so the UI and the log could disagree about
             #    whether a pick actually qualified.
             'qualifies': bool(p.get('qualifies', True)),
-            # â”€â”€ Real pitcher stats (None when unavailable â€” never fabricated) â”€â”€
+            # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Real pitcher stats (None when unavailable ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â never fabricated) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
             'pitcherA_era':  pa.get('era'),  'pitcherA_whip': pa.get('whip'),
             'pitcherA_k9':   pa.get('k9'),   'pitcherA_ip':   pa.get('ip'),
             'pitcherA_w':    pa.get('w'),    'pitcherA_l':    pa.get('l'),
             'pitcherB_era':  pb.get('era'),  'pitcherB_whip': pb.get('whip'),
             'pitcherB_k9':   pb.get('k9'),   'pitcherB_ip':   pb.get('ip'),
             'pitcherB_w':    pb.get('w'),    'pitcherB_l':    pb.get('l'),
-            # â”€â”€ Real team batting stats â”€â”€
+            # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Real team batting stats ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
             'teamA_avg': bat_a.get('avg'), 'teamA_obp': bat_a.get('obp'),
             'teamA_slg': bat_a.get('slg'), 'teamA_ops': bat_a.get('ops'),
             'teamA_hr':  bat_a.get('hr'),  'teamA_rbi': bat_a.get('rbi'),
@@ -1946,10 +1946,10 @@ def _picks_to_v6_games(picks: List) -> List:
             'teamB_sb':  bat_b.get('sb'),
         }
 
-        # â”€â”€ Confirmed daily lineup with individual batter stats â€” only
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Confirmed daily lineup with individual batter stats ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â only
         #    fetched if the game has real team IDs (needed for player ID
         #    disambiguation). Absent entirely (no 'lineupA'/'lineupB' keys)
-        #    if lineups haven't posted yet or the scrape fails â€” the HTML
+        #    if lineups haven't posted yet or the scrape fails ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the HTML
         #    side treats missing keys the same as an empty result.
         if tid_a and tid_b:
             full_lineup = fetch_full_lineup_with_stats(abbr_a, abbr_b, tid_a, tid_b)
@@ -2013,17 +2013,17 @@ def export_to_html(picks: List, output_path: str = None) -> str:
     except FileNotFoundError:
         print(f"Template not found: {out_path}"); return ""
 
-    # â”€â”€ Build game objects (now enriched with real pitcher/team stats) â”€â”€
+    # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Build game objects (now enriched with real pitcher/team stats) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
     v6_games   = _picks_to_v6_games(picks)
     games_json = json.dumps(v6_games, separators=(',', ':'))
 
-    # â”€â”€ Real monthly schedules for calendar â”€â”€
+    # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Real monthly schedules for calendar ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
     # Fetch real schedules for ALL 30 MLB teams, so past results always show
     all_abbrs = list(TEAM_ABBR.values())
     schedules = fetch_month_schedule_all_teams(all_abbrs)
     schedules_json = json.dumps(schedules, separators=(',', ':'))
 
-    # â”€â”€ Collect real team batting stats for the standalone Batting tab â”€â”€
+    # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Collect real team batting stats for the standalone Batting tab ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
     team_stats = {}
     for g in v6_games:
         for side, abbr in [('A', g.get('a')), ('B', g.get('b'))]:
@@ -2031,7 +2031,7 @@ def export_to_html(picks: List, output_path: str = None) -> str:
                 continue
             avg = g.get(f'team{side}_avg')
             if avg is None:
-                continue  # no real data fetched for this team â€” omit rather than fabricate
+                continue  # no real data fetched for this team ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â omit rather than fabricate
             team_stats[abbr] = {
                 'avg': avg, 'obp': g.get(f'team{side}_obp'),
                 'slg': g.get(f'team{side}_slg'), 'ops': g.get(f'team{side}_ops'),
@@ -2043,16 +2043,16 @@ def export_to_html(picks: List, output_path: str = None) -> str:
     run_date   = datetime.now().strftime('%b %d %Y  %H:%M')
     pick_count = len(picks)
 
-    # â”€â”€ Strip ALL previous injections (handles garbled AND clean box-drawing chars) â”€â”€
+    # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Strip ALL previous injections (handles garbled AND clean box-drawing chars) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
     html = re.sub(
         r'[ \t]*//[^\n]*PARLAYOS LIVE DATA.*?[ \t]*//[^\n]*END PARLAYOS LIVE DATA[^\n]*\n?',
         '', html, flags=re.DOTALL
     )
     html = re.sub(r'\n{3,}', '\n\n', html)
 
-    # â”€â”€ Build fresh injection â€” games, schedules, and teamStats ALL included â”€â”€
+    # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Build fresh injection ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â games, schedules, and teamStats ALL included ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
     injection_lines = [
-        "    // â”€â”€ PARLAYOS LIVE DATA (" + run_date + ") â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€",
+        "    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ PARLAYOS LIVE DATA (" + run_date + ") ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
         "    window.PARLAYOS_DATA = {",
         "      runDate: \"" + run_date + "\",",
         "      pickCount: " + str(pick_count) + ",",
@@ -2066,17 +2066,17 @@ def export_to_html(picks: List, output_path: str = None) -> str:
         "      if(typeof renderDashboard==='function') renderDashboard();",
         "      if(typeof renderAll      ==='function') renderAll();",
         "    })();",
-        "    // â”€â”€ END PARLAYOS LIVE DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€",
+        "    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ END PARLAYOS LIVE DATA ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
     ]
     injection = "\n".join(injection_lines)
 
-    # â”€â”€ Sanity check before writing: every field must actually be present â”€â”€
-    assert '"games":' not in injection or True  # games is a bare array, not keyed this way â€” skip
+    # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Sanity check before writing: every field must actually be present ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+    assert '"games":' not in injection or True  # games is a bare array, not keyed this way ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â skip
     assert games_json in injection, "games_json missing from injection!"
     assert schedules_json in injection, "schedules_json missing from injection!"
     assert team_stats_json in injection, "team_stats_json missing from injection!"
 
-    # â”€â”€ Insert at stable marker (preferred) â”€â”€
+    # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Insert at stable marker (preferred) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
     MARKER = '    // <!--PARLAYOS_INJECT_POINT-->'
     if MARKER in html:
         html = html.replace(MARKER, MARKER + '\n' + injection)
@@ -2093,14 +2093,14 @@ def export_to_html(picks: List, output_path: str = None) -> str:
 
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"âœ“ {pick_count} picks â†’ {out_path}")
-    print(f"âœ“ {len(schedules)} team schedules, {len(team_stats)} team batting lines included")
+    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {pick_count} picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {out_path}")
+    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {len(schedules)} team schedules, {len(team_stats)} team batting lines included")
     return out_path
 
 
 
 def run(html_path: str = None):
-    """Entry point for run_all.py â€” mirrors nfl_ace.run() / nba_ace.run()"""
+    """Entry point for run_all.py â€” mirrors nfl_ace.run() / nba_ace.run() - V4 FIX 2026-07-17"""
     import_pending_slip()
     config = load_config()
     engine = PredictionEngine(ODDS_API_KEY)
@@ -2200,7 +2200,7 @@ def run(html_path: str = None):
 
 
 if __name__ == "__main__":
-    # Check for a pasted slip dropped since the last run â€” see
+    # Check for a pasted slip dropped since the last run ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see
     # import_pending_slip()'s docstring. Runs first and independently of
     # everything else below: even if the odds API is down or rate-limited,
     # a slip the person already pasted still gets logged.
@@ -2211,12 +2211,12 @@ if __name__ == "__main__":
     odds_data = engine.fetch_live_odds()
 
     # Fetch real probable pitchers ONCE up front (was previously only used
-    # much later in _picks_to_v6_games for display â€” the actual prediction
+    # much later in _picks_to_v6_games for display ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the actual prediction
     # model never saw real pitcher IDs at all, it always got 0).
     probables = fetch_today_probable_pitchers()
 
     games = []
-    seen_matchups = set()  # (away, home) â€” dedup same game from multiple bookmakers
+    seen_matchups = set()  # (away, home) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â dedup same game from multiple bookmakers
     skipped_non_mlb_team = []
     for game in odds_data:  # Process ALL games
         if len(game.get("bookmakers", [])) > 0:
@@ -2225,9 +2225,9 @@ if __name__ == "__main__":
                 home = game["home_team"]
                 away = game["away_team"]
 
-                # â”€â”€ Real-MLB-team filter â”€â”€
+                # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Real-MLB-team filter ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
                 # The Odds API's baseball_mlb sport key isn't limited to
-                # regular-season games between the 30 real franchises â€” it
+                # regular-season games between the 30 real franchises ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â it
                 # can also include the All-Star Game (home_team/away_team
                 # come back as "American League"/"National League", not a
                 # real team), and potentially other non-standard entries.
@@ -2239,7 +2239,7 @@ if __name__ == "__main__":
                 # truncation fallback used elsewhere for display purposes.
                 # That fallback produced "AME"/"NAT" abbreviations for a
                 # fictional matchup with no real roster, season stats, or
-                # schedule behind it â€” every downstream stats lookup then
+                # schedule behind it ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â every downstream stats lookup then
                 # silently fell back to league-average placeholders, and
                 # the model produced a confident-looking pick built
                 # entirely out of noise for a game that was never
@@ -2250,7 +2250,7 @@ if __name__ == "__main__":
 
                 matchup_key = (away, home)
                 if matchup_key in seen_matchups:
-                    continue  # same game from a second bookmaker entry â€” skip
+                    continue  # same game from a second bookmaker entry ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â skip
                 seen_matchups.add(matchup_key)
                 home_odds = next(o["price"] for o in h2h["outcomes"] if o["name"] == home)
                 market_prob = 100/(home_odds+100) if home_odds > 0 else -home_odds/(-home_odds+100)
@@ -2258,14 +2258,14 @@ if __name__ == "__main__":
                 # Resolve REAL team IDs (was hardcoded 0 for every game, which
                 # made calculate_win_probability's team/pitcher lookups fail
                 # identically for both sides and silently zero out those
-                # factors â€” the model was effectively only market_prob+noise).
+                # factors ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the model was effectively only market_prob+noise).
                 home_abbr = TEAM_ABBR.get(home, home[:3].upper())
                 away_abbr = TEAM_ABBR.get(away, away[:3].upper())
                 home_id = MLB_TEAM_IDS.get(home_abbr, 0)
                 away_id = MLB_TEAM_IDS.get(away_abbr, 0)
 
                 # Resolve REAL probable pitchers for this matchup (was
-                # hardcoded "TBD"/id=0 for every game â€” fetch_today_probable_
+                # hardcoded "TBD"/id=0 for every game ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â fetch_today_probable_
                 # pitchers() existed but was never called before this point).
                 real = probables.get((away_abbr, home_abbr), {})
                 home_pitcher_id = real.get('home_id', 0)
@@ -2277,7 +2277,7 @@ if __name__ == "__main__":
                 # to NYC's lat/lon for every single game regardless of venue).
                 lat, lon = STADIUM_LOCATIONS.get(home_abbr, (40.0, -74.0))
 
-                # Real O/U total line â€” was previously never fetched at all;
+                # Real O/U total line ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â was previously never fetched at all;
                 # _picks_to_v6_games synthesized a fake total from
                 # random.random(). fetch_live_odds() now requests the
                 # "totals" market alongside h2h, so the real posted line (and
@@ -2285,7 +2285,7 @@ if __name__ == "__main__":
                 # game and, further down, to actually gate qualifies against
                 # min_total_line/max_total_line. real_total stays None (never
                 # a fabricated number) when no bookmaker has posted a total
-                # yet â€” the caller must treat that as "unknown," not "8.5."
+                # yet ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the caller must treat that as "unknown," not "8.5."
                 real_total, over_price, under_price = None, None, None
                 totals_mkt = next((m for m in game["bookmakers"][0]["markets"] if m["key"] == "totals"), None)
                 if totals_mkt:
@@ -2308,7 +2308,7 @@ if __name__ == "__main__":
 
     if skipped_non_mlb_team:
         print(f"  Skipped {len(skipped_non_mlb_team)} non-regular-season entr"
-              f"{'y' if len(skipped_non_mlb_team)==1 else 'ies'} (e.g. All-Star Game â€” "
+              f"{'y' if len(skipped_non_mlb_team)==1 else 'ies'} (e.g. All-Star Game ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â "
               f"not a real matchup between two of the 30 MLB teams):")
         for s in skipped_non_mlb_team:
             print(f"    - {s}")
@@ -2327,14 +2327,14 @@ if __name__ == "__main__":
         prob = engine.calculate_win_probability(g)
         implied = g["market_prob"]
 
-        # Pick whichever side the model actually favors â€” the previous
+        # Pick whichever side the model actually favors ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the previous
         # version hardcoded "pick": g["home"] unconditionally, meaning every
         # single recommendation was the home team regardless of what prob
         # said. edge/odds are computed for whichever side is actually picked.
         if prob >= 0.5:
             pick, pick_prob, pick_odds = g["home"], prob, g["odds"]["home"]
         else:
-            # Model favors away â€” convert market_prob/odds to the away side
+            # Model favors away ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â convert market_prob/odds to the away side
             pick, pick_prob = g["away"], 1 - prob
             away_dec = 1 / (1 - implied) if implied < 1 else 2.0
             pick_odds = int((away_dec - 1) * 100) if away_dec >= 2 else int(-100 / (away_dec - 1))
@@ -2359,7 +2359,7 @@ if __name__ == "__main__":
             "line": g.get("real_total"),
             "kind": "team",
             # market was never set on these rows before, and mlb_backtest.py's
-            # analyse() silently skips any row with an empty market column â€”
+            # analyse() silently skips any row with an empty market column ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
             # so every automated pick this script ever wrote was invisible to
             # the backtest, regardless of whether won/profit_1u ever got
             # filled in by hand later. "Moneyline" matches the value already
@@ -2368,12 +2368,12 @@ if __name__ == "__main__":
             "market": "Moneyline",
         }
         # Individual edge-term values, for mlb_fit_weights.py's eventual full
-        # multi-factor regression against graded outcomes. Rounded to 4dp â€”
+        # multi-factor regression against graded outcomes. Rounded to 4dp ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
         # plenty of precision for a future fit, keeps the CSV readable.
         for _col, _val in g.get("_edge_components", {}).items():
             game_data[_col] = round(_val, 4)
 
-        # â”€â”€ qualifies: was hardcoded True for every game ("threshold
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ qualifies: was hardcoded True for every game ("threshold
         #    removed"), which meant mlb_backtest.py's tuned min_edge and
         #    total-line band were written to mlb_config.json but never
         #    actually filtered anything. Real gating restored:
@@ -2382,7 +2382,7 @@ if __name__ == "__main__":
         #      - IF a real O/U total is available for this game, it must
         #        fall inside [min_total_line, max_total_line]. A missing
         #        total (bookmaker hasn't posted one yet) does NOT
-        #        disqualify the moneyline pick â€” the two are different
+        #        disqualify the moneyline pick ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the two are different
         #        markets, and this system only produces one ML pick per
         #        game here, not a separate O/U pick, so an absent total is
         #        "unknown," not "out of band."
@@ -2402,10 +2402,10 @@ if __name__ == "__main__":
         all_games_data.append(game_data)
         write_pick_to_log(game_data)
 
-    # Export ALL games so V6 UI always shows data â€” qualifies is now a real,
+    # Export ALL games so V6 UI always shows data ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â qualifies is now a real,
     # meaningful flag on each one (see above) rather than a decorative True
     # on every row, so the UI can filter/sort/highlight on it if desired.
     export_to_html(all_games_data)
     qualifying = sum(1 for gd in all_games_data if gd["qualifies"])
-    print(f"\nâœ“ {len(all_games_data)} games exported ({qualifying} qualify at current thresholds)")
-    print(f"âœ“ Picks â†’ {PICKS_LOG_PATH}")
+    print(f"\nÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {len(all_games_data)} games exported ({qualifying} qualify at current thresholds)")
+    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {PICKS_LOG_PATH}")
