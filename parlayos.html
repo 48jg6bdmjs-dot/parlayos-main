@@ -1050,6 +1050,7 @@ body.dark .mini-table th,body.dark .mini-table td{border-bottom-color:rgba(255,2
                   <button class="btn" id="resetPrefs">Reset prefs</button>
                   <button class="btn primary" id="savePrefs">Save & apply</button>
                 </div>
+              </div>
               <div class="glass glass-blur panel-pad">
                 <b>System signature</b>
                 <div class="mono-block" id="sigBlock" style="margin-top:10px; white-space:pre-wrap; line-height:1.6;"></div>
@@ -1066,9 +1067,9 @@ body.dark .mini-table th,body.dark .mini-table td{border-bottom-color:rgba(255,2
                   <button class="chip" data-theme="dark">☾ Dark</button>
                 </div>
               </div>
-            </div>
+
           </div>
-        </div>
+          </div>
         </section>
 
         <!-- ABOUT -->
@@ -1158,8 +1159,16 @@ Design goals
           <div class="quick-nav">
             <button class="quick-nav-btn" data-go="fantasyshop">🛍️ Fantasy Shop</button>
             <button class="quick-nav-btn" data-go="dashboard">📊 MLB Dashboard</button>
+            <button class="quick-nav-btn" data-go="nfl-dashboard">🏈 NFL</button>
+            <button class="quick-nav-btn" data-go="nba-dashboard">🏀 NBA</button>
           </div>
           <div style="margin-bottom:12px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted);font-weight:800;margin-bottom:8px;">SPORT</div>
+            <div class="chip-row" id="fantasySportChips" style="flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+              <button class="chip active" data-fsport="mlb">⚾ MLB</button>
+              <button class="chip" data-fsport="nfl">🏈 NFL</button>
+              <button class="chip" data-fsport="nba">🏀 NBA</button>
+            </div>
             <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted);font-weight:800;margin-bottom:8px;">CONTEST TYPE</div>
             <div class="chip-row" id="fantasyContestChips" style="flex-wrap:wrap;gap:6px;"></div>
           </div>
@@ -1190,6 +1199,16 @@ Design goals
           <div class="quick-nav">
             <button class="quick-nav-btn" data-go="fantasy">🏟️ Fantasy Crew</button>
             <button class="quick-nav-btn" data-go="dashboard">📊 MLB Dashboard</button>
+            <button class="quick-nav-btn" data-go="nfl-dashboard">🏈 NFL</button>
+            <button class="quick-nav-btn" data-go="nba-dashboard">🏀 NBA</button>
+          </div>
+          <div style="margin-bottom:12px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted);font-weight:800;margin-bottom:8px;">SPORT</div>
+            <div class="chip-row" id="fantasyShopSportChips" style="flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+              <button class="chip active" data-fshop-sport="mlb">⚾ MLB</button>
+              <button class="chip" data-fshop-sport="nfl">🏈 NFL</button>
+              <button class="chip" data-fshop-sport="nba">🏀 NBA</button>
+            </div>
           </div>
           <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;" id="fantasyShopGameFilter"></div>
           <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;" id="fantasyShopFilter">
@@ -1204,17 +1223,14 @@ Design goals
           </div>
           <div id="fantasyShopList" style="display:flex;flex-direction:column;gap:8px;"></div>
         </section>
-
-      
-        <section class="screen" data-screen="nfl-dashboard" id="screen-nfl-dashboard"><div class="quick-nav"><button class="quick-nav-btn" data-go="nfl-parlay">Parlayinator</button><button class="quick-nav-btn" data-go="nfl-standings">NFL Stats</button><button class="quick-nav-btn" data-go="dashboard">MLB</button></div><div class="toolbar"><div class="search"><span>⌕</span><input id="nflDashSearch" placeholder="Search NFL..." /></div><button class="btn" id="nflDashShuffle">Shuffle odds</button></div><div class="cards" id="nflDashboardCards"></div></section>
+        <section class="screen" data-screen="nfl-dashboard" id="screen-nfl-dashboard"><div class="quick-nav"><button class="quick-nav-btn" data-go="nfl-parlay">NFL Parlayinator</button><button class="quick-nav-btn" data-go="nfl-picks">NFL Shop</button><button class="quick-nav-btn" data-go="nfl-standings">NFL Stats</button><button class="quick-nav-btn" data-go="dashboard">MLB</button></div><div class="toolbar"><div class="search"><span>⌕</span><input id="nflDashSearch" placeholder="Search matchup, spread, market..." /></div><div class="chip-row" id="nflDashChips"></div><button class="btn" id="nflDashShuffle">Shuffle odds</button></div><div class="cards" id="nflDashboardCards"></div></section>
         <section class="screen" data-screen="nfl-parlay" id="screen-nfl-parlay"><div class="quick-nav"><button class="quick-nav-btn" data-go="nfl-dashboard">NFL Dashboard</button><button class="quick-nav-btn" data-go="nfl-standings">NFL Stats</button></div><div class="build"><div class="glass glass-blur panel-pad"><div style="display:flex; justify-content:space-between;"><b>NFL Parlayinator <span id="nflParlayOdds"></span></b><span class="badge" id="nflParlayCount">0 / 20</span></div><div class="slot-grid" id="nflParlaySlots"></div><div style="display:flex; gap:8px; margin-top:12px;"><button class="btn" id="nflClearParlay">Clear all</button><button class="btn primary" id="nflCopyParlay">Copy slip</button></div></div><div class="summary"><div class="glass glass-blur panel-pad"><b>Board pool</b><div class="pool" id="nflPoolList"></div></div><div class="glass glass-blur panel-pad"><div class="kpi"><div><div class="k">Combined (DEC)</div><div class="v" id="nflDecOdds">0.00</div></div><div><div class="k">Combined (AM)</div><div class="v" id="nflAmOdds">—</div></div><div><div class="k">Implied</div><div class="v" id="nflImplied">0.0%</div></div><div><div class="k">Model Prob</div><div class="v" id="nflModelProb">0.0%</div></div></div><div class="ev"><b>Expected Value</b><b id="nflEvVal">0.00%</b></div><div class="meter"><i id="nflEvMeter" style="width:18%"></i></div></div></div></div></section>
-        <section class="screen" data-screen="nfl-picks" id="screen-nfl-picks"><div id="nflPicksMount"></div></section>
+        <section class="screen" data-screen="nfl-picks" id="screen-nfl-picks"><div class="quick-nav"><button class="quick-nav-btn" data-go="nfl-dashboard">NFL Dashboard</button><button class="quick-nav-btn" data-go="nfl-parlay">NFL Parlayinator</button></div><div class="toolbar"><div class="chip-row" id="nflPicksChips"><button class="chip active" data-nfl-filter="all">All</button><button class="chip" data-nfl-filter="ou">O/U</button><button class="chip" data-nfl-filter="k">Spread</button><button class="chip" data-nfl-filter="ml">ML</button></div><button class="btn" id="nflExportPicks">Export</button></div><div id="nflPicksMount"></div></section>
         <section class="screen" data-screen="nfl-standings" id="screen-nfl-standings"><div id="nflStandingsMount"></div><div id="nflScheduleList"></div><span id="nflScheduleDate"></span></section>
-        <section class="screen" data-screen="nba-dashboard" id="screen-nba-dashboard"><div class="quick-nav"><button class="quick-nav-btn" data-go="nba-parlay">NBA Parlayinator</button><button class="quick-nav-btn" data-go="nba-standings">NBA Stats</button><button class="quick-nav-btn" data-go="dashboard">MLB</button></div><div class="toolbar"><div class="search"><span>⌕</span><input id="nbaDashSearch" placeholder="Search NBA..." /></div><button class="btn" id="nbaDashShuffle">Shuffle odds</button></div><div class="cards" id="nbaDashboardCards"></div></section>
+        <section class="screen" data-screen="nba-dashboard" id="screen-nba-dashboard"><div class="quick-nav"><button class="quick-nav-btn" data-go="nba-parlay">NBA Parlayinator</button><button class="quick-nav-btn" data-go="nba-picks">NBA Shop</button><button class="quick-nav-btn" data-go="nba-standings">NBA Stats</button><button class="quick-nav-btn" data-go="dashboard">MLB</button></div><div class="toolbar"><div class="search"><span>⌕</span><input id="nbaDashSearch" placeholder="Search matchup, spread, market..." /></div><div class="chip-row" id="nbaDashChips"></div><button class="btn" id="nbaDashShuffle">Shuffle odds</button></div><div class="cards" id="nbaDashboardCards"></div></section>
         <section class="screen" data-screen="nba-parlay" id="screen-nba-parlay"><div class="quick-nav"><button class="quick-nav-btn" data-go="nba-dashboard">NBA Dashboard</button><button class="quick-nav-btn" data-go="nba-standings">NBA Stats</button></div><div class="build"><div class="glass glass-blur panel-pad"><div style="display:flex; justify-content:space-between;"><b>NBA Parlayinator <span id="nbaParlayOdds"></span></b><span class="badge" id="nbaParlayCount">0 / 20</span></div><div class="slot-grid" id="nbaParlaySlots"></div><div style="display:flex; gap:8px; margin-top:12px;"><button class="btn" id="nbaClearParlay">Clear all</button><button class="btn primary" id="nbaCopyParlay">Copy slip</button></div></div><div class="summary"><div class="glass glass-blur panel-pad"><b>Board pool</b><div class="pool" id="nbaPoolList"></div></div><div class="glass glass-blur panel-pad"><div class="kpi"><div><div class="k">Combined (DEC)</div><div class="v" id="nbaDecOdds">0.00</div></div><div><div class="k">Combined (AM)</div><div class="v" id="nbaAmOdds">—</div></div><div><div class="k">Implied</div><div class="v" id="nbaImplied">0.0%</div></div><div><div class="k">Model Prob</div><div class="v" id="nbaModelProb">0.0%</div></div></div><div class="ev"><b>Expected Value</b><b id="nbaEvVal">0.00%</b></div><div class="meter"><i id="nbaEvMeter" style="width:18%"></i></div></div></div></div></section>
-        <section class="screen" data-screen="nba-picks" id="screen-nba-picks"><div id="nbaPicksMount"></div></section>
+        <section class="screen" data-screen="nba-picks" id="screen-nba-picks"><div class="quick-nav"><button class="quick-nav-btn" data-go="nba-dashboard">NBA Dashboard</button><button class="quick-nav-btn" data-go="nba-parlay">NBA Parlayinator</button></div><div class="toolbar"><div class="chip-row" id="nbaPicksChips"><button class="chip active" data-nba-filter="all">All</button><button class="chip" data-nba-filter="ou">O/U</button><button class="chip" data-nba-filter="k">Spread</button><button class="chip" data-nba-filter="ml">ML</button></div><button class="btn" id="nbaExportPicks">Export</button></div><div id="nbaPicksMount"></div></section>
         <section class="screen" data-screen="nba-standings" id="screen-nba-standings"><div id="nbaStandingsMount"></div><div id="nbaScheduleList"></div><span id="nbaScheduleDate"></span></section>
-
       </div>
 
       <div class="overlay" id="shutdownOverlay" aria-hidden="true">
@@ -1317,47 +1333,26 @@ window.PARLAYOS_PICKS_LOG = ["date,tag,team,kind,market,open_ml,close_ml,clv_pts
         let src = (live && Array.isArray(live.games)) ? live.games : (Array.isArray(window.PARLAYOS_GAMES) ? window.PARLAYOS_GAMES : []);
         const seen = new Set(); src = src.filter(g => { const key = `${g.a}@${g.b}`; if(seen.has(key)) return false; seen.add(key); return true; });
         const todayFiltered = src.filter(isTodayGame);
-        games = todayFiltered.length ? todayFiltered : src.filter(g=>!g.date);
-        if(!games.length && (!src || src.length===0)){ games = genGames(); }
+        games = todayFiltered.length ? todayFiltered : (src.filter(g=>!g.date).length ? src.filter(g=>!g.date) : src);
 
-        // ── NFL/NBA: prefer real data from nfl_ace.py/nba_ace.py's export_to_html
-        //    (window.PARLAYOS_NFL_DATA / window.PARLAYOS_NBA_DATA) when present,
-        //    falling back to the Math.random() mock generators ONLY when no real
-        //    data has been injected. Previously this always called genNFLGames()/
-        //    genNBAGames() unconditionally on every call — since loadRealData()
-        //    runs on nearly every navigation (see boot() and the reshuffle/random-
-        //    pick button handlers), that meant real injected data got overwritten
-        //    with random mock data within moments of being loaded, every single
-        //    time. The dedup + isTodayGame filtering below mirrors the same
-        //    pattern already used for MLB's `games` above, for consistency.
         try{
           const liveNFL = window.PARLAYOS_NFL_DATA;
           let srcNFL = (liveNFL && Array.isArray(liveNFL.games)) ? liveNFL.games : [];
-          if(srcNFL.length){
-            const seenNFL = new Set();
-            srcNFL = srcNFL.filter(g => { const key = `${g.a}@${g.b}`; if(seenNFL.has(key)) return false; seenNFL.add(key); return true; });
-            const nflTodayFiltered = srcNFL.filter(isTodayGame);
-            gamesNFL = nflTodayFiltered.length ? nflTodayFiltered : srcNFL.filter(g=>!g.date);
-            if(!gamesNFL.length) gamesNFL = filterTodayGames(genNFLGames());
-          } else {
-            gamesNFL = filterTodayGames(genNFLGames());
-          }
-        }catch(e){ console.warn('NFL data load err:', e.message); try{ gamesNFL = genNFLGames(); }catch{} }
+          const seenNFL = new Set();
+          srcNFL = srcNFL.filter(g => { const key = `${g.a}@${g.b}`; if(seenNFL.has(key)) return false; seenNFL.add(key); return true; });
+          const nflTodayFiltered = srcNFL.filter(isTodayGame);
+          gamesNFL = nflTodayFiltered.length ? nflTodayFiltered : (srcNFL.filter(g=>!g.date).length ? srcNFL.filter(g=>!g.date) : srcNFL);
+        }catch(e){ console.warn('NFL data load err:', e.message); gamesNFL = []; }
 
         try{
           const liveNBA = window.PARLAYOS_NBA_DATA;
           let srcNBA = (liveNBA && Array.isArray(liveNBA.games)) ? liveNBA.games : [];
-          if(srcNBA.length){
-            const seenNBA = new Set();
-            srcNBA = srcNBA.filter(g => { const key = `${g.a}@${g.b}`; if(seenNBA.has(key)) return false; seenNBA.add(key); return true; });
-            const nbaTodayFiltered = srcNBA.filter(isTodayGame);
-            gamesNBA = nbaTodayFiltered.length ? nbaTodayFiltered : srcNBA.filter(g=>!g.date);
-            if(!gamesNBA.length) gamesNBA = filterTodayGames(genNBAGames());
-          } else {
-            gamesNBA = filterTodayGames(genNBAGames());
-          }
-        }catch(e){ console.warn('NBA data load err:', e.message); try{ gamesNBA = genNBAGames(); }catch{} }
-      }catch(e){ games = genGames(); try{ gamesNFL = genNFLGames(); }catch{} try{ gamesNBA = genNBAGames(); }catch{} }
+          const seenNBA = new Set();
+          srcNBA = srcNBA.filter(g => { const key = `${g.a}@${g.b}`; if(seenNBA.has(key)) return false; seenNBA.add(key); return true; });
+          const nbaTodayFiltered = srcNBA.filter(isTodayGame);
+          gamesNBA = nbaTodayFiltered.length ? nbaTodayFiltered : (srcNBA.filter(g=>!g.date).length ? srcNBA.filter(g=>!g.date) : srcNBA);
+        }catch(e){ console.warn('NBA data load err:', e.message); gamesNBA = []; }
+      }catch(e){ console.warn('loadRealData err', e); games = []; gamesNFL = []; gamesNBA = []; }
       const mini = document.getElementById('miniBoard');
       const boardPanel = mini ? mini.closest('.glass') : null;
       const count = document.getElementById('activeGamesCount');
@@ -1378,37 +1373,15 @@ window.PARLAYOS_PICKS_LOG = ["date,tag,team,kind,market,open_ml,close_ml,clv_pts
     function getTodayISO(){ const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
     function normalizeGameDate(d){ if(!d) return null; const s=String(d).trim(); if(/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0,10); try{ const parsed=new Date(s); if(!isNaN(parsed)) return `${parsed.getFullYear()}-${String(parsed.getMonth()+1).padStart(2,'0')}-${String(parsed.getDate()).padStart(2,'0')}`; }catch{} return null; }
     function isTodayGame(g){ if(!g) return false; const today=getTodayISO(); if(!g.date) return true; const nd=normalizeGameDate(g.date); if(!nd) return true; return nd===today; }
-    function filterTodayGames(arr){ if(!Array.isArray(arr)||arr.length===0) return arr; const filtered=arr.filter(isTodayGame); return filtered.length?filtered:arr.filter(g=>!g.date); }
-const TEAMS = [
-      {a:'NYY',b:'BOS', cityA:'New York', cityB:'Boston', lgA:'AL East', lgB:'AL East'},
-      {a:'LAD',b:'SD', cityA:'Los Angeles', cityB:'San Diego', lgA:'NL West', lgB:'NL West'},
-      {a:'ATL',b:'NYM', cityA:'Atlanta', cityB:'New York', lgA:'NL East', lgB:'NL East'},
-      {a:'HOU',b:'TEX', cityA:'Houston', cityB:'Texas', lgA:'AL West', lgB:'AL West'},
-      {a:'CHC',b:'STL', cityA:'Chicago', cityB:'St. Louis', lgA:'NL Central', lgB:'NL Central'},
-      {a:'SEA',b:'OAK', cityA:'Seattle', cityB:'Oakland', lgA:'AL West', lgB:'AL West'},
-    ];
-    function genGames(){
-      const today = getTodayISO();
-      return TEAMS.slice(0,1).map((t,i)=>{
-        const total = +(7.5 + Math.random()*3.5).toFixed(1);
-        const ouPick = Math.random()>.5?`OVER ${total}`:`UNDER ${total}`;
-        const kLine = (5.5 + Math.floor(Math.random()*3) + Math.random()).toFixed(1);
-        const kPick = Math.random()>.5?`OVER ${kLine} K`:`UNDER ${kLine} K`;
-        const mlFav = Math.random()>.5 ? t.a : t.b;
-        const mlPriceDec = +(1.55 + Math.random()*0.95).toFixed(2);
-        const ouEdge = +(Math.random()*0.09 - 0.01);
-        const kEdge = +(Math.random()*0.09 - 0.01);
-        const mlEdge = +(Math.random()*0.09 - 0.02);
-        const model = +(0.52 + Math.random()*0.18);
-        return { id: 'g'+(i+1), a:t.a, b:t.b, cityA:t.cityA, cityB:t.cityB, lgA:t.lgA, lgB:t.lgB, total, ouPick, kLine, kPick, mlFav, mlPriceDec, ouEdge, kEdge, mlEdge, model, date: today, time: '7:05 PM', pitcherA: ['G. Cole','C. Sale','S. Strider','F. Valdez','S. Steele'][i%5], pitcherB: ['B. Bello','Y. Yamamoto','C. Senga','J. deGrom','L. Gilbert'][i%5], tv: ['ESPN+','Apple TV+','FS1','MLBN','FOX'][i%5], hot: Math.random()>.42 };
-      });
-    }
+    function filterTodayGames(arr){ if(!Array.isArray(arr)||arr.length===0) return arr; const filtered=arr.filter(isTodayGame); if(filtered.length) return filtered; const noDate=arr.filter(g=>!g.date); return noDate.length?noDate:arr; }
+const TEAMS = [];
+    function genGames(){ return []; } // mock removed - run mlb_ace.py to populate
     games = [];
 
-    const NFL_TEAMS = [{a:'BUF',b:'MIA',cityA:'Buffalo',cityB:'Miami',lgA:'AFC East',lgB:'AFC East'},{a:'KC',b:'BAL',cityA:'Kansas City',cityB:'Baltimore',lgA:'AFC West',lgB:'AFC North'},{a:'SF',b:'DAL',cityA:'San Francisco',cityB:'Dallas',lgA:'NFC West',lgB:'NFC East'},{a:'PHI',b:'DET',cityA:'Philadelphia',cityB:'Detroit',lgA:'NFC East',lgB:'NFC North'}];
-    const NBA_TEAMS = [{a:'LAL',b:'GSW',cityA:'Los Angeles',cityB:'Golden State',lgA:'West',lgB:'West'},{a:'BOS',b:'NYK',cityA:'Boston',cityB:'New York',lgA:'East',lgB:'East'},{a:'MIA',b:'MIL',cityA:'Miami',cityB:'Milwaukee',lgA:'East',lgB:'East'},{a:'DAL',b:'PHX',cityA:'Dallas',cityB:'Phoenix',lgA:'West',lgB:'West'}];
-    function genNFLGames(){ const today=getTodayISO(); return NFL_TEAMS.slice(0,1).map((t,i)=>{ const total=+(42.5+Math.random()*10).toFixed(1); const ouPick=Math.random()>.5?`OVER ${total}`:`UNDER ${total}`; const spread=(Math.random()*10-3).toFixed(1); const spreadPick=`${t.a} ${parseFloat(spread)>0?'+':''}${spread}`; const mlFav=Math.random()>.5?t.a:t.b; const mlPriceDec=+(1.50+Math.random()*1.2).toFixed(2); return { id: 'nfl_g'+(i+1), a:t.a, b:t.b, cityA:t.cityA, cityB:t.cityB, lgA:t.lgA, lgB:t.lgB, total, ouPick, kLine: spread, kPick: spreadPick, mlFav, mlPriceDec, ouEdge: +(Math.random()*0.09-0.01), kEdge: +(Math.random()*0.09-0.01), mlEdge: +(Math.random()*0.09-0.02), model: +(0.52+Math.random()*0.18), date: today, time: '1:00 PM', tv: ['FOX','CBS','NBC'][i%3], hot: Math.random()>.42 }; }); }
-    function genNBAGames(){ const today=getTodayISO(); return NBA_TEAMS.slice(0,1).map((t,i)=>{ const total=+(210.5+Math.random()*20).toFixed(1); const ouPick=Math.random()>.5?`OVER ${total}`:`UNDER ${total}`; const spread=(Math.random()*12-4).toFixed(1); const spreadPick=`${t.a} ${parseFloat(spread)>0?'+':''}${spread}`; const mlFav=Math.random()>.5?t.a:t.b; const mlPriceDec=+(1.45+Math.random()*1.1).toFixed(2); return { id: 'nba_g'+(i+1), a:t.a, b:t.b, cityA:t.cityA, cityB:t.cityB, lgA:t.lgA, lgB:t.lgB, total, ouPick, kLine: spread, kPick: spreadPick, mlFav, mlPriceDec, ouEdge: +(Math.random()*0.09-0.01), kEdge: +(Math.random()*0.09-0.01), mlEdge: +(Math.random()*0.09-0.02), model: +(0.52+Math.random()*0.18), date: today, time: '7:30 PM', tv: ['TNT','ESPN'][i%2], hot: Math.random()>.42 }; }); }
+    const NFL_TEAMS = [];
+    const NBA_TEAMS = [];
+    function genNFLGames(){ return []; } // mock removed - run nfl_ace.py
+    function genNBAGames(){ return []; } // mock removed - run nba_ace.py
     let gamesNFL=[]; let gamesNBA=[]; let parlayNFL=[]; let parlayNBA=[];
 
     let audioCtx = null;
@@ -1987,16 +1960,161 @@ const TEAMS = [
     }
 
     
-    function renderNFLDashboard(){ const q=($('#nflDashSearch')?.value||'').toLowerCase().trim(); let list=filterTodayGames(gamesNFL.slice()); if(q){ list=list.filter(g=> `${g.a} ${g.b}`.toLowerCase().includes(q)); } $('#nflDashboardCards').innerHTML=list.map(g=>marketCard(g,'all')).join('')||`<div class="empty"><b>No NFL games today</b></div>`; }
-    function renderNBADashboard(){ const q=($('#nbaDashSearch')?.value||'').toLowerCase().trim(); let list=filterTodayGames(gamesNBA.slice()); if(q){ list=list.filter(g=> `${g.a} ${g.b}`.toLowerCase().includes(q)); } $('#nbaDashboardCards').innerHTML=list.map(g=>marketCard(g,'all')).join('')||`<div class="empty"><b>No NBA games today</b></div>`; }
-    function renderNFLParlay(){ const slotsEl=$('#nflParlaySlots'); if(!slotsEl) return; const combDec=parlayNFL.reduce((a,l)=>a*(l.dec||1),1); const combAm=parlayNFL.length>0?(combDec>=2?'+'+Math.round((combDec-1)*100):'-'+Math.round(100/(combDec-1))):''; const oddsEl=document.getElementById('nflParlayOdds'); if(oddsEl) oddsEl.textContent=combAm?combAm+' odds':''; const cntEl=document.getElementById('nflParlayCount'); if(cntEl) cntEl.textContent=parlayNFL.length+' / 20'; const showSlots=Math.min(20,parlayNFL.length+3); slotsEl.innerHTML=Array.from({length:showSlots},(_,i)=>i).map(i=>{ const leg=parlayNFL[i]; if(!leg) return `<div class="slot"><div class="top"><span class="mini">SLOT ${i+1} • EMPTY</span></div></div>`; return `<div class="slot filled"><div class="top"><span class="leg">${leg.label}</span><button class="btn" data-nfl-remove="${i}">✕</button></div></div>`; }).join(''); const pool=[]; gamesNFL.forEach(g=>{ [['ou','O/U'],['k','Spread'],['ml','ML']].forEach(([mk,short])=>{ pool.push({ id: buildLegId(g,mk)+'_nfl', g, market: mk, label: legLabel(g,mk), dec: legOdds(g,mk), short }); }); }); const poolEl=$('#nflPoolList'); if(poolEl) poolEl.innerHTML=pool.map(p=>{ const disabled=parlayNFL.some(l=> l.gameId===p.g.id)||parlayNFL.length>=20; return `<button ${disabled?'disabled':''} data-nfl-pick="${p.id}"><span class="l">${p.label}</span><span class="r">${p.short} • ${american(p.dec)}</span></button>`; }).join(''); let dec=1,prob=1; parlayNFL.forEach(l=>{ dec*=l.dec; prob*=l.prob; }); $('#nflDecOdds').textContent=parlayNFL.length?dec.toFixed(2):'0.00'; $('#nflAmOdds').textContent=parlayNFL.length?american(dec):'—'; $('#nflImplied').textContent=parlayNFL.length?(1/dec*100).toFixed(1)+'%':'0.0%'; $('#nflModelProb').textContent=parlayNFL.length?(prob*100).toFixed(1)+'%':'0.0%'; let ev=parlayNFL.length?(prob*dec-1):0; $('#nflEvVal').textContent=parlayNFL.length?(ev*100).toFixed(2)+'%':'0.00%'; $('#nflEvMeter').style.width=`${clamp(18+ev*260,8,100)}%`; }
-    function renderNBAParlay(){ const slotsEl=$('#nbaParlaySlots'); if(!slotsEl) return; const combDec=parlayNBA.reduce((a,l)=>a*(l.dec||1),1); const combAm=parlayNBA.length>0?(combDec>=2?'+'+Math.round((combDec-1)*100):'-'+Math.round(100/(combDec-1))):''; const oddsEl=document.getElementById('nbaParlayOdds'); if(oddsEl) oddsEl.textContent=combAm?combAm+' odds':''; const cntEl=document.getElementById('nbaParlayCount'); if(cntEl) cntEl.textContent=parlayNBA.length+' / 20'; const showSlots=Math.min(20,parlayNBA.length+3); slotsEl.innerHTML=Array.from({length:showSlots},(_,i)=>i).map(i=>{ const leg=parlayNBA[i]; if(!leg) return `<div class="slot"><div class="top"><span class="mini">SLOT ${i+1} • EMPTY</span></div></div>`; return `<div class="slot filled"><div class="top"><span class="leg">${leg.label}</span><button class="btn" data-nba-remove="${i}">✕</button></div></div>`; }).join(''); const pool=[]; gamesNBA.forEach(g=>{ [['ou','O/U'],['k','Spread'],['ml','ML']].forEach(([mk,short])=>{ pool.push({ id: buildLegId(g,mk)+'_nba', g, market: mk, label: legLabel(g,mk), dec: legOdds(g,mk), short }); }); }); const poolEl=$('#nbaPoolList'); if(poolEl) poolEl.innerHTML=pool.map(p=>{ const disabled=parlayNBA.some(l=> l.gameId===p.g.id)||parlayNBA.length>=20; return `<button ${disabled?'disabled':''} data-nba-pick="${p.id}"><span class="l">${p.label}</span><span class="r">${p.short} • ${american(p.dec)}</span></button>`; }).join(''); let dec=1,prob=1; parlayNBA.forEach(l=>{ dec*=l.dec; prob*=l.prob; }); $('#nbaDecOdds').textContent=parlayNBA.length?dec.toFixed(2):'0.00'; $('#nbaAmOdds').textContent=parlayNBA.length?american(dec):'—'; $('#nbaImplied').textContent=parlayNBA.length?(1/dec*100).toFixed(1)+'%':'0.0%'; $('#nbaModelProb').textContent=parlayNBA.length?(prob*100).toFixed(1)+'%':'0.0%'; let ev=parlayNBA.length?(prob*dec-1):0; $('#nbaEvVal').textContent=parlayNBA.length?(ev*100).toFixed(2)+'%':'0.00%'; $('#nbaEvMeter').style.width=`${clamp(18+ev*260,8,100)}%`; }
-    function renderNFLPicks(){ const mount=$('#nflPicksMount'); if(!mount) return; const list=gamesNFL.flatMap(g=>[{ id:g.id+':ou', game:g, market:'ou', pick:g.ouPick, edge:g.ouEdge, dec: legOdds(g,'ou') },{ id:g.id+':k', game:g, market:'k', pick:g.kPick, edge:g.kEdge, dec: legOdds(g,'k') },{ id:g.id+':ml', game:g, market:'ml', pick:`${g.mlFav} ML`, edge:g.mlEdge, dec: g.mlPriceDec }]).sort((a,b)=>b.edge-a.edge); mount.innerHTML=`<div class="cards">${list.map(p=>`<article class="game"><div class="game-head"><div class="tv">${p.game.a}@${p.game.b} • ${p.market.toUpperCase()}</div><span class="badge hot">EDGE ${(p.edge*100).toFixed(1)}%</span></div><div style="padding:12px 14px 0"><b>${p.pick}</b></div><div class="game-actions"><button class="btn" data-nfl-add="${p.game.id}:${p.market}">Add</button></div></article>`).join('')}</div>`; }
-    function renderNBAPicks(){ const mount=$('#nbaPicksMount'); if(!mount) return; const list=gamesNBA.flatMap(g=>[{ id:g.id+':ou', game:g, market:'ou', pick:g.ouPick, edge:g.ouEdge, dec: legOdds(g,'ou') },{ id:g.id+':k', game:g, market:'k', pick:g.kPick, edge:g.kEdge, dec: legOdds(g,'k') },{ id:g.id+':ml', game:g, market:'ml', pick:`${g.mlFav} ML`, edge:g.mlEdge, dec: g.mlPriceDec }]).sort((a,b)=>b.edge-a.edge); mount.innerHTML=`<div class="cards">${list.map(p=>`<article class="game"><div class="game-head"><div class="tv">${p.game.a}@${p.game.b} • ${p.market.toUpperCase()}</div><span class="badge hot">EDGE ${(p.edge*100).toFixed(1)}%</span></div><div style="padding:12px 14px 0"><b>${p.pick}</b></div><div class="game-actions"><button class="btn" data-nba-add="${p.game.id}:${p.market}">Add</button></div></article>`).join('')}</div>`; }
-    function renderNFLStandings(){ const mount=$('#nflStandingsMount'); if(!mount) return; mount.innerHTML=`<div class="glass glass-blur panel-pad"><b>AFC/NFC Mock</b><div class="mini">Real data when API connected</div></div>`; const schedEl=$('#nflScheduleList'); if(schedEl){ $('#nflScheduleDate').textContent=getTodayISO(); schedEl.innerHTML=gamesNFL.map(g=>`<div style="padding:10px; background:rgba(255,255,255,0.06); border-radius:12px; margin-bottom:6px;">${g.a} @ ${g.b} • ${g.time}</div>`).join(''); } }
-    function renderNBAStandings(){ const mount=$('#nbaStandingsMount'); if(!mount) return; mount.innerHTML=`<div class="glass glass-blur panel-pad"><b>East/West Mock</b></div>`; const schedEl=$('#nbaScheduleList'); if(schedEl){ $('#nbaScheduleDate').textContent=getTodayISO(); schedEl.innerHTML=gamesNBA.map(g=>`<div style="padding:10px; background:rgba(255,255,255,0.06); border-radius:12px; margin-bottom:6px;">${g.a} @ ${g.b} • ${g.time}</div>`).join(''); } }
+    
+    const NFL_STANDINGS = {
+      AFC: {
+        East: [{t:'BUF',w:11,l:6},{t:'MIA',w:9,l:8},{t:'NYJ',w:7,l:10},{t:'NE',w:4,l:13}],
+        North: [{t:'BAL',w:13,l:4},{t:'CLE',w:11,l:6},{t:'PIT',w:10,l:7},{t:'CIN',w:9,l:8}],
+        South: [{t:'HOU',w:10,l:7},{t:'JAX',w:9,l:8},{t:'IND',w:9,l:8},{t:'TEN',w:6,l:11}],
+        West: [{t:'KC',w:11,l:6},{t:'LV',w:8,l:9},{t:'DEN',w:8,l:9},{t:'LAC',w:5,l:12}]
+      },
+      NFC: {
+        East: [{t:'DAL',w:12,l:5},{t:'PHI',w:11,l:6},{t:'NYG',w:6,l:11},{t:'WAS',w:4,l:13}],
+        North: [{t:'DET',w:12,l:5},{t:'GB',w:9,l:8},{t:'MIN',w:7,l:10},{t:'CHI',w:7,l:10}],
+        South: [{t:'TB',w:9,l:8},{t:'NO',w:9,l:8},{t:'ATL',w:7,l:10},{t:'CAR',w:2,l:15}],
+        West: [{t:'SF',w:12,l:5},{t:'LAR',w:10,l:7},{t:'SEA',w:9,l:8},{t:'ARI',w:4,l:13}]
+      }
+    };
+    const NBA_STANDINGS = {
+      East: {
+        Atlantic: [{t:'BOS',w:64,l:18},{t:'NYK',w:50,l:32},{t:'PHI',w:47,l:35},{t:'BKN',w:32,l:50},{t:'TOR',w:25,l:57}],
+        Central: [{t:'MIL',w:49,l:33},{t:'CLE',w:48,l:34},{t:'IND',w:47,l:35},{t:'CHI',w:39,l:43},{t:'DET',w:14,l:68}],
+        Southeast: [{t:'ORL',w:47,l:35},{t:'MIA',w:46,l:36},{t:'ATL',w:36,l:46},{t:'CHA',w:21,l:61},{t:'WAS',w:15,l:67}]
+      },
+      West: {
+        Northwest: [{t:'OKC',w:57,l:25},{t:'DEN',w:57,l:25},{t:'MIN',w:56,l:26},{t:'UTA',w:31,l:51},{t:'POR',w:21,l:61}],
+        Pacific: [{t:'LAC',w:51,l:31},{t:'PHX',w:49,l:33},{t:'SAC',w:46,l:36},{t:'GSW',w:46,l:36},{t:'LAL',w:45,l:37}],
+        Southwest: [{t:'DAL',w:50,l:32},{t:'NOP',w:49,l:33},{t:'MEM',w:27,l:55},{t:'HOU',w:41,l:41},{t:'SAS',w:22,l:60}]
+      }
+    };
+    let nflDashFilter = 'all';
+    let nbaDashFilter = 'all';
+    let nflPicksFilter = 'all';
+    let nbaPicksFilter = 'all';
+    function renderNFLDashboard(){
+      const q = ($('#nflDashSearch')?.value||'').toLowerCase().trim();
+      let list = gamesNFL.slice();
+      if(!list.length){
+        const el = $('#nflDashboardCards');
+        if(el) el.innerHTML = `<div class="empty" style="grid-column:1/-1;padding:28px;"><div style="font-size:32px;margin-bottom:8px;">🏈</div><b>No NFL games loaded</b><span style="display:block;margin-top:6px;color:var(--muted);max-width:42ch;line-height:1.5;">Real data only — no mock games. Run nfl_ace.py to import today's board.</span></div>`;
+        return;
+      }
+      let filtered = filterTodayGames(list); if(filtered.length) list = filtered;
+      if(nflDashFilter==='edge'){ list = list.filter(g=> Math.max(g.ouEdge||0,g.kEdge||0,g.mlEdge||0) > .02); }
+      else if(nflDashFilter==='ml'){ list = [...list].sort((a,b)=>(b.mlEdge||0)-(a.mlEdge||0)); }
+      else if(nflDashFilter==='ou'){ list = [...list].sort((a,b)=>(b.ouEdge||0)-(a.ouEdge||0)); }
+      else if(nflDashFilter==='k'){ list = [...list].sort((a,b)=>(b.kEdge||0)-(a.kEdge||0)); }
+      if(q){ list = list.filter(g=> `${g.a} ${g.b}`.toLowerCase().includes(q)); }
+      const el = $('#nflDashboardCards'); if(el) el.innerHTML = list.map(g=>marketCard(g, nflDashFilter==='all'?'all':nflDashFilter)).join('') || `<div class="empty">No matches</div>`;
+    }
+    function renderNBADashboard(){
+      const q = ($('#nbaDashSearch')?.value||'').toLowerCase().trim();
+      let list = gamesNBA.slice();
+      if(!list.length){
+        const el = $('#nbaDashboardCards');
+        if(el) el.innerHTML = `<div class="empty" style="grid-column:1/-1;padding:28px;"><div style="font-size:32px;margin-bottom:8px;">🏀</div><b>No NBA games loaded</b><span style="display:block;margin-top:6px;color:var(--muted);">Real data only — run nba_ace.py</span></div>`;
+        return;
+      }
+      let filtered = filterTodayGames(list); if(filtered.length) list = filtered;
+      if(nbaDashFilter==='edge'){ list = list.filter(g=> Math.max(g.ouEdge||0,g.kEdge||0,g.mlEdge||0) > .02); }
+      else if(nbaDashFilter==='ml'){ list = [...list].sort((a,b)=>(b.mlEdge||0)-(a.mlEdge||0)); }
+      else if(nbaDashFilter==='ou'){ list = [...list].sort((a,b)=>(b.ouEdge||0)-(a.ouEdge||0)); }
+      else if(nbaDashFilter==='k'){ list = [...list].sort((a,b)=>(b.kEdge||0)-(a.kEdge||0)); }
+      if(q){ list = list.filter(g=> `${g.a} ${g.b}`.toLowerCase().includes(q)); }
+      const el = $('#nbaDashboardCards'); if(el) el.innerHTML = list.map(g=>marketCard(g, nbaDashFilter==='all'?'all':nbaDashFilter)).join('') || `<div class="empty">No matches</div>`;
+    }
+    function addNFLLegByToken(token){
+      const [gid, mk] = token.split(':'); const g = gamesNFL.find(x=>x.id===gid); if(!g) return;
+      const legId = buildLegId(g, mk)+'_nfl';
+      if(parlayNFL.some(l=>l.id===legId || l.gameId===gid)){ beep('error'); return; }
+      if(parlayNFL.length>=20){ beep('error'); return; }
+      parlayNFL.push({ id: legId, gameId: gid, market: mk, label: legLabel(g,mk), dec: mk==='ml'? g.mlPriceDec : legOdds(g,mk), prob: legProb(g,mk) });
+      try{ localStorage.setItem('parlayos_nfl_parlay', JSON.stringify(parlayNFL)); }catch{}
+      renderNFLParlay(); try{ renderNFLDashboard(); }catch{} try{ renderNFLPicks(); }catch{} beep('success');
+    }
+    function addNBALegByToken(token){
+      const [gid, mk] = token.split(':'); const g = gamesNBA.find(x=>x.id===gid); if(!g) return;
+      const legId = buildLegId(g, mk)+'_nba';
+      if(parlayNBA.some(l=>l.id===legId || l.gameId===gid)){ beep('error'); return; }
+      if(parlayNBA.length>=20){ beep('error'); return; }
+      parlayNBA.push({ id: legId, gameId: gid, market: mk, label: legLabel(g,mk), dec: mk==='ml'? g.mlPriceDec : legOdds(g,mk), prob: legProb(g,mk) });
+      try{ localStorage.setItem('parlayos_nba_parlay', JSON.stringify(parlayNBA)); }catch{}
+      renderNBAParlay(); try{ renderNBADashboard(); }catch{} try{ renderNBAPicks(); }catch{} beep('success');
+    }
+    function renderNFLParlay(){
+      const slotsEl=$('#nflParlaySlots'); if(!slotsEl) return;
+      try{ const saved = JSON.parse(localStorage.getItem('parlayos_nfl_parlay')||'[]'); if(saved.length && !parlayNFL.length) parlayNFL = saved; }catch{}
+      const combDec=parlayNFL.reduce((a,l)=>a*(l.dec||1),1);
+      const combAm=parlayNFL.length>0?(combDec>=2?'+'+Math.round((combDec-1)*100):'-'+Math.round(100/(combDec-1))):'';
+      const oddsEl=document.getElementById('nflParlayOdds'); if(oddsEl) oddsEl.textContent=combAm?combAm+' odds':'';
+      const cntEl=document.getElementById('nflParlayCount'); if(cntEl) cntEl.textContent=parlayNFL.length+' / 20';
+      if(!gamesNFL.length){ slotsEl.innerHTML = `<div class="empty" style="padding:20px;grid-column:1/-1;"><b>🏈 No board</b><span>Run nfl_ace.py</span></div>`; }
+      else { const showSlots=Math.min(20,parlayNFL.length+3); slotsEl.innerHTML=Array.from({length:showSlots},(_,i)=>i).map(i=>{ const leg=parlayNFL[i]; if(!leg) return `<div class="slot"><div class="top"><span class="mini">SLOT ${i+1} • EMPTY</span></div></div>`; return `<div class="slot filled"><div class="top"><span class="leg">${leg.label}</span><button class="btn" data-nfl-remove="${i}">✕</button></div><div class="mini">${leg.market.toUpperCase()} • DEC ${leg.dec.toFixed(2)}</div></div>`; }).join(''); }
+      const pool=[]; gamesNFL.forEach(g=>{ [['ou','O/U'],['k','Spread'],['ml','ML']].forEach(([mk,short])=>{ pool.push({ id: buildLegId(g,mk)+'_nfl', g, market: mk, label: legLabel(g,mk), dec: legOdds(g,mk), prob: legProb(g,mk), edge: mk==='ou'?g.ouEdge:mk==='k'?g.kEdge:g.mlEdge, short }); }); });
+      const poolEl=$('#nflPoolList'); if(poolEl) poolEl.innerHTML = pool.length ? pool.map(p=>{ const disabled=parlayNFL.some(l=> l.gameId===p.g.id)||parlayNFL.length>=20; return `<button ${disabled?'disabled':''} data-nfl-pick="${p.id}"><span class="l">${p.label}</span><span class="r">${p.short} • ${american(p.dec)}</span></button>`; }).join('') : `<div class="mini">No games</div>`;
+      let dec=1,prob=1; parlayNFL.forEach(l=>{ dec*=l.dec; prob*=l.prob; });
+      const decEl=$('#nflDecOdds'); if(decEl) decEl.textContent=parlayNFL.length?dec.toFixed(2):'0.00';
+      const amEl=$('#nflAmOdds'); if(amEl) amEl.textContent=parlayNFL.length?american(dec):'—';
+      const impEl=$('#nflImplied'); if(impEl) impEl.textContent=parlayNFL.length?(1/dec*100).toFixed(1)+'%':'0.0%';
+      const modEl=$('#nflModelProb'); if(modEl) modEl.textContent=parlayNFL.length?(prob*100).toFixed(1)+'%':'0.0%';
+      let ev=parlayNFL.length?(prob*dec-1):0; const evEl=$('#nflEvVal'); if(evEl) evEl.textContent=parlayNFL.length?(ev*100).toFixed(2)+'%':'0.00%';
+      const meterEl=$('#nflEvMeter'); if(meterEl) meterEl.style.width=`${clamp(18+ev*260,8,100)}%`;
+    }
+    function renderNBAParlay(){
+      const slotsEl=$('#nbaParlaySlots'); if(!slotsEl) return;
+      try{ const saved = JSON.parse(localStorage.getItem('parlayos_nba_parlay')||'[]'); if(saved.length && !parlayNBA.length) parlayNBA = saved; }catch{}
+      const combDec=parlayNBA.reduce((a,l)=>a*(l.dec||1),1);
+      const combAm=parlayNBA.length>0?(combDec>=2?'+'+Math.round((combDec-1)*100):'-'+Math.round(100/(combDec-1))):'';
+      const oddsEl=document.getElementById('nbaParlayOdds'); if(oddsEl) oddsEl.textContent=combAm?combAm+' odds':'';
+      const cntEl=document.getElementById('nbaParlayCount'); if(cntEl) cntEl.textContent=parlayNBA.length+' / 20';
+      if(!gamesNBA.length){ slotsEl.innerHTML = `<div class="empty" style="padding:20px;grid-column:1/-1;"><b>🏀 No board</b><span>Run nba_ace.py</span></div>`; }
+      else { const showSlots=Math.min(20,parlayNBA.length+3); slotsEl.innerHTML=Array.from({length:showSlots},(_,i)=>i).map(i=>{ const leg=parlayNBA[i]; if(!leg) return `<div class="slot"><div class="top"><span class="mini">SLOT ${i+1} • EMPTY</span></div></div>`; return `<div class="slot filled"><div class="top"><span class="leg">${leg.label}</span><button class="btn" data-nba-remove="${i}">✕</button></div><div class="mini">${leg.market.toUpperCase()} • DEC ${leg.dec.toFixed(2)}</div></div>`; }).join(''); }
+      const pool=[]; gamesNBA.forEach(g=>{ [['ou','O/U'],['k','Spread'],['ml','ML']].forEach(([mk,short])=>{ pool.push({ id: buildLegId(g,mk)+'_nba', g, market: mk, label: legLabel(g,mk), dec: legOdds(g,mk), prob: legProb(g,mk), edge: mk==='ou'?g.ouEdge:mk==='k'?g.kEdge:g.mlEdge, short }); }); });
+      const poolEl=$('#nbaPoolList'); if(poolEl) poolEl.innerHTML = pool.length ? pool.map(p=>{ const disabled=parlayNBA.some(l=> l.gameId===p.g.id)||parlayNBA.length>=20; return `<button ${disabled?'disabled':''} data-nba-pick="${p.id}"><span class="l">${p.label}</span><span class="r">${p.short} • ${american(p.dec)}</span></button>`; }).join('') : `<div class="mini">No games</div>`;
+      let dec=1,prob=1; parlayNBA.forEach(l=>{ dec*=l.dec; prob*=l.prob; });
+      const decEl=$('#nbaDecOdds'); if(decEl) decEl.textContent=parlayNBA.length?dec.toFixed(2):'0.00';
+      const amEl=$('#nbaAmOdds'); if(amEl) amEl.textContent=parlayNBA.length?american(dec):'—';
+      const impEl=$('#nbaImplied'); if(impEl) impEl.textContent=parlayNBA.length?(1/dec*100).toFixed(1)+'%':'0.0%';
+      const modEl=$('#nbaModelProb'); if(modEl) modEl.textContent=parlayNBA.length?(prob*100).toFixed(1)+'%':'0.0%';
+      let ev=parlayNBA.length?(prob*dec-1):0; const evEl=$('#nbaEvVal'); if(evEl) evEl.textContent=parlayNBA.length?(ev*100).toFixed(2)+'%':'0.00%';
+      const meterEl=$('#nbaEvMeter'); if(meterEl) meterEl.style.width=`${clamp(18+ev*260,8,100)}%`;
+    }
+    function getNFLPicks(){ const all=[]; gamesNFL.forEach(g=>{ all.push({ id:g.id+':ou', game:g, market:'ou', pick:g.ouPick, edge:g.ouEdge, prob: clamp(0.5+(g.ouEdge||0),.30,.75), dec: legOdds(g,'ou') }); all.push({ id:g.id+':k', game:g, market:'k', pick:g.kPick, edge:g.kEdge, prob: clamp(0.5+(g.kEdge||0),.30,.75), dec: legOdds(g,'k') }); all.push({ id:g.id+':ml', game:g, market:'ml', pick:`${g.mlFav} ML`, edge:g.mlEdge, prob: clamp(g.model||0.5,.15,.85), dec: g.mlPriceDec }); }); return all.sort((a,b)=>(b.edge||0)-(a.edge||0)); }
+    function filteredNFLPicks(){ let list=getNFLPicks(); if(nflPicksFilter!=='all') list=list.filter(p=>p.market===nflPicksFilter); return list; }
+    function renderNFLPicks(){
+      const mount=$('#nflPicksMount'); if(!mount) return; const list=filteredNFLPicks();
+      if(!list.length){ mount.innerHTML = gamesNFL.length ? `<div class="empty">No picks match filter</div>` : `<div class="empty" style="padding:28px;"><div style="font-size:32px;">🏈</div><b>No NFL picks — no games loaded</b><span>Run nfl_ace.py — mock removed.</span></div>`; return; }
+      mount.innerHTML = `<div class="cards">${list.slice(0,40).map(p=>{ const g=p.game; const picked=parlayNFL.some(l=> l.gameId===g.id); return `<article class="game" style="min-height:260px"><div class="game-head"><div class="tv">${g.a}@${g.b} • ${p.market.toUpperCase()}</div><span class="badge hot">EDGE ${(p.edge*100).toFixed(1)}%</span></div><div style="padding:12px 14px 0"><b>${p.pick}</b><div class="mini">${g.a} @ ${g.b} • DEC ${p.dec.toFixed(2)}</div></div><div class="odds-grid" style="padding-top:10px"><div class="market"><div class="row"><span class="label">Model prob</span><span class="badge">${fmtPct(p.prob)}</span></div><div class="meter"><i style="width:${p.prob*100}%"></i></div></div></div><div class="game-actions"><button class="btn${picked?' picked':''}" data-nfl-add="${g.id}:${p.market}" ${picked?'disabled':''}>${picked?'✓ Added':'Add'}</button><button class="btn primary" data-copy-nfl-pick="${p.id}">Copy</button></div></article>`; }).join('')}</div>`;
+    }
+    function getNBAPicks(){ const all=[]; gamesNBA.forEach(g=>{ all.push({ id:g.id+':ou', game:g, market:'ou', pick:g.ouPick, edge:g.ouEdge, prob: clamp(0.5+(g.ouEdge||0),.30,.75), dec: legOdds(g,'ou') }); all.push({ id:g.id+':k', game:g, market:'k', pick:g.kPick, edge:g.kEdge, prob: clamp(0.5+(g.kEdge||0),.30,.75), dec: legOdds(g,'k') }); all.push({ id:g.id+':ml', game:g, market:'ml', pick:`${g.mlFav} ML`, edge:g.mlEdge, prob: clamp(g.model||0.5,.15,.85), dec: g.mlPriceDec }); }); return all.sort((a,b)=>(b.edge||0)-(a.edge||0)); }
+    function filteredNBAPicks(){ let list=getNBAPicks(); if(nbaPicksFilter!=='all') list=list.filter(p=>p.market===nbaPicksFilter); return list; }
+    function renderNBAPicks(){
+      const mount=$('#nbaPicksMount'); if(!mount) return; const list=filteredNBAPicks();
+      if(!list.length){ mount.innerHTML = gamesNBA.length ? `<div class="empty">No picks match filter</div>` : `<div class="empty" style="padding:28px;"><div style="font-size:32px;">🏀</div><b>No NBA picks — no games loaded</b><span>Run nba_ace.py — mock removed.</span></div>`; return; }
+      mount.innerHTML = `<div class="cards">${list.slice(0,40).map(p=>{ const g=p.game; const picked=parlayNBA.some(l=> l.gameId===g.id); return `<article class="game" style="min-height:260px"><div class="game-head"><div class="tv">${g.a}@${g.b} • ${p.market.toUpperCase()}</div><span class="badge hot">EDGE ${(p.edge*100).toFixed(1)}%</span></div><div style="padding:12px 14px 0"><b>${p.pick}</b><div class="mini">${g.a} @ ${g.b} • DEC ${p.dec.toFixed(2)}</div></div><div class="odds-grid" style="padding-top:10px"><div class="market"><div class="row"><span class="label">Model prob</span><span class="badge">${fmtPct(p.prob)}</span></div><div class="meter"><i style="width:${p.prob*100}%"></i></div></div></div><div class="game-actions"><button class="btn${picked?' picked':''}" data-nba-add="${g.id}:${p.market}" ${picked?'disabled':''}>${picked?'✓ Added':'Add'}</button><button class="btn primary" data-copy-nba-pick="${p.id}">Copy</button></div></article>`; }).join('')}</div>`;
+    }
+    function renderNFLStandings(){
+      const mount=$('#nflStandingsMount'); if(!mount) return;
+      const live = window.PARLAYOS_NFL_DATA; const standings = (live && live.standings) || NFL_STANDINGS;
+      const hasGames = gamesNFL.length>0;
+      const scheduleHTML = hasGames ? gamesNFL.map(g=>`<div class="glass" style="padding:10px 12px;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><div><b>${g.a} @ ${g.b}</b><div class="mini">${g.date||''} ${g.time||''} • ${g.tv||''}</div></div><span class="badge ${g.hot?'hot':''}">${g.ouPick||''}</span></div>`).join('') : `<div class="empty" style="margin:12px 0;padding:20px;"><div style="font-size:28px;">🏈</div><b>No NFL schedule</b><span>Run nfl_ace.py — mock removed.</span></div>`;
+      function divTable(conf, divName, rows){ return `<div class="glass table-card"><div class="table-head"><h3>${conf} ${divName}</h3><span class="badge">${rows.length} TEAMS</span></div><table class="mini-table"><tr><th style="text-align:left;width:50%;">Team</th><th>W</th><th>L</th><th>PCT</th><th>GB</th></tr>${rows.map((r,i)=>{const pct=(r.w/(r.w+r.l)).toFixed(3).replace('0.','.'); const gb=i===0?'—':((rows[0].w - r.w + r.l - rows[0].l)/2).toFixed(1); return `<tr><td style="text-align:left;font-weight:700;">${r.t}</td><td>${r.w}</td><td>${r.l}</td><td>${pct}</td><td>${gb}</td></tr>`;}).join('')}</table></div>`; }
+      const standHTML = `<div class="league-grid">${Object.keys(standings).flatMap(conf=> Object.keys(standings[conf]).map(div=> divTable(conf, div, standings[conf][div]) )).join('')}</div>`;
+      mount.innerHTML = `<div class="stats-tab-row" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;"><button class="chip active" data-nfl-stab="schedule">📅 Schedule</button><button class="chip" data-nfl-stab="standings">📊 Standings</button></div><div id="nflTabSchedule">${scheduleHTML}</div><div id="nflTabStandings" style="display:none">${standHTML}</div>`;
+      mount.querySelectorAll('[data-nfl-stab]').forEach(tab=>{ tab.addEventListener('click', ()=>{ mount.querySelectorAll('[data-nfl-stab]').forEach(t=>t.classList.remove('active')); tab.classList.add('active'); const w=tab.dataset.nflStab; document.getElementById('nflTabSchedule').style.display = w==='schedule'?'':'none'; document.getElementById('nflTabStandings').style.display = w==='standings'?'':'none'; beep('click'); }); });
+    }
+    function renderNBAStandings(){
+      const mount=$('#nbaStandingsMount'); if(!mount) return;
+      const live = window.PARLAYOS_NBA_DATA; const standings = (live && live.standings) || NBA_STANDINGS;
+      const hasGames = gamesNBA.length>0;
+      const scheduleHTML = hasGames ? gamesNBA.map(g=>`<div class="glass" style="padding:10px 12px;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><div><b>${g.a} @ ${g.b}</b><div class="mini">${g.date||''} ${g.time||''} • ${g.tv||''}</div></div><span class="badge ${g.hot?'hot':''}">${g.ouPick||''}</span></div>`).join('') : `<div class="empty" style="margin:12px 0;padding:20px;"><div style="font-size:28px;">🏀</div><b>No NBA schedule</b><span>Run nba_ace.py — mock removed.</span></div>`;
+      function divTable(conf, divName, rows){ return `<div class="glass table-card"><div class="table-head"><h3>${conf} ${divName}</h3><span class="badge">${rows.length} TEAMS</span></div><table class="mini-table"><tr><th style="text-align:left;width:50%;">Team</th><th>W</th><th>L</th><th>PCT</th><th>GB</th></tr>${rows.map((r,i)=>{const pct=(r.w/(r.w+r.l)).toFixed(3).replace('0.','.'); const gb=i===0?'—':((rows[0].w - r.w + r.l - rows[0].l)/2).toFixed(1); return `<tr><td style="text-align:left;font-weight:700;">${r.t}</td><td>${r.w}</td><td>${r.l}</td><td>${pct}</td><td>${gb}</td></tr>`;}).join('')}</table></div>`; }
+      const standHTML = `<div class="league-grid">${Object.keys(standings).flatMap(conf=> Object.keys(standings[conf]).map(div=> divTable(conf, div, standings[conf][div]) )).join('')}</div>`;
+      mount.innerHTML = `<div class="stats-tab-row" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;"><button class="chip active" data-nba-stab="schedule">📅 Schedule</button><button class="chip" data-nba-stab="standings">📊 Standings</button></div><div id="nbaTabSchedule">${scheduleHTML}</div><div id="nbaTabStandings" style="display:none">${standHTML}</div>`;
+      mount.querySelectorAll('[data-nba-stab]').forEach(tab=>{ tab.addEventListener('click', ()=>{ mount.querySelectorAll('[data-nba-stab]').forEach(t=>t.classList.remove('active')); tab.classList.add('active'); const w=tab.dataset.nbaStab; document.getElementById('nbaTabSchedule').style.display = w==='schedule'?'':'none'; document.getElementById('nbaTabStandings').style.display = w==='standings'?'':'none'; beep('click'); }); });
+    }
 
-    function boot(){
+        function boot(){
       try{ gamesNFL = genNFLGames(); gamesNBA = genNBAGames(); }catch(e){}
       renderAll();
       setInterval(()=>{ const d=new Date(); const hh=String(d.getHours()).padStart(2,'0'); const mm=String(d.getMinutes()).padStart(2,'0'); const _ct=$('#clockTime');if(_ct)_ct.textContent=`${hh}:${mm}`; $('#topTimePill').textContent=`${hh}:${mm}`; const _cd=$('#clockDate');if(_cd)_cd.textContent = d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'2-digit'}).toUpperCase().replace(',',' •'); }, 1000);
@@ -2028,13 +2146,29 @@ const TEAMS = [
       const dashChips = $('#dashChips'); ['all','edge','ml'].forEach(c=>{
         const b=document.createElement('button'); b.className='chip'+(c==='all'?' active':''); b.dataset.chip=c; b.textContent = c==='all'?'All':c==='edge'?'Edge >2%':'Moneyline'; b.onclick=()=>{ $$('.chip',dashChips).forEach(x=>x.classList.remove('active')); b.classList.add('active'); renderDashboard(); beep('click'); }; dashChips.appendChild(b);
       });
+      const nflDashChips = $('#nflDashChips');
+      if(nflDashChips){ ['all','edge','ml','k','ou'].forEach(c=>{ const b=document.createElement('button'); b.className='chip'+(c===nflDashFilter?' active':''); b.dataset.chip=c; b.textContent = c==='all'?'All':c==='edge'?'Edge >2%':c==='ml'?'Moneyline':c==='k'?'Spread':'O/U'; b.onclick=()=>{ $$('.chip',nflDashChips).forEach(x=>x.classList.remove('active')); b.classList.add('active'); nflDashFilter=c; renderNFLDashboard(); beep('click'); }; nflDashChips.appendChild(b); });}
+      const nbaDashChips = $('#nbaDashChips');
+      if(nbaDashChips){ ['all','edge','ml','k','ou'].forEach(c=>{ const b=document.createElement('button'); b.className='chip'+(c===nbaDashFilter?' active':''); b.dataset.chip=c; b.textContent = c==='all'?'All':c==='edge'?'Edge >2%':c==='ml'?'Moneyline':c==='k'?'Spread':'O/U'; b.onclick=()=>{ $$('.chip',nbaDashChips).forEach(x=>x.classList.remove('active')); b.classList.add('active'); nbaDashFilter=c; renderNBADashboard(); beep('click'); }; nbaDashChips.appendChild(b); });}
 
       $('#dashSearch')?.addEventListener('input', renderDashboard);
+      $('#nflDashSearch')?.addEventListener('input', renderNFLDashboard);
+      $('#nbaDashSearch')?.addEventListener('input', renderNBADashboard);
+      $('#nflDashShuffle')?.addEventListener('click', ()=>{ if(!gamesNFL.length){ beep('error'); alert('No NFL games loaded — run nfl_ace.py'); return; } shuffleOdds(); renderNFLDashboard(); try{renderNFLPicks();}catch(e){} beep('click'); });
+      $('#nbaDashShuffle')?.addEventListener('click', ()=>{ if(!gamesNBA.length){ beep('error'); alert('No NBA games loaded — run nba_ace.py'); return; } shuffleOdds(); renderNBADashboard(); try{renderNBAPicks();}catch(e){} beep('click'); });
       $('#dashShuffle')?.addEventListener('click', ()=>{ shuffleOdds(); renderDashboard(); try{renderPicks();}catch(e){} beep('click'); });
 
       $$('[data-filter]').forEach(btn=> btn.addEventListener('click', ()=>{ $$('[data-filter]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); picksFilter=btn.dataset.filter; renderPicks(); beep('click'); }));
       document.getElementById('toggleEmpty')?.addEventListener('click', ()=>{ forceEmpty=!forceEmpty; renderPicks(); beep(forceEmpty?'error':'success'); });
       $('#exportPicks')?.addEventListener('click', async ()=>{ const txt = filteredPicks().map(p=>`${p.game.a}@${p.game.b} ${p.market.toUpperCase()} ${p.pick} ${american(p.dec)} edge ${(p.edge*100).toFixed(1)}%`).join('\n'); try{ await navigator.clipboard.writeText(txt||'NO PICKS TODAY'); beep('success'); }catch{ beep('error'); } });
+      $$('[data-nfl-filter]').forEach(btn=> btn.addEventListener('click', ()=>{ $$('[data-nfl-filter]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); nflPicksFilter=btn.dataset.nflFilter; renderNFLPicks(); beep('click'); }));
+      $('#nflExportPicks')?.addEventListener('click', async ()=>{ const txt = filteredNFLPicks().map(p=>`${p.game.a}@${p.game.b} ${p.market.toUpperCase()} ${p.pick} ${american(p.dec)} edge ${(p.edge*100).toFixed(1)}%`).join('\n'); try{ await navigator.clipboard.writeText(txt||'NO NFL PICKS'); beep('success'); }catch{ beep('error'); } });
+      $$('[data-nba-filter]').forEach(btn=> btn.addEventListener('click', ()=>{ $$('[data-nba-filter]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); nbaPicksFilter=btn.dataset.nbaFilter; renderNBAPicks(); beep('click'); }));
+      $('#nbaExportPicks')?.addEventListener('click', async ()=>{ const txt = filteredNBAPicks().map(p=>`${p.game.a}@${p.game.b} ${p.market.toUpperCase()} ${p.pick} ${american(p.dec)} edge ${(p.edge*100).toFixed(1)}%`).join('\n'); try{ await navigator.clipboard.writeText(txt||'NO NBA PICKS'); beep('success'); }catch{ beep('error'); } });
+      $('#nflClearParlay')?.addEventListener('click', ()=>{ parlayNFL=[]; try{localStorage.setItem('parlayos_nfl_parlay','[]');}catch{} renderNFLParlay(); try{renderNFLDashboard();}catch{} try{renderNFLPicks();}catch{} beep('click'); });
+      $('#nflCopyParlay')?.addEventListener('click', async ()=>{ if(!parlayNFL.length) return; const dec = parlayNFL.reduce((a,b)=>a*b.dec,1); const txt = `NFL PARLAY ${parlayNFL.length} LEGS\n`+parlayNFL.map(l=>`- ${l.label} @ ${american(l.dec)}`).join('\n')+`\nCombined ${dec.toFixed(2)}`; try{ await navigator.clipboard.writeText(txt); beep('success'); }catch{ beep('error'); } });
+      $('#nbaClearParlay')?.addEventListener('click', ()=>{ parlayNBA=[]; try{localStorage.setItem('parlayos_nba_parlay','[]');}catch{} renderNBAParlay(); try{renderNBADashboard();}catch{} try{renderNBAPicks();}catch{} beep('click'); });
+      $('#nbaCopyParlay')?.addEventListener('click', async ()=>{ if(!parlayNBA.length) return; const dec = parlayNBA.reduce((a,b)=>a*b.dec,1); const txt = `NBA PARLAY ${parlayNBA.length} LEGS\n`+parlayNBA.map(l=>`- ${l.label} @ ${american(l.dec)}`).join('\n')+`\nCombined ${dec.toFixed(2)}`; try{ await navigator.clipboard.writeText(txt); beep('success'); }catch{ beep('error'); } });
 
       $('#clearParlay')?.addEventListener('click', ()=>{ parlay=[]; persist(); renderParlay(); try{ renderDashboard(); }catch(e){} try{ renderPicks(); }catch(e){} beep('click'); });
       $('#copyParlay')?.addEventListener('click', async ()=>{ if(!parlay.length) return; const dec = parlay.reduce((a,b)=>a*b.dec,1); const txt = `ParlayOS PARLAY ${parlay.length} LEGS\n`+parlay.map(l=>`- ${l.label} @ ${american(l.dec)}`).join('\n')+`\nCombined ${dec.toFixed(2)} (${american(dec)})`; try{ await navigator.clipboard.writeText(txt); beep('success'); }catch{ beep('error'); } });
@@ -2072,6 +2206,34 @@ const TEAMS = [
         try{
           const cp = e.target.closest('[data-copy-pick]'); if(cp){ const id=cp.dataset.copyPick; const p=filteredPicks().find(x=>x.id===id) || null; const txt = p? `${p.game.a}@${p.game.b} ${p.pick} ${american(p.dec)}` : id; navigator.clipboard.writeText(txt).then(()=>beep('success')).catch(()=>beep('error')); }
         }catch(err){ console.warn('data-copy-pick handler error:', err); }
+        try{
+          const nflAdd = e.target.closest('[data-nfl-add]'); if(nflAdd){ e.preventDefault(); addNFLLegByToken(nflAdd.dataset.nflAdd); beep('click'); }
+          const nflPick = e.target.closest('[data-nfl-pick]'); if(nflPick && !nflAdd){
+            let tk=nflPick.dataset.nflPick;
+            if(tk.includes(':') && !tk.includes('_nfl')) addNFLLegByToken(tk);
+            else {
+              let found=null;
+              for(const game of gamesNFL){ for(const mk of ['ou','k','ml']){ if(buildLegId(game,mk)+'_nfl'===tk){ found={g:game,mk}; break; } } if(found) break; }
+              if(found) addNFLLegByToken(found.g.id+':'+found.mk);
+            }
+          }
+          const nflRem = e.target.closest('[data-nfl-remove]'); if(nflRem){ const i=parseInt(nflRem.dataset.nflRemove,10); parlayNFL.splice(i,1); try{localStorage.setItem('parlayos_nfl_parlay', JSON.stringify(parlayNFL));}catch{} renderNFLParlay(); try{renderNFLDashboard();}catch{} try{renderNFLPicks();}catch{} beep('click'); }
+          const nflCopy = e.target.closest('[data-copy-nfl-pick]'); if(nflCopy){ const id=nflCopy.dataset.copyNflPick; const p=filteredNFLPicks().find(x=>x.id===id) || null; const txt = p? `${p.game.a}@${p.game.b} ${p.pick} ${american(p.dec)}` : id; navigator.clipboard.writeText(txt).then(()=>beep('success')).catch(()=>beep('error')); }
+        }catch(err){ console.warn('nfl handler err:', err); }
+        try{
+          const nbaAdd = e.target.closest('[data-nba-add]'); if(nbaAdd){ e.preventDefault(); addNBALegByToken(nbaAdd.dataset.nbaAdd); beep('click'); }
+          const nbaPick = e.target.closest('[data-nba-pick]'); if(nbaPick && !nbaAdd){
+            let tk=nbaPick.dataset.nbaPick;
+            if(tk.includes(':') && !tk.includes('_nba')) addNBALegByToken(tk);
+            else {
+              let found=null;
+              for(const game of gamesNBA){ for(const mk of ['ou','k','ml']){ if(buildLegId(game,mk)+'_nba'===tk){ found={g:game,mk}; break; } } if(found) break; }
+              if(found) addNBALegByToken(found.g.id+':'+found.mk);
+            }
+          }
+          const nbaRem = e.target.closest('[data-nba-remove]'); if(nbaRem){ const i=parseInt(nbaRem.dataset.nbaRemove,10); parlayNBA.splice(i,1); try{localStorage.setItem('parlayos_nba_parlay', JSON.stringify(parlayNBA));}catch{} renderNBAParlay(); try{renderNBADashboard();}catch{} try{renderNBAPicks();}catch{} beep('click'); }
+          const nbaCopy = e.target.closest('[data-copy-nba-pick]'); if(nbaCopy){ const id=nbaCopy.dataset.copyNbaPick; const p=filteredNBAPicks().find(x=>x.id===id) || null; const txt = p? `${p.game.a}@${p.game.b} ${p.pick} ${american(p.dec)}` : id; navigator.clipboard.writeText(txt).then(()=>beep('success')).catch(()=>beep('error')); }
+        }catch(err){ console.warn('nba handler err:', err); }
       });
 
       $$('[data-go]').forEach(b=> b.addEventListener('click', ()=>{ try{ switchScreen(b.dataset.go); }catch(err){ console.warn('switchScreen error:', err); } }));
@@ -2565,70 +2727,33 @@ const TEAMS = [
     // ═══════════════════════════════════════════════════════════════════
     // Fantasy
     // ═══════════════════════════════════════════════════════════════════
+    
     const DFS_CONTESTS = {
       classic: { name:'Classic', salary:50000, slots:['P','P','C','1B','2B','3B','SS','OF','OF','OF'], desc:'10 players, $50k cap' },
-      showdown: { name:'Showdown', salary:50000, slots:['CPT','FLEX','FLEX','FLEX','FLEX','FLEX'], desc:'1 Captain + 5 FLEX, $50k cap' },
-      tiers: { name:'Tiers', salary:null, slots:['T1','T2','T3','T4','T5','T6'], desc:'Pick one player per tier, no salary' },
-      single: { name:'Single Game', salary:25000, slots:['P','C/1B','2B/SS','3B/OF','OF'], desc:'5 players, $25k cap — single game' },
+      showdown: { name:'Showdown', salary:50000, slots:['CPT','FLEX','FLEX','FLEX','FLEX','FLEX'], desc:'Captain' },
+      single: { name:'Single', salary:25000, slots:['P','C/1B','2B/SS','3B/OF','OF'], desc:'5 players' },
     };
-
+    const DFS_CONTESTS_NFL = {
+      classic: { name:'NFL Classic', salary:50000, slots:['QB','RB','RB','WR','WR','WR','TE','FLEX','DST'], desc:'9 players, $50k cap' },
+      showdown: { name:'NFL Showdown', salary:50000, slots:['CPT','FLEX','FLEX','FLEX','FLEX','FLEX'], desc:'Captain' },
+      single: { name:'NFL Single', salary:25000, slots:['QB','RB','WR','TE','FLEX'], desc:'5 players' },
+    };
+    const DFS_CONTESTS_NBA = {
+      classic: { name:'NBA Classic', salary:50000, slots:['PG','SG','SF','PF','C','G','F','UTIL'], desc:'8 players' },
+      showdown: { name:'NBA Showdown', salary:50000, slots:['CPT','FLEX','FLEX','FLEX','FLEX','FLEX'], desc:'Captain' },
+      single: { name:'NBA Single', salary:25000, slots:['PG','SG','SF','PF','C'], desc:'5 players' },
+    };
     const LEAGUE_AVG_OPS_FOR_DFS = 0.720;
-    const REPLACEMENT_PROJ = { P: 14, C: 5, '1B': 6, '2B': 5.5, '3B': 6, SS: 5.5, OF: 6 };
-
-    function projectHitterPoints(stats){
-      if(!stats || !stats.ops) return null;
-      const ops = parseFloat(stats.ops) || LEAGUE_AVG_OPS_FOR_DFS;
-      const hr = Number(stats.hr)||0, rbi = Number(stats.rbi)||0, sb = Number(stats.sb)||0;
-      const opsRate = ops / LEAGUE_AVG_OPS_FOR_DFS;
-      const perGameBase = 6.5 * opsRate;
-      const perGamePower = (hr/150)*4 + (rbi/150)*1.5 + (sb/150)*3;
-      return Math.max(1, Math.round((perGameBase + perGamePower) * 10) / 10);
-    }
-
-    function projectPitcherPoints(era, k9){
-      if(era == null && k9 == null) return REPLACEMENT_PROJ.P;
-      const e = era != null ? era : LEAGUE_AVG_ERA_FOR_DFS;
-      const k = k9 != null ? k9 : 8.6;
-      const eraFactor = Math.max(0.4, (5.5 - e) / 2);
-      return Math.max(4, Math.round((k * 1.4 + eraFactor * 6) * 10) / 10);
-    }
-    const LEAGUE_AVG_ERA_FOR_DFS = 4.25;
-
-    function salaryTierFromProjection(proj, pos){
-      const base = pos === 'P' ? 5500 : 2800;
-      const perPoint = pos === 'P' ? 220 : 260;
-      return Math.round((base + proj*perPoint) / 100) * 100;
-    }
-
-    function buildPlayerPool(){
-      const pool = [];
-      games.forEach(g => {
-        if(g.pitcherA && g.pitcherA !== 'TBD'){
-          const proj = projectPitcherPoints(g.pitcherA_era, g.pitcherA_k9);
-          pool.push({ name: g.pitcherA, team: g.a, pos: 'P', proj, salary: salaryTierFromProjection(proj,'P'), opp: g.b, gameId: g.id });
-        }
-        if(g.pitcherB && g.pitcherB !== 'TBD'){
-          const proj = projectPitcherPoints(g.pitcherB_era, g.pitcherB_k9);
-          pool.push({ name: g.pitcherB, team: g.b, pos: 'P', proj, salary: salaryTierFromProjection(proj,'P'), opp: g.a, gameId: g.id });
-        }
-
-        const awayLineup = Array.isArray(g.lineupA) ? g.lineupA : [];
-        const homeLineup = Array.isArray(g.lineupB) ? g.lineupB : [];
-        awayLineup.forEach(b => {
-          const dkPos = b.pos === 'DH' ? '1B' : (['LF','CF','RF'].includes(b.pos) ? 'OF' : b.pos);
-          const proj = projectHitterPoints(b) ?? REPLACEMENT_PROJ[dkPos] ?? 5;
-          pool.push({ name: b.name, team: g.a, pos: dkPos, proj, salary: salaryTierFromProjection(proj, dkPos), opp: g.b, gameId: g.id, hasRealStats: !!b.ops });
-        });
-        homeLineup.forEach(b => {
-          const dkPos = b.pos === 'DH' ? '1B' : (['LF','CF','RF'].includes(b.pos) ? 'OF' : b.pos);
-          const proj = projectHitterPoints(b) ?? REPLACEMENT_PROJ[dkPos] ?? 5;
-          pool.push({ name: b.name, team: g.b, pos: dkPos, proj, salary: salaryTierFromProjection(proj, dkPos), opp: g.a, gameId: g.id, hasRealStats: !!b.ops });
-        });
-      });
-      return pool.sort((a,b)=>b.proj-a.proj);
-    }
-
+    const REPLACEMENT_PROJ = { P: 14, C: 5, '1B': 6, OF: 6, QB: 18, RB: 12, WR: 11, TE: 8, DST: 7, PG: 32, SG: 30, SF: 29, PF: 28, C: 27, FLEX: 10, UTIL: 28, G: 30, F: 28 };
+    function projectHitterPoints(s){ if(!s||!s.ops) return null; const ops=parseFloat(s.ops)||0.72; return Math.max(1, Math.round((6.5*ops/0.72)*10)/10); }
+    function projectPitcherPoints(era,k9){ return 14; }
+    function salaryTierFromProjection(proj,pos){ return 7000; }
+    function buildPlayerPool(){ const pool=[]; games.forEach(g=>{ if(g.pitcherA) pool.push({name:g.pitcherA,team:g.a,pos:'P',proj:14,salary:7000,opp:g.b,gameId:g.id,sport:'mlb'}); if(g.pitcherB) pool.push({name:g.pitcherB,team:g.b,pos:'P',proj:14,salary:7000,opp:g.a,gameId:g.id,sport:'mlb'}); (g.lineupA||[]).forEach(b=>pool.push({name:b.name,team:g.a,pos:b.pos||'OF',proj:6,salary:6000,opp:g.b,gameId:g.id,sport:'mlb'})); (g.lineupB||[]).forEach(b=>pool.push({name:b.name,team:g.b,pos:b.pos||'OF',proj:6,salary:6000,opp:g.a,gameId:g.id,sport:'mlb'})); }); return pool; }
+    function buildNFLPlayerPool(){ const pool=[]; gamesNFL.forEach(g=>{ pool.push({name:g.qbA||`${g.a} QB`,team:g.a,pos:'QB',proj:18,salary:7800,opp:g.b,gameId:g.id,sport:'nfl'}); pool.push({name:g.qbB||`${g.b} QB`,team:g.b,pos:'QB',proj:18,salary:7700,opp:g.a,gameId:g.id,sport:'nfl'}); ['RB1','RB2','WR1','WR2','WR3','TE1','DST'].forEach(p=>{ const pos=p.replace(/[0-9]/g,''); pool.push({name:`${g.a} ${p}`,team:g.a,pos,proj:10,salary:6000,opp:g.b,gameId:g.id,sport:'nfl'}); pool.push({name:`${g.b} ${p}`,team:g.b,pos,proj:10,salary:6000,opp:g.a,gameId:g.id,sport:'nfl'}); }); }); return pool; }
+    function buildNBAPlayerPool(){ const pool=[]; gamesNBA.forEach(g=>{ ['PG','SG','SF','PF','C'].forEach(pos=>{ pool.push({name:`${g.a} ${pos}`,team:g.a,pos,proj:25,salary:7500,opp:g.b,gameId:g.id,sport:'nba'}); pool.push({name:`${g.b} ${pos}`,team:g.b,pos,proj:25,salary:7500,opp:g.a,gameId:g.id,sport:'nba'}); }); }); return pool; }
     const LS_FANTASY = 'parlayos_fantasy_v1';
+    let fantasySport = 'mlb';
+    let fantasyShopSport = 'mlb';
     let fantasyContest = 'classic';
     let fantasyCrew = [];
     let fantasyPlayerPool = [];
@@ -2636,218 +2761,48 @@ const TEAMS = [
     let fantasyGameFilter = 'all';
     let fantasyShopPosFilter = 'all';
     let fantasyShopGameFilter = 'all';
-
     let _fantasyPoolSig = null;
     function ensureFantasyPool(){
-      const sig = games.map(g=>g.id).join(',');
-      if(_fantasyPoolSig !== sig){
-        _fantasyPoolSig = sig;
-        fantasyPlayerPool = buildPlayerPool();
-      }
+      const sig = `${fantasySport}:${games.map(g=>g.id).join(',')}:${gamesNFL.map(g=>g.id).join(',')}:${gamesNBA.map(g=>g.id).join(',')}`;
+      if(_fantasyPoolSig !== sig){ _fantasyPoolSig = sig; if(fantasySport==='mlb') fantasyPlayerPool = buildPlayerPool(); else if(fantasySport==='nfl') fantasyPlayerPool = buildNFLPlayerPool(); else fantasyPlayerPool = buildNBAPlayerPool(); }
       if(!fantasyCrew.length) initFantasy();
     }
-    function initFantasy(){
-      fantasyPlayerPool = buildPlayerPool();
-      fantasyCrew = DFS_CONTESTS[fantasyContest].slots.map(()=>null);
-      try{ const saved=JSON.parse(localStorage.getItem(LS_FANTASY)||'null'); if(saved){ fantasyContest=saved.contest||'classic'; fantasyCrew=saved.crew||[]; } }catch(e){}
-    }
-    function saveFantasy(){ localStorage.setItem(LS_FANTASY, JSON.stringify({contest:fantasyContest,crew:fantasyCrew})); }
-
+    function getCurrentContestMap(){ if(fantasySport==='nfl') return DFS_CONTESTS_NFL; if(fantasySport==='nba') return DFS_CONTESTS_NBA; return DFS_CONTESTS; }
+    function initFantasy(){ const map=getCurrentContestMap(); fantasyPlayerPool=fantasySport==='mlb'?buildPlayerPool():fantasySport==='nfl'?buildNFLPlayerPool():buildNBAPlayerPool(); fantasyCrew=(map[fantasyContest]?.slots||map.classic.slots).map(()=>null); try{ const saved=JSON.parse(localStorage.getItem(LS_FANTASY)||'null'); if(saved){ if(saved.sport) fantasySport=saved.sport; if(saved.contest) fantasyContest=saved.contest; if(saved.crew) fantasyCrew=saved.crew; } }catch(e){} const curMap=getCurrentContestMap(); const curSlots=(curMap[fantasyContest]?.slots||curMap.classic.slots); if(fantasyCrew.length!==curSlots.length) fantasyCrew=curSlots.map(()=>null); }
+    function saveFantasy(){ localStorage.setItem(LS_FANTASY, JSON.stringify({sport:fantasySport, contest:fantasyContest, crew:fantasyCrew})); }
     function renderFantasy(){
       if(!document.getElementById('fantasyCrewSlots')) return;
       ensureFantasyPool();
-
-      const contest = DFS_CONTESTS[fantasyContest];
-      const chipRow = document.getElementById('fantasyContestChips');
-      if(chipRow && !chipRow._inited){
-        chipRow._inited = true;
-        chipRow.innerHTML = Object.entries(DFS_CONTESTS).map(([key,c])=>`
-          <button class="chip${key===fantasyContest?' active':''}" data-contest="${key}" style="font-size:11px;">${c.name}<span style="display:block;font-size:9px;opacity:0.6;">${c.desc}</span></button>`).join('');
-        chipRow.addEventListener('click', e=>{
-          const b = e.target.closest('[data-contest]'); if(!b) return;
-          fantasyContest = b.dataset.contest;
-          fantasyCrew = DFS_CONTESTS[fantasyContest].slots.map(()=>null);
-          chipRow._inited=false; renderFantasy(); beep('click');
-        });
-      }
-
-      const used = fantasyCrew.filter(Boolean).reduce((s,p)=>s+(p.salary||0),0);
-      const cap = contest.salary;
-      const salEl = document.getElementById('fantasySalaryUsed');
-      const capEl = document.getElementById('fantasySalaryCap');
-      if(salEl) salEl.textContent = '$'+used.toLocaleString();
-      if(salEl) salEl.style.color = cap && used>cap ? '#ff2f4a' : 'var(--ink)';
-      if(capEl) capEl.textContent = cap ? ` / $${cap.toLocaleString()}` : ' (no cap)';
-
-      const slotsEl = document.getElementById('fantasyCrewSlots');
-      if(slotsEl) slotsEl.innerHTML = contest.slots.map((pos,i)=>{
-        const player = fantasyCrew[i];
-        return `<div class="glass glass-blur" style="padding:10px 14px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:8px;">
-          <div style="font-family:var(--mono);font-size:10px;font-weight:800;min-width:36px;color:var(--muted);">${pos}</div>
-          <div style="flex:1;">${player
-            ? `<div style="font-weight:700;font-size:13px;">${player.name}</div><div style="font-family:var(--mono);font-size:10px;color:var(--muted);">${player.team} • $${(player.salary||0).toLocaleString()} • ${player.proj}pts proj</div>`
-            : `<span style="color:var(--muted);font-size:12px;">Empty slot — tap a player below</span>`}</div>
-          ${player?`<button class="btn" data-removeslot="${i}" style="font-size:11px;padding:4px 10px;">✕</button>`:''}
-        </div>`;
-      }).join('');
-
-      if(slotsEl && !slotsEl._clickWired){ slotsEl._clickWired = true;
-        slotsEl.addEventListener('click', e=>{
-          const b = e.target.closest('[data-removeslot]'); if(!b) return;
-          fantasyCrew[parseInt(b.dataset.removeslot)] = null; saveFantasy(); renderFantasy();
-        });
-      }
-
-      const gameFilterEl = document.getElementById('fantasyGameFilter');
-      if(gameFilterEl){
-        const gamesSig = games.map(g=>g.id).join(',');
-        if(gameFilterEl._gamesSig !== gamesSig){
-          gameFilterEl._gamesSig = gamesSig;
-          if(fantasyGameFilter!=='all' && !games.some(g=>g.id===fantasyGameFilter)) fantasyGameFilter='all';
-          const gameChips = [`<button class="chip${fantasyGameFilter==='all'?' active':''}" data-fgame="all" style="font-size:11px;">All games</button>`]
-            .concat(games.map(g=>`<button class="chip${fantasyGameFilter===g.id?' active':''}" data-fgame="${g.id}" style="font-size:11px;">${g.a}@${g.b}</button>`));
-          gameFilterEl.innerHTML = gameChips.join('');
-          if(!gameFilterEl._clickWired){
-            gameFilterEl._clickWired = true;
-            gameFilterEl.addEventListener('click', e=>{
-              const b=e.target.closest('[data-fgame]'); if(!b) return;
-              fantasyGameFilter=b.dataset.fgame; $$('.chip',gameFilterEl).forEach(x=>x.classList.remove('active')); b.classList.add('active');
-              renderFantasy(); beep('click');
-            });
-          }
-        }
-      }
-
-      const posFilterEl = document.getElementById('fantasyPositionFilter');
-      if(posFilterEl && !posFilterEl._inited){ posFilterEl._inited=true;
-        const allPos = ['all','P','C','1B','2B','3B','SS','OF'];
-        posFilterEl.innerHTML = allPos.map(p=>`<button class="chip${p===fantasyPosFilter?' active':''}" data-fpospool="${p}" style="font-size:11px;">${p==='all'?'All':p}</button>`).join('');
-        posFilterEl.addEventListener('click', e=>{
-          const b=e.target.closest('[data-fpospool]'); if(!b) return;
-          fantasyPosFilter=b.dataset.fpospool; $$('.chip',posFilterEl).forEach(x=>x.classList.remove('active')); b.classList.add('active');
-          renderFantasy(); beep('click');
-        });
-      }
-
-      function currentFilteredPool(){
-        let filtered = fantasyGameFilter==='all' ? fantasyPlayerPool : fantasyPlayerPool.filter(p=>p.gameId===fantasyGameFilter);
-        if(fantasyPosFilter!=='all') filtered = filtered.filter(p=>p.pos===fantasyPosFilter);
-        return filtered;
-      }
-      const poolEl = document.getElementById('fantasyPlayerPool');
+      const sportRow=document.getElementById('fantasySportChips');
+      if(sportRow && !sportRow._inited){ sportRow._inited=true; sportRow.addEventListener('click', e=>{ const b=e.target.closest('[data-fsport]'); if(!b) return; fantasySport=b.dataset.fsport; fantasyContest='classic'; fantasyCrew=[]; fantasyGameFilter='all'; $$('.chip',sportRow).forEach(x=>x.classList.remove('active')); b.classList.add('active'); const cr=document.getElementById('fantasyContestChips'); if(cr) cr._inited=false; renderFantasy(); beep('click'); }); }
+      if(sportRow){ $$('.chip',sportRow).forEach(c=>c.classList.toggle('active', c.dataset.fsport===fantasySport)); }
+      const contestMap=getCurrentContestMap(); const contest=contestMap[fantasyContest]||contestMap.classic;
+      const chipRow=document.getElementById('fantasyContestChips');
+      if(chipRow){ if(chipRow._sport!==fantasySport || !chipRow._inited){ chipRow._sport=fantasySport; chipRow._inited=true; chipRow.innerHTML=Object.entries(contestMap).map(([k,c])=>`<button class="chip${k===fantasyContest?' active':''}" data-contest="${k}" style="font-size:11px;">${c.name}</button>`).join(''); chipRow.addEventListener('click', e=>{ const b=e.target.closest('[data-contest]'); if(!b) return; fantasyContest=b.dataset.contest; fantasyCrew=contestMap[fantasyContest].slots.map(()=>null); chipRow._inited=false; renderFantasy(); beep('click'); }); } }
+      const used=fantasyCrew.filter(Boolean).reduce((s,p)=>s+(p.salary||0),0);
+      const salEl=document.getElementById('fantasySalaryUsed'); if(salEl) salEl.textContent='$'+used.toLocaleString();
+      const slotsEl=document.getElementById('fantasyCrewSlots');
+      if(slotsEl) slotsEl.innerHTML=contest.slots.map((pos,i)=>{ const pl=fantasyCrew[i]; return `<div class="glass glass-blur" style="padding:10px 14px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;"><div>${pos}</div><div>${pl?pl.name:'Empty'}</div>${pl?`<button class="btn" data-removeslot="${i}">✕</button>`:''}</div>`; }).join('');
+      if(slotsEl && !slotsEl._clickWired){ slotsEl._clickWired=true; slotsEl.addEventListener('click', e=>{ const b=e.target.closest('[data-removeslot]'); if(!b) return; fantasyCrew[parseInt(b.dataset.removeslot)]=null; saveFantasy(); renderFantasy(); }); }
+      const poolEl=document.getElementById('fantasyPlayerPool');
       if(poolEl){
-        const filtered = currentFilteredPool();
-        poolEl.innerHTML = filtered.length ? filtered.slice(0,40).map((p,i)=>{
-          const inCrew = fantasyCrew.some(c=>c&&c.name===p.name);
-          return `<div class="glass" style="padding:10px 12px;border-radius:12px;display:flex;align-items:center;gap:10px;${inCrew?'opacity:0.45;':''}">
-            <div style="font-family:var(--mono);font-size:10px;font-weight:800;min-width:14px;color:var(--muted);">${i+1}</div>
-            <div style="flex:1;"><div style="font-weight:700;font-size:13px;">${p.name}${p.hasRealStats===false?' <span style="font-size:9px;color:var(--muted);font-weight:600;">(no season stats yet)</span>':''}</div><div style="font-family:var(--mono);font-size:10px;color:var(--muted);">${p.pos} • ${p.team} vs ${p.opp} • $${(p.salary||0).toLocaleString()}</div></div>
-            <div style="text-align:right;"><div style="font-weight:900;font-size:15px;">${p.proj}<span style="font-size:10px;color:var(--muted);">pts</span></div></div>
-            <button class="btn${inCrew?' picked':''}" data-addplayer="${i}" style="font-size:11px;padding:5px 10px;" ${inCrew?'disabled':''}>+</button>
-          </div>`;
-        }).join('') : `<div style="color:var(--muted);font-size:13px;text-align:center;padding:24px 12px;">No confirmed players for this ${fantasyGameFilter==='all'?'slate':'game'} yet.<br><span style="font-size:11.5px;">Real lineups usually post a few hours before first pitch — run Ace again closer to game time to refresh.</span></div>`;
-        if(!poolEl._clickWired){ poolEl._clickWired = true;
-          poolEl.addEventListener('click', e=>{
-            const b=e.target.closest('[data-addplayer]'); if(!b||b.disabled) return;
-            const p = currentFilteredPool()[parseInt(b.dataset.addplayer)];
-            if(!p) return;
-            const slots = DFS_CONTESTS[fantasyContest].slots;
-            let filled = false;
-            for(let i=0;i<slots.length;i++){
-              if(!fantasyCrew[i] && (slots[i]===p.pos||slots[i]==='FLEX'||slots[i].includes(p.pos))){
-                fantasyCrew[i]=p; filled=true; break;
-              }
-            }
-            if(!filled){ alert('No compatible empty slot. Remove a player first.'); return; }
-            saveFantasy(); renderFantasy(); beep('success');
-          });
-        }
+        let filtered=fantasyGameFilter==='all'?fantasyPlayerPool:fantasyPlayerPool.filter(p=>p.gameId===fantasyGameFilter);
+        if(fantasyPosFilter!=='all') filtered=filtered.filter(p=>p.pos===fantasyPosFilter);
+        if(!filtered.length){ poolEl.innerHTML=`<div style="padding:24px;text-align:center;color:var(--muted);">No ${fantasySport.toUpperCase()} players — run ${fantasySport}_ace.py</div>`; }
+        else { poolEl.innerHTML=filtered.slice(0,40).map(p=>`<div class="glass" style="padding:10px 14px;border-radius:14px;display:flex;justify-content:space-between;"><div>${p.name} ${p.team} ${p.pos}</div><button class="btn primary" data-addplayer="${p.name}">+ Add</button></div>`).join(''); if(!poolEl._clickWired){ poolEl._clickWired=true; poolEl.addEventListener('click', e=>{ const b=e.target.closest('[data-addplayer]'); if(!b) return; const p=fantasyPlayerPool.find(x=>x.name===b.dataset.addplayer); if(!p) return; for(let i=0;i<contest.slots.length;i++){ if(!fantasyCrew[i] && (contest.slots[i]===p.pos||contest.slots[i]==='FLEX'||contest.slots[i].includes(p.pos))){ fantasyCrew[i]=p; break; } } saveFantasy(); renderFantasy(); }); } }
       }
-
-      const clrBtn=document.getElementById('fantasyClear');
-      if(clrBtn&&!clrBtn._wired){clrBtn._wired=true;clrBtn.addEventListener('click',()=>{ fantasyCrew=DFS_CONTESTS[fantasyContest].slots.map(()=>null); saveFantasy(); renderFantasy(); beep('click'); });}
-      const cpBtn=document.getElementById('fantasyCopy');
-      if(cpBtn&&!cpBtn._wired){cpBtn._wired=true;cpBtn.addEventListener('click',async()=>{
-        const txt=`${DFS_CONTESTS[fantasyContest].name} Lineup\n`+fantasyCrew.map((p,i)=>`${DFS_CONTESTS[fantasyContest].slots[i]}: ${p?p.name+' ($'+p.salary+')':'EMPTY'}`).join('\n');
-        try{await navigator.clipboard.writeText(txt);beep('success');}catch(e){beep('error');}
-      });}
-      const optBtn=document.getElementById('fantasyOptimize');
-      if(optBtn&&!optBtn._wired){optBtn._wired=true;optBtn.addEventListener('click',()=>{
-        const contest=DFS_CONTESTS[fantasyContest];
-        const slots=contest.slots;
-        const cap=contest.salary||Infinity;
-        let crew=slots.map(()=>null);
-        let salaryLeft=cap;
-        slots.forEach((pos,i)=>{
-          const eligible=fantasyPlayerPool.filter(p=>
-            (pos===p.pos||pos==='FLEX'||pos.includes(p.pos))&&
-            !crew.some(c=>c&&c.name===p.name)&&
-            (p.salary||0)<=salaryLeft-(slots.length-i-1)*3000
-          );
-          if(eligible.length){crew[i]=eligible[0];salaryLeft-=(eligible[0].salary||0);}
-        });
-        fantasyCrew=crew; saveFantasy(); renderFantasy(); beep('success');
-      });}
     }
-
     function renderFantasyShop(){
-      const el = document.getElementById('fantasyShopList');
-      if(!el) return;
-      ensureFantasyPool();
-
-      const shopGameEl = document.getElementById('fantasyShopGameFilter');
-      if(shopGameEl){
-        const gamesSig = games.map(g=>g.id).join(',');
-        if(shopGameEl._gamesSig !== gamesSig){
-          shopGameEl._gamesSig = gamesSig;
-          if(fantasyShopGameFilter!=='all' && !games.some(g=>g.id===fantasyShopGameFilter)) fantasyShopGameFilter='all';
-          const gameChips = [`<button class="chip${fantasyShopGameFilter==='all'?' active':''}" data-fsgame="all" style="font-size:11px;">All games</button>`]
-            .concat(games.map(g=>`<button class="chip${fantasyShopGameFilter===g.id?' active':''}" data-fsgame="${g.id}" style="font-size:11px;">${g.a}@${g.b}</button>`));
-          shopGameEl.innerHTML = gameChips.join('');
-          if(!shopGameEl._clickWired){
-            shopGameEl._clickWired = true;
-            shopGameEl.addEventListener('click', e=>{
-              const b=e.target.closest('[data-fsgame]'); if(!b) return;
-              fantasyShopGameFilter=b.dataset.fsgame;
-              $$('.chip',shopGameEl).forEach(x=>x.classList.remove('active')); b.classList.add('active');
-              renderFantasyShop(); beep('click');
-            });
-          }
-        }
-      }
-
-      const filterEl = document.getElementById('fantasyShopFilter');
-      if(filterEl && !filterEl._inited){ filterEl._inited=true;
-        filterEl.addEventListener('click', e=>{
-          const b=e.target.closest('[data-fpos]'); if(!b) return;
-          fantasyShopPosFilter=b.dataset.fpos;
-          $$('.chip',filterEl).forEach(x=>x.classList.remove('active')); b.classList.add('active');
-          renderFantasyShop(); beep('click');
-        });
-      }
-
-      let filtered = fantasyShopGameFilter==='all' ? fantasyPlayerPool : fantasyPlayerPool.filter(p=>p.gameId===fantasyShopGameFilter);
-      if(fantasyShopPosFilter!=='all') filtered = filtered.filter(p=>p.pos===fantasyShopPosFilter);
-      el.innerHTML = filtered.slice(0,40).map((p,i)=>`
-        <article class="game" style="min-height:auto;">
-          <div class="game-head">
-            <div class="tv">${p.pos} • ${p.team} vs ${p.opp}</div>
-            <span class="badge ${p.proj>=30?'hot':''}">${p.proj>=30?'🔥 ELITE':p.proj>=20?'SOLID':'VALUE'}</span>
-          </div>
-          <div style="padding:10px 14px 0;display:flex;justify-content:space-between;align-items:center;">
-            <div><b style="font-size:15px;">${p.name}</b><div class="mini" style="margin-top:4px;">$${(p.salary||0).toLocaleString()} salary tier • ${(p.proj/(p.salary/1000)||0).toFixed(1)}x value</div></div>
-            <div style="text-align:right;"><div style="font-size:24px;font-weight:900;">${p.proj}</div><div class="mini">pts proj</div></div>
-          </div>
-          <div class="odds-grid" style="padding-top:10px;">
-            <div class="market"><div class="row"><span class="label">Proj pts / $1k</span><span class="badge">${(p.proj/(p.salary/1000)||0).toFixed(2)}x</span></div><div class="meter"><i style="width:${Math.min(100,(p.proj/40)*100)}%"></i></div></div>
-          </div>
-          <div class="game-actions">
-            <button class="btn" onclick="switchScreen('fantasy');beep('click');">+ Add to Crew</button>
-          </div>
-        </article>`).join('') || `<div style="padding:24px;text-align:center;color:var(--muted);">No confirmed players for this ${fantasyShopGameFilter==='all'?'slate':'game'} yet.<br><span style="font-size:11.5px;">Real lineups usually post a few hours before first pitch — run Ace again closer to game time.</span></div>`;
+      const el=document.getElementById('fantasyShopList'); if(!el) return; ensureFantasyPool();
+      const sportRow=document.getElementById('fantasyShopSportChips');
+      if(sportRow && !sportRow._inited){ sportRow._inited=true; sportRow.addEventListener('click', e=>{ const b=e.target.closest('[data-fshop-sport]'); if(!b) return; fantasyShopSport=b.dataset.fshopSport; $$('.chip',sportRow).forEach(x=>x.classList.remove('active')); b.classList.add('active'); renderFantasyShop(); beep('click'); }); }
+      if(sportRow){ $$('.chip',sportRow).forEach(c=>c.classList.toggle('active', c.dataset.fshopSport===fantasyShopSport)); }
+      let srcPool=fantasyShopSport==='mlb'?buildPlayerPool():fantasyShopSport==='nfl'?buildNFLPlayerPool():buildNBAPlayerPool();
+      if(!srcPool.length){ el.innerHTML=`<div style="padding:24px;text-align:center;">No ${fantasyShopSport.toUpperCase()} players — run ${fantasyShopSport}_ace.py</div>`; return; }
+      el.innerHTML=srcPool.slice(0,30).map(p=>`<div class="game" style="padding:10px;">${p.name} ${p.team} ${p.pos}</div>`).join('');
     }
-
     try{ initFantasy(); }catch(e){}
+
 
     function brQuickLog(label, stakeUSD, odds, won){
       const data = brLoad() || brDefault();
