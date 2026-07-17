@@ -42,14 +42,50 @@
 :where(code, pre, kbd, samp) {
   font-family: "Optimistic Mono", ui-monospace, monospace;
 }
-
-/* ── V5 FIX PLACEHOLDER ── */
-.screen {
-  padding: 18px 18px 110px !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch;
+</style><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
 }
-#screen-desktop { padding: 20px 18px 110px !important; }
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+
+/* ── V5 FIX PLACEHOLDER — consolidated below ── */
 
 .toolbar {
   position: relative !important;
@@ -157,11 +193,11 @@ body.dark .empty b { color: #eef2ff !important; }
 
 /* ── V5 FIX: Glass titlebar + emoji chips + bottom settings ── */
 .screen {
-  padding: 18px 18px 110px !important;
+  padding: 82px 18px 82px !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch;
 }
-#screen-desktop { padding: 20px 18px 110px !important; }
+#screen-desktop { padding: 82px 18px 82px !important; }
 
 .toolbar {
   position: relative !important;
@@ -357,12 +393,8 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
     .titlebar {
       height: 64px; display: flex; align-items: center; justify-content: space-between;
       padding: 0 18px 0 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.78);
-      box-shadow: 0 8px 32px rgba(23,37,73,0.10), 0 1px 0 rgba(255,255,255,0.88) inset;
-      background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.68) 42%, rgba(240,245,251,0.46) 100%);
-      backdrop-filter: blur(32px) saturate(1.8) brightness(1.05);
-      -webkit-backdrop-filter: blur(32px) saturate(1.8) brightness(1.05);
-      position: relative; z-index: 10; flex-shrink: 0;
+      position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     }
     body.dark .titlebar {
       background: linear-gradient(180deg, rgba(42,54,84,0.94) 0%, rgba(26,36,64,0.78) 48%, rgba(14,22,42,0.64) 100%) !important;
@@ -399,14 +431,14 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
       scroll-padding-top: 56px;
     }
     .screen {
-      position: absolute; inset: 0; padding: 56px 18px 16px;
+      position: absolute; inset: 0; padding: 56px 18px 82px;
       overflow: auto; scrollbar-width: thin;
       transform: translateX(18px); opacity: 0; pointer-events: none;
       transition: transform .38s cubic-bezier(.2,.8,.2,1), opacity .28s ease;
-    padding: 76px 18px 110px;}
+    }
     .screen.active { transform: translateX(0); opacity: 1; pointer-events: auto; }
     .screen.exit-left { transform: translateX(-18px); opacity: 0; }
-    #screen-desktop { padding-top: 20px; }
+    #screen-desktop { padding-top: 82px; }
 
     .screen::-webkit-scrollbar{ width:8px; height:8px; } .screen::-webkit-scrollbar-thumb{ background: rgba(28,34,48,.16); border-radius:999px; }
 
@@ -464,9 +496,9 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
       text-align:left; border-radius: 22px; border: 1px solid rgba(255,255,255,0.92);
       background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.72));
       box-shadow: var(--shadow-sm);
-      padding: 16px 14px 14px; position:relative; overflow:hidden;
+      padding: 16px 14px 48px; position:relative; overflow:hidden;
       transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      min-height: 118px;
+      min-height: 158px;
     }
     .menu-btn:hover { transform: translateY(-2px); box-shadow: 0 18px 38px rgba(23,37,73,0.16); border-color: rgba(92,124,255,0.22); }
     .menu-btn:active { transform: translateY(0px) scale(.99); }
@@ -530,7 +562,7 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
     .matchup { padding: 12px 14px 0; display:flex; align-items:center; justify-content:space-between; gap:10px; }
     .team { display:flex; align-items:center; gap:10px; min-width:0; }
     .logo { width:34px; height:34px; border-radius:12px; display:grid; place-items:center; font-weight:900; letter-spacing:-0.04em; background: rgba(28,34,48,0.08); border:1px solid rgba(255,255,255,0.9); flex:0 0 auto; }
-    .team b { display:block; font-size:14px; line-height:1.1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width: 13ch; }
+    .team b { display:block; font-size:14px; line-height:1.5; padding:2px 0; white-space:nowrap; overflow:visible; max-width: none; }
     .team span{ display:block; font-family:var(--mono); font-size:11px; color: var(--muted); font-weight:700; }
     .team .t-badge{ display:inline-flex; }
     .vs { font-family: var(--mono); font-size:11px; color: var(--muted); font-weight:800; letter-spacing:.12em; }
@@ -680,7 +712,7 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
     @media (max-width: 560px){
       .title-center{ font-size:13px; }
       .title-actions{ display:none; }
-      .screen{ padding: 12px 12px 88px; padding: 76px 18px 110px;}
+      .screen{ padding: 12px 12px 88px; padding: 76px 18px 82px;}
       .menu-grid{ grid-template-columns: 1fr; }
       .meta-grid{ grid-template-columns: 1fr; }
       .toolbar{ gap:8px; }
@@ -873,6 +905,198 @@ body.dark .chip { background: rgba(32,42,64,0.72) !important; border-color: rgba
 body.dark .chip.active { background:#eef2ff !important; color:#0a0e18 !important; }
 .crumb-btn { background: rgba(255,255,255,0.78) !important; color:#1c2230 !important; }
 body.dark .crumb-btn { background: rgba(32,42,64,0.88) !important; color:#eef2ff !important; }
+
+/* ── REFRACTIVE GLASS SYSTEM ── */
+/* 1. Window background: transparent blur */
+.os-window {
+  background: rgba(255,255,255,0.12) !important;
+  backdrop-filter: blur(40px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(1.3) !important;
+}
+body.dark .os-window {
+  background: rgba(10,14,24,0.18) !important;
+  backdrop-filter: blur(40px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(1.3) !important;
+}
+.viewport {
+  background: transparent !important;
+}
+.screen {
+  background: transparent !important;
+}
+
+/* 2. Refractive glass on ALL elements — NO per-element backdrop-filter (perf) */
+.game, .menu-btn, .glass, .chip, .badge, .pill, .market, .meta,
+.qbtn, .crumb-btn, .btn, .slot, .table-card, .status-lines div,
+.notice, .clock-card, .search, .parlay-bubble-panel, .cal-cell,
+.breadcrumb, .toolbar, .logo, .odds-grid {
+  position: relative;
+  background: rgba(255,255,255,0.18) !important;
+  border: 1px solid rgba(255,255,255,0.30) !important;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.50),
+    inset 0 -1px 0 rgba(255,255,255,0.12) !important;
+}
+/* Specular highlight — only on large cards */
+.game::before, .menu-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    linear-gradient(
+      125deg,
+      rgba(255,255,255,0.25) 0%,
+      rgba(255,255,255,0.0) 30%,
+      rgba(255,255,255,0.0) 60%,
+      rgba(255,255,255,0.10) 85%,
+      rgba(255,255,255,0.18) 100%
+    );
+}
+/* Prismatic refraction edge — only on large cards */
+.game::after, .menu-btn::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+  background: conic-gradient(
+    from 220deg at 50% 50%,
+    rgba(255,60,90,0.18) 0deg,
+    rgba(255,180,40,0.14) 60deg,
+    rgba(120,255,180,0.16) 120deg,
+    rgba(60,140,255,0.20) 180deg,
+    rgba(180,80,255,0.16) 240deg,
+    rgba(255,60,160,0.14) 300deg,
+    rgba(255,60,90,0.18) 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 2px;
+  opacity: 0.8;
+}
+
+/* 3. Title bar — refractive glass that distorts text beneath */
+html body .titlebar,
+body .titlebar,
+html .titlebar {
+  background: rgba(255,255,255,0.06) !important;
+  background-image: none !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.04),
+    inset 0 -1px 0 rgba(255,255,255,0.2) !important;
+  backdrop-filter: blur(32px) saturate(1.8) brightness(1.06) contrast(1.05) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(1.8) brightness(1.06) contrast(1.05) !important;
+  position: absolute !important;
+  top: 0; left: 0; right: 0;
+  z-index: 10;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+/* Titlebar refraction rainbow band */
+html body .titlebar::after,
+body .titlebar::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 5%; right: 5%;
+  height: 3px;
+  border-radius: 2px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(255,60,90,0.3),
+    rgba(255,180,40,0.25),
+    rgba(80,255,160,0.3),
+    rgba(60,140,255,0.35),
+    rgba(180,80,255,0.25),
+    rgba(255,60,120,0.3)
+  );
+  opacity: 0.6;
+  filter: blur(1px);
+  z-index: 2;
+}
+
+/* 4. Dark mode variants */
+body.dark .game, body.dark .menu-btn, body.dark .glass, body.dark .chip,
+body.dark .badge, body.dark .pill, body.dark .market, body.dark .meta,
+body.dark .qbtn, body.dark .crumb-btn, body.dark .btn, body.dark .slot,
+body.dark .table-card, body.dark .status-lines div, body.dark .notice,
+body.dark .clock-card, body.dark .search, body.dark .parlay-bubble-panel,
+body.dark .cal-cell, body.dark .breadcrumb, body.dark .toolbar,
+body.dark .logo, body.dark .odds-grid {
+  background: rgba(18,24,40,0.22) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 -1px 0 rgba(255,255,255,0.04) !important;
+}
+body.dark .titlebar,
+body.dark div.titlebar {
+  background: rgba(18,24,40,0.06) !important;
+  background-image: none !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.12),
+    inset 0 -1px 0 rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(32px) saturate(1.8) brightness(1.12) contrast(1.05) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(1.8) brightness(1.12) contrast(1.05) !important;
+}
+/* Dark mode specular highlight */
+body.dark .game::before, body.dark .menu-btn::before {
+  background:
+    linear-gradient(
+      125deg,
+      rgba(255,255,255,0.08) 0%,
+      rgba(255,255,255,0.0) 30%,
+      rgba(255,255,255,0.0) 60%,
+      rgba(255,255,255,0.03) 85%,
+      rgba(255,255,255,0.06) 100%
+    );
+}
+/* Dark mode prismatic edge */
+body.dark .game::after, body.dark .menu-btn::after {
+  opacity: 0.65;
+  background: conic-gradient(
+    from 220deg at 50% 50%,
+    rgba(255,80,120,0.22) 0deg,
+    rgba(255,200,60,0.18) 60deg,
+    rgba(140,255,200,0.20) 120deg,
+    rgba(80,160,255,0.24) 180deg,
+    rgba(200,100,255,0.20) 240deg,
+    rgba(255,80,180,0.18) 300deg,
+    rgba(255,80,120,0.22) 360deg
+  );
+}
+
+/* 5. Keep solid fills on active/primary states */
+.btn.primary {
+  background: linear-gradient(180deg, #ff445e, #e82e48) !important;
+  border-color: rgba(255,47,74,0.32) !important;
+}
+body.dark .btn.primary {
+  background: linear-gradient(180deg, #ff4d67, #d9233f) !important;
+}
+.chip.active {
+  background: rgba(28,34,48,0.85) !important;
+  color: white !important;
+  border-color: rgba(28,34,48,0.9) !important;
+}
+body.dark .chip.active {
+  background: rgba(238,242,255,0.85) !important;
+  color: #0a0e18 !important;
+}
+.btn::after { display: none; }
+.btn.primary::before { display: none; }
+
 .parlay-bubble-panel .empty-btn-fix { display:none; }
 #exportPicks:empty, #toggleEmpty:empty { display:none; }
 .settings-dark-centered { display:flex; justify-content:center; margin:12px auto 18px; max-width:420px; }
@@ -882,7 +1106,7 @@ body.dark .crumb-btn { background: rgba(32,42,64,0.88) !important; color:#eef2ff
 .crumb-link:hover { opacity:1; text-decoration:underline; }
 body.dark .crumb-link { color:#a6b0c6 !important; }
 
-body.dark #dashSearch, body.dark .search-input, body.dark input[type="search"], body.dark .search-bar input { background: rgba(18,24,38,0.86) !important; border:1px solid rgba(255,255,255,0.16) !important; color:#eef2ff !important; }
+body.dark #dashSearch, body.dark .search-input, body.dark input[type="search"], body.dark .search-bar input { background: rgba(18,24,38,0.86) !important; border:0 !important; color:#eef2ff !important; }
 body.dark #dashSearch::placeholder { color:#8a97b1 !important; }
 
 body.dark .table-card thead th, body.dark .standings-head, body.dark .table-head { background: rgba(18,24,38,0.92) !important; color:#a6b0c6 !important; }
@@ -893,7 +1117,7 @@ body.dark .table-card tr { border-color: rgba(255,255,255,0.06) !important; }
 body.dark .table-card .club-badge, body.dark .table-card .badge-count { background: rgba(255,255,255,0.10) !important; color:#cbd5e1 !important; }
 
 .breadcrumb { /* removed */ }
-.screen { overflow-y:auto; -webkit-overflow-scrolling:touch; padding: 76px 18px 110px;}
+.screen { overflow-y:auto; -webkit-overflow-scrolling:touch; padding: 76px 18px 82px;}
 
 body.dark .toolbar .search {
   background: rgba(12,18,32,0.96) !important;
@@ -991,22 +1215,192 @@ body.dark .cal-cell.loss{background:rgba(255,90,82,0.14);border-color:rgba(255,9
 body.dark .mini-table th,body.dark .mini-table td{border-bottom-color:rgba(255,255,255,0.08);}
 </style>
 
+
+
+
+
+
+
+
+
+
+
+<style id="final-fix-v9">
+/* 1. REMOVE CARDS FROM BEHIND ALL CHIPS - HIGH SPECIFICITY FOR BOTH LIGHT/DARK */
+html body .quick-nav,
+body .quick-nav,
+html body.dark .quick-nav,
+body.dark .quick-nav,
+html.dark body .quick-nav,
+html.light body .quick-nav,
+html body.light .quick-nav,
+body.light .quick-nav,
+#screen-dashboard .quick-nav,
+#screen-standings .quick-nav,
+#screen-nfl-standings .quick-nav,
+#screen-nba-standings .quick-nav,
+#screen-calendar .quick-nav {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  margin: 0 0 12px 0 !important;
+  border-radius: 0 !important;
+}
+
+html body .toolbar,
+body .toolbar,
+html body.dark .toolbar,
+body.dark .toolbar,
+html.dark body .toolbar,
+#screen-dashboard .toolbar,
+#screen-nfl-dashboard .toolbar,
+#screen-nba-dashboard .toolbar {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+html body .stats-tab-row,
+body .stats-tab-row,
+html body.dark .stats-tab-row,
+body.dark .stats-tab-row,
+html.dark body .stats-tab-row,
+html body .chip-row,
+body .chip-row,
+body.dark .chip-row,
+html body.dark .chip-row {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  margin: 0 0 10px 0 !important;
+  border-radius: 0 !important;
+}
+
+/* 2. TITLE BAR - handled by REFRACTIVE GLASS SYSTEM */
+
+/* os-window: transparent blur — handled by REFRACTIVE GLASS SYSTEM */
+html body .screen,
+body .screen {
+  background: transparent !important;
+}
+
+/* 3. FIX COLOR MISMATCH ON STATS SCREEN - MLB/NBA/NFL - DARK MODE */
+body.dark .game {
+  background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)) !important;
+  border-color: rgba(255,255,255,0.14) !important;
+}
+body.dark .game div[style*="background:rgba(255,255,255,0.48)"],
+body.dark .game div[style*="background: rgba(255,255,255,0.48)"],
+html body.dark .game div[style*="rgba(255,255,255,0.48)"] {
+  background: rgba(32,42,64,0.72) !important;
+  background-color: rgba(32,42,64,0.72) !important;
+  border-color: rgba(255,255,255,0.14) !important;
+  color: #eef2ff !important;
+}
+body.dark .game div[style*="background:rgba(255,255,255,0.48)"] span,
+body.dark .game div[style*="background:rgba(255,255,255,0.48)"] b,
+body.dark .game div[style*="background:rgba(255,255,255,0.48)"] div {
+  color: #cbd5e1 !important;
+}
+/* Fix inner pitcher stat blocks - light gray becoming dark glass */
+body.dark .game > div > div[style*="border-radius:12px"] {
+  background: rgba(32,42,64,0.72) !important;
+  border-color: rgba(255,255,255,0.14) !important;
+}
+/* Also for NBA/NFL cards if they use same pattern */
+body.dark .cards .game,
+body.dark #dashboardCards .game,
+body.dark #nflDashboardCards .game,
+body.dark #nbaDashboardCards .game {
+  background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)) !important;
+}
+
+/* Search square removal */
+html body .search input,
+body.dark .search input,
+#dashSearch, #nflDashSearch, #nbaDashSearch {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Menu numbers left, text centered */
+html body .menu-btn .num { justify-content: flex-start !important; text-align: left !important; align-self: flex-start !important; width: 100% !important; }
+html body .menu-btn h3, html body .menu-btn p { text-align: center !important; width: 100% !important; margin-left: auto !important; margin-right: auto !important; }
+html body .menu-btn p { padding-right: 0 !important; }
+</style>
+
+
+<style id="gate-blur-fix">
+/* Temporary blur behind title screen + password gate */
+#gateBlurOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(8,12,22,0.42);
+  backdrop-filter: blur(22px) saturate(1.25);
+  -webkit-backdrop-filter: blur(22px) saturate(1.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+body.gate-blur-active #gateBlurOverlay {
+  opacity: 1;
+  pointer-events: none !important;
+}
+body.gate-blur-active .app-shell {
+  filter: blur(14px);
+  -webkit-filter: blur(14px);
+  transform: scale(0.985);
+  transition: filter 0.35s ease, transform 0.35s ease, -webkit-filter 0.35s ease;
+}
+.app-shell {
+  transition: filter 0.35s ease, transform 0.35s ease, -webkit-filter 0.35s ease;
+}
+
+/* Gate pointer-events safety net */
+#coverPage { pointer-events: auto !important; }
+#coverPage * { pointer-events: auto !important; }
+#accessGate { pointer-events: auto !important; }
+#accessGate * { pointer-events: auto !important; }
+</style>
 </head>
 <body>
+  <div id="gateBlurOverlay" aria-hidden="true"></div>
+
   <!-- COVER PAGE (overlay) – tabs: Request Access, About, Legal -->
   <div id="coverPage" style="
     position: fixed; inset: 0; z-index: 10000;
-    background: linear-gradient(180deg, #0a0e18, #1a2240);
+    background: rgba(10,14,24,0.72);
     display: flex; align-items: center; justify-content: center;
     padding: 20px; font-family: system-ui, -apple-system, sans-serif;
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2);
   ">
     <div style="
       width: 100%; max-width: 420px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, rgba(32,42,64,0.82), rgba(18,26,42,0.78));
+      border: 1px solid rgba(255,255,255,0.14);
       border-radius: 32px; padding: 32px 24px;
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(24px) saturate(1.5); -webkit-backdrop-filter: blur(24px) saturate(1.5);
+      box-shadow: 0 18px 48px rgba(0,0,0,0.42);
       max-height: 90vh; overflow-y: auto;
     ">
       <!-- Tabs -->
@@ -1111,20 +1505,20 @@ body.dark .mini-table th,body.dark .mini-table td{border-bottom-color:rgba(255,2
               </div>
 
               <div class="menu-grid" id="menuGrid">
-                <button class="menu-btn accent" data-go="dashboard"><div class="num"><i>1</i> MODULE</div><h3>MLB Dashboard</h3><p>Glass cards, model %, moneyline + O/U + K props in one glance.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="parlay"><div class="num"><i>2</i> BUILDER</div><h3>Parlayinator</h3><p>20-slot builder with combined odds, implied prob, and EV math.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="picks"><div class="num"><i>3</i> FILTER</div><h3>Parlay Shop</h3><p>All qualifying edges with EV math. Add picks to parlay or copy individually.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="standings"><div class="num"><i>4</i> DATA</div><h3>MLB Stats</h3><p>AL / NL • East / Central / West in frozen glass tables.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="bankroll"><div class="num"><i>5</i> TRACK</div><h3>Bankroll Tracker</h3><p>$1,000 virtual bankroll with live P&L curve and bet history.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="fantasy"><div class="num"><i>6</i> Fantasy</div><h3>Fantasy Crew</h3><p>Daily fantasy lineup builder — all contest types, salary cap, optimizer.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="nfl-dashboard" style="border-color:rgba(92,124,255,0.28);"><div class="num"><i>9</i> NFL</div><h3>NFL Dashboard</h3><p>Glass cards, model %, spread + O/U + props.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="nfl-parlay"><div class="num"><i>10</i> NFL BUILD</div><h3>NFL Parlayinator</h3><p>20-slot builder for NFL.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="nfl-picks"><div class="num"><i>11</i> NFL SHOP</div><h3>NFL Parlay Shop</h3><p>All NFL edges.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="nfl-standings"><div class="num"><i>12</i> NFL DATA</div><h3>NFL Stats</h3><p>AFC / NFC standings & schedules.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="nba-dashboard" style="border-color:rgba(255,90,60,0.28);"><div class="num"><i>13</i> NBA</div><h3>NBA Dashboard</h3><p>Glass cards, model %, spread + O/U + props.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="nba-parlay"><div class="num"><i>14</i> NBA BUILD</div><h3>NBA Parlayinator</h3><p>20-slot builder for NBA.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="nba-picks"><div class="num"><i>15</i> NBA SHOP</div><h3>NBA Parlay Shop</h3><p>All NBA edges.</p><span class="go">↗</span></button>
-                <button class="menu-btn" data-go="nba-standings"><div class="num"><i>16</i> NBA DATA</div><h3>NBA Stats</h3><p>East / West standings & schedules.</p><span class="go">↗</span></button>
+                <button class="menu-btn accent" data-go="dashboard"><div class="num"><i>1</i> MODULE</div><h3>⚾ MLB Dashboard</h3><p>Glass cards, model %, moneyline + O/U + K props in one glance.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="parlay"><div class="num"><i>2</i> BUILDER</div><h3>🧮 Parlayinator</h3><p>20-slot builder with combined odds, implied prob, and EV math.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="picks"><div class="num"><i>3</i> FILTER</div><h3>🛒 Parlay Shop</h3><p>All qualifying edges with EV math. Add picks to parlay or copy individually.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="standings"><div class="num"><i>4</i> DATA</div><h3>📊 MLB Stats</h3><p>AL / NL • East / Central / West in frozen glass tables.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="bankroll"><div class="num"><i>5</i> TRACK</div><h3>💰 Bankroll Tracker</h3><p>$1,000 virtual bankroll with live P&L curve and bet history.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="fantasy"><div class="num"><i>6</i> Fantasy</div><h3>👥 Fantasy Crew</h3><p>Daily fantasy lineup builder — all contest types, salary cap, optimizer.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="nfl-dashboard" style="border-color:rgba(92,124,255,0.28);"><div class="num"><i>9</i> NFL</div><h3>🏈 NFL Dashboard</h3><p>Glass cards, model %, spread + O/U + props.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="nfl-parlay"><div class="num"><i>10</i> NFL BUILD</div><h3>🧮 NFL Parlayinator</h3><p>20-slot builder for NFL.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="nfl-picks"><div class="num"><i>11</i> NFL SHOP</div><h3>🛒 NFL Parlay Shop</h3><p>All NFL edges.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="nfl-standings"><div class="num"><i>12</i> NFL DATA</div><h3>📊 NFL Stats</h3><p>AFC / NFC standings & schedules.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="nba-dashboard" style="border-color:rgba(255,90,60,0.28);"><div class="num"><i>13</i> NBA</div><h3>🏀 NBA Dashboard</h3><p>Glass cards, model %, spread + O/U + props.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="nba-parlay"><div class="num"><i>14</i> NBA BUILD</div><h3>🧮 NBA Parlayinator</h3><p>20-slot builder for NBA.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="nba-picks"><div class="num"><i>15</i> NBA SHOP</div><h3>🛒 NBA Parlay Shop</h3><p>All NBA edges.</p><span class="go">↗</span></button>
+                <button class="menu-btn" data-go="nba-standings"><div class="num"><i>16</i> NBA DATA</div><h3>📊 NBA Stats</h3><p>East / West standings & schedules.</p><span class="go">↗</span></button>
                 <button class="menu-btn" data-go="settings"><div class="num"><i>15</i> ⚙️ CONFIG</div><h3>⚙️ System Settings</h3><p>CRT, Sound FX, FX/visuals, Execute easter egg, persistence.</p><span class="go">↗</span></button>
                 <button class="menu-btn" data-go="about"><div class="num"><i>16</i> ℹ️ INFO</div><h3>ℹ️ About System</h3><p>Version, model notes, disclaimer, and provenance block.</p><span class="go">↗</span></button>
               </div>
@@ -1448,11 +1842,21 @@ Design goals
         <section class="screen" data-screen="nfl-dashboard" id="screen-nfl-dashboard"><div class="quick-nav"><button class="quick-nav-btn" data-go="nfl-parlay">🧮 NFL Parlayinator</button><button class="quick-nav-btn" data-go="nfl-picks">🛒 NFL Shop</button><button class="quick-nav-btn" data-go="nfl-standings">📈 NFL Stats</button><button class="quick-nav-btn" data-go="dashboard">⚾ MLB</button></div><div class="toolbar"><div class="search"><span>⌕</span><input id="nflDashSearch" placeholder="Search matchup, spread, market..." /></div><div class="chip-row" id="nflDashChips"></div><button class="btn" id="nflDashShuffle">Shuffle odds</button></div><div class="cards" id="nflDashboardCards"></div></section>
         <section class="screen" data-screen="nfl-parlay" id="screen-nfl-parlay"><div class="quick-nav"><button class="quick-nav-btn" data-go="nfl-dashboard">📊 NFL Dashboard</button><button class="quick-nav-btn" data-go="nfl-standings">📈 NFL Stats</button></div><div class="build"><div class="glass glass-blur panel-pad"><div style="display:flex; justify-content:space-between;"><b>NFL Parlayinator <span id="nflParlayOdds"></span></b><span class="badge" id="nflParlayCount">0 / 20</span></div><div class="slot-grid" id="nflParlaySlots"></div><div style="display:flex; gap:8px; margin-top:12px;"><button class="btn" id="nflClearParlay">Clear all</button><button class="btn primary" id="nflCopyParlay">Copy slip</button></div></div><div class="summary"><div class="glass glass-blur panel-pad"><b>Board pool</b><div class="pool" id="nflPoolList"></div></div><div class="glass glass-blur panel-pad"><div class="kpi"><div><div class="k">Combined (DEC)</div><div class="v" id="nflDecOdds">0.00</div></div><div><div class="k">Combined (AM)</div><div class="v" id="nflAmOdds">—</div></div><div><div class="k">Implied</div><div class="v" id="nflImplied">0.0%</div></div><div><div class="k">Model Prob</div><div class="v" id="nflModelProb">0.0%</div></div></div><div class="ev"><b>Expected Value</b><b id="nflEvVal">0.00%</b></div><div class="meter"><i id="nflEvMeter" style="width:18%"></i></div></div></div></div></section>
         <section class="screen" data-screen="nfl-picks" id="screen-nfl-picks"><div class="quick-nav"><button class="quick-nav-btn" data-go="nfl-dashboard">📊 NFL Dashboard</button><button class="quick-nav-btn" data-go="nfl-parlay">🧮 NFL Parlayinator</button></div><div class="toolbar"><div class="chip-row" id="nflPicksChips"><button class="chip active" data-nfl-filter="all">🌐 All</button><button class="chip" data-nfl-filter="ou">🔼 O/U</button><button class="chip" data-nfl-filter="k">📏 Spread</button><button class="chip" data-nfl-filter="ml">💰 ML</button></div><button class="btn" id="nflExportPicks">Export</button></div><div id="nflPicksMount"></div></section>
-        <section class="screen" data-screen="nfl-standings" id="screen-nfl-standings"><div id="nflStandingsMount"></div><div id="nflScheduleList"></div><span id="nflScheduleDate"></span></section>
+        <section class="screen" data-screen="nfl-standings" id="screen-nfl-standings">
+          <div class="quick-nav">
+            <button class="quick-nav-btn" data-go="nfl-dashboard">📊 NFL Dashboard</button>
+            <button class="quick-nav-btn" data-go="nfl-parlay">🧮 NFL Parlayinator</button>
+          </div>
+          <div id="nflStandingsMount"></div><div id="nflScheduleList"></div><span id="nflScheduleDate"></span></section>
         <section class="screen" data-screen="nba-dashboard" id="screen-nba-dashboard"><div class="quick-nav"><button class="quick-nav-btn" data-go="nba-parlay">🧮 NBA Parlayinator</button><button class="quick-nav-btn" data-go="nba-picks">NBA Shop</button><button class="quick-nav-btn" data-go="nba-standings">📈 NBA Stats</button><button class="quick-nav-btn" data-go="dashboard">⚾ MLB</button></div><div class="toolbar"><div class="search"><span>⌕</span><input id="nbaDashSearch" placeholder="Search matchup, spread, market..." /></div><div class="chip-row" id="nbaDashChips"></div><button class="btn" id="nbaDashShuffle">Shuffle odds</button></div><div class="cards" id="nbaDashboardCards"></div></section>
         <section class="screen" data-screen="nba-parlay" id="screen-nba-parlay"><div class="quick-nav"><button class="quick-nav-btn" data-go="nba-dashboard">📊 NBA Dashboard</button><button class="quick-nav-btn" data-go="nba-standings">📈 NBA Stats</button></div><div class="build"><div class="glass glass-blur panel-pad"><div style="display:flex; justify-content:space-between;"><b>NBA Parlayinator <span id="nbaParlayOdds"></span></b><span class="badge" id="nbaParlayCount">0 / 20</span></div><div class="slot-grid" id="nbaParlaySlots"></div><div style="display:flex; gap:8px; margin-top:12px;"><button class="btn" id="nbaClearParlay">Clear all</button><button class="btn primary" id="nbaCopyParlay">Copy slip</button></div></div><div class="summary"><div class="glass glass-blur panel-pad"><b>Board pool</b><div class="pool" id="nbaPoolList"></div></div><div class="glass glass-blur panel-pad"><div class="kpi"><div><div class="k">Combined (DEC)</div><div class="v" id="nbaDecOdds">0.00</div></div><div><div class="k">Combined (AM)</div><div class="v" id="nbaAmOdds">—</div></div><div><div class="k">Implied</div><div class="v" id="nbaImplied">0.0%</div></div><div><div class="k">Model Prob</div><div class="v" id="nbaModelProb">0.0%</div></div></div><div class="ev"><b>Expected Value</b><b id="nbaEvVal">0.00%</b></div><div class="meter"><i id="nbaEvMeter" style="width:18%"></i></div></div></div></div></section>
         <section class="screen" data-screen="nba-picks" id="screen-nba-picks"><div class="quick-nav"><button class="quick-nav-btn" data-go="nba-dashboard">📊 NBA Dashboard</button><button class="quick-nav-btn" data-go="nba-parlay">🧮 NBA Parlayinator</button></div><div class="toolbar"><div class="chip-row" id="nbaPicksChips"><button class="chip active" data-nba-filter="all">🌐 All</button><button class="chip" data-nba-filter="ou">🔼 O/U</button><button class="chip" data-nba-filter="k">📏 Spread</button><button class="chip" data-nba-filter="ml">💰 ML</button></div><button class="btn" id="nbaExportPicks">Export</button></div><div id="nbaPicksMount"></div></section>
-        <section class="screen" data-screen="nba-standings" id="screen-nba-standings"><div id="nbaStandingsMount"></div><div id="nbaScheduleList"></div><span id="nbaScheduleDate"></span></section>
+        <section class="screen" data-screen="nba-standings" id="screen-nba-standings">
+          <div class="quick-nav">
+            <button class="quick-nav-btn" data-go="nba-dashboard">📊 NBA Dashboard</button>
+            <button class="quick-nav-btn" data-go="nba-parlay">🧮 NBA Parlayinator</button>
+          </div>
+          <div id="nbaStandingsMount"></div><div id="nbaScheduleList"></div><span id="nbaScheduleDate"></span></section>
       </div>
 
       <div class="overlay" id="shutdownOverlay" aria-hidden="true">
@@ -1518,7 +1922,7 @@ window.PARLAYOS_PICKS_LOG = ["date,tag,team,kind,market,open_ml,close_ml,clv_pts
       const t=MLB_TEAMS[abbr]||{c:'#334'};
       const mixed=`${abbr.charAt(0)}${abbr.slice(1).toLowerCase()}`;
       const color=colorOverride||t.c;
-      return `<b style="font-family:'Snell Roundhand','Apple Chancery','Brush Script MT','Segoe Script','Lucida Handwriting',cursive;font-size:${fontSize}px;font-style:italic;color:${color};-webkit-text-stroke:0.5px rgba(20,24,34,0.7);text-stroke:0.5px rgba(20,24,34,0.7);letter-spacing:0.01em;">${mixed}</b>`;
+      return `<b style="font-family:'Apple Chancery','Snell Roundhand','Segoe Script','Lucida Handwriting','Brush Script MT',cursive;font-size:${Math.round(fontSize*1.15)}px;font-style:italic;font-weight:600;color:${color};-webkit-text-stroke:0.4px rgba(20,24,34,0.55);text-stroke:0.4px rgba(20,24,34,0.55);letter-spacing:0.02em;display:inline-block;line-height:1.5;padding:1px 2px;">${mixed}</b>`;
     }
     let calSelectedTeam=null;
     function setCalTeam(a){calSelectedTeam=(calSelectedTeam===a)?null:a;renderCalendar();beep('click');}
@@ -1894,7 +2298,8 @@ const TEAMS = [];
         return typeof v==='number' ? v.toFixed(decimals) : v;
       }
       const pitchHTML = games.length ? games.map(g=>{
-        const cardStyle='background:rgba(255,255,255,0.48);border-radius:12px;padding:9px 7px;border:1px solid rgba(255,255,255,0.8);min-width:0;overflow:hidden;';
+        const isDark = document.body.classList.contains('dark');
+        const cardStyle = isDark ? 'background:rgba(32,42,64,0.72);border-radius:12px;padding:9px 7px;border:1px solid rgba(255,255,255,0.14);min-width:0;overflow:hidden;color:#eef2ff;' : 'background:rgba(255,255,255,0.48);border-radius:12px;padding:9px 7px;border:1px solid rgba(255,255,255,0.8);min-width:0;overflow:hidden;';
         function pitcherBlock(side, abbr, name){
           const era=statCell(g[`pitcher${side}_era`],2), whip=statCell(g[`pitcher${side}_whip`],2);
           const k9=statCell(g[`pitcher${side}_k9`],1), ip=g[`pitcher${side}_ip`]||'—';
@@ -1980,7 +2385,7 @@ const TEAMS = [];
       const leagues=['AL','NL'], divs=['East','Central','West'];
       const standHTML=`<div class="league-grid">${leagues.flatMap(l=>divs.map(d=>{
         const rows=STANDINGS[l][d];
-        return `<div class="glass table-card"><div class="table-head"><h3>${l} ${d}</h3><span class="badge">${rows.length} CLUBS</span></div><table class="mini-table"><tr><th style="width:44%;text-align:left;">Team</th><th>W</th><th>L</th><th>PCT</th><th>GB</th></tr>${rows.map((r,i)=>{const pct=(r.w/(r.w+r.l)).toFixed(3).replace('0.','.');const gb=i===0?'—':(rows[0].w-r.w+r.l-rows[0].l)/2;return`<tr><td style="text-align:left;">${wordmark(r.t,13)}</td><td>${r.w}</td><td>${r.l}</td><td>${pct}</td><td>${gb}</td></tr>`;}).join('')}</table></div>`;
+        return `<div class="glass table-card"><div class="table-head"><h3>📊 NBA Stats</h3><span class="badge">${rows.length} CLUBS</span></div><table class="mini-table"><tr><th style="width:44%;text-align:left;">Team</th><th>W</th><th>L</th><th>PCT</th><th>GB</th></tr>${rows.map((r,i)=>{const pct=(r.w/(r.w+r.l)).toFixed(3).replace('0.','.');const gb=i===0?'—':(rows[0].w-r.w+r.l-rows[0].l)/2;return`<tr><td style="text-align:left;">${wordmark(r.t,13)}</td><td>${r.w}</td><td>${r.l}</td><td>${pct}</td><td>${gb}</td></tr>`;}).join('')}</table></div>`;
       })).join('')}</div>`;
 
       mount.innerHTML=`
@@ -2103,7 +2508,17 @@ const TEAMS = [];
           </div>
         </div>`;
       }).join('')||`<div class="empty"><b>No games loaded</b><span>Run mlb_ace.py to populate schedule.</span></div>`;
+      // --- CHIPS for MLB schedule screens (always visible) ---
+      const chipRow = `
+        <div class="stats-tab-row">
+          <button class="chip" data-stab="pitching">⚾ Pitching</button>
+          <button class="chip" data-stab="batting">🏏 Batting</button>
+          <button class="chip" data-stab="lineups">🧢 Lineups</button>
+          <button class="chip" data-stab="standings">📊 Standings</button>
+          <button class="chip active" data-stab="schedule">📅 Schedule</button>
+        </div>`;
       mount.innerHTML=`
+        ${chipRow}
         <div class="glass panel-pad" style="border-radius:22px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
             <b style="font-size:13px;letter-spacing:-0.02em;display:flex;align-items:center;flex-wrap:wrap;">${ht}</b>
@@ -2117,7 +2532,58 @@ const TEAMS = [];
           <span class="mini" style="margin-left:8px;color:var(--muted);">tap team to view their month</span>
           <div style="margin-top:8px;">${rows}</div>
         </div>`;
+      // wire chips on calendar screen to go back to standings tabs
+      mount.querySelectorAll('[data-stab]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const stab=btn.dataset.stab;
+          if(stab==='schedule'){ btn.classList.add('active'); return; }
+          // go to standings screen and select that tab
+          switchScreen('standings');
+          setTimeout(()=>{
+            const sMount=document.getElementById('standingsMount');
+            if(!sMount) return;
+            const target=sMount.querySelector(`[data-stab="${stab}"]`);
+            if(target) target.click();
+          }, 50);
+          beep('click');
+        });
+      });
     }
+
+    // --- SHARED: Build a month calendar grid for any sport ---
+    function buildSportMonthGrid(now, gamesByDate, todayCount){
+      const yr=now.getFullYear(), mo=now.getMonth(), tod=now.getDate();
+      const fDay=new Date(yr,mo,1).getDay(), dim=new Date(yr,mo+1,0).getDate();
+      const DOW=['S','M','T','W','T','F','S'];
+      const eC=Array(fDay).fill('<div></div>').join('');
+      const dC=Array.from({length:dim},(_,i)=>{
+        const day=i+1, isT=day===tod;
+        const ds=`${yr}-${String(mo+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        const dayGames=gamesByDate[ds]||[];
+        if(isT){
+          return `<div class="cal-cell today"><span class="cal-day">${day}</span>${todayCount?'<span style="width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.8);display:block;margin:2px auto;"></span>':''}${dayGames.length?`<span class="mini" style="font-size:8px;margin-top:2px;">${dayGames.length}g</span>`:''}</div>`;
+        }
+        if(dayGames.length){
+          return `<div class="cal-cell game"><span class="cal-day">${day}</span><span class="mini" style="font-size:8px;color:var(--muted);">${dayGames.length} ${dayGames.length===1?'gm':'gms'}</span></div>`;
+        }
+        return `<div class="cal-cell"><span class="cal-day">${day}</span></div>`;
+      }).join('');
+      return {DOW,eC,dC,yr,mo};
+    }
+
+    function getGamesByDateFromLive(liveGames){
+      const map={};
+      try{
+        (liveGames||[]).forEach(g=>{
+          if(!g.date) return;
+          const ds=typeof normalizeGameDate==='function'?normalizeGameDate(g.date):String(g.date).slice(0,10);
+          if(!ds) return;
+          (map[ds]=map[ds]||[]).push(g);
+        });
+      }catch(e){}
+      return map;
+    }
+    
     function renderAll(){
       try{ loadRealData(); }catch(e){ console.warn('loadRealData err:',e); }
       try{ renderDashboard(); }catch(e){ console.warn('renderDashboard err:',e); }
@@ -2318,22 +2784,88 @@ const TEAMS = [];
     function renderNFLStandings(){
       const mount=$('#nflStandingsMount'); if(!mount) return;
       const live = window.PARLAYOS_NFL_DATA; const standings = (live && live.standings) || NFL_STANDINGS;
+      const now=new Date();
+      const mName=now.toLocaleString('en-US',{month:'long',year:'numeric'});
+      const allGames = (live && Array.isArray(live.games) ? live.games : []);
+      const gamesByDate = getGamesByDateFromLive(allGames);
+      const grid=buildSportMonthGrid(now, gamesByDate, gamesNFL.length);
+      const calendarHTML = `
+        <div class="glass panel-pad" style="border-radius:22px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+            <b style="font-size:13px;letter-spacing:-0.02em;">${mName} • NFL</b>
+            <span class="badge">${gamesNFL.length} TODAY • ${allGames.length} THIS MONTH</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;margin-bottom:4px;">${grid.DOW.map(d=>`<div class="mini" style="padding:3px 0;font-size:9.5px;">${d}</div>`).join('')}</div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">${grid.eC}${grid.dC}</div>
+        </div>`;
+
       const hasGames = gamesNFL.length>0;
-      const scheduleHTML = hasGames ? gamesNFL.map(g=>`<div class="glass" style="padding:10px 12px;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><div><b>${g.a} @ ${g.b}</b><div class="mini">${g.date||''} ${g.time||''} • ${g.tv||''}</div></div><span class="badge ${g.hot?'hot':''}">${g.ouPick||''}</span></div>`).join('') : `<div class="empty" style="margin:12px 0;padding:20px;"><div style="font-size:28px;">🏈</div><b>No NFL schedule</b><span>Run nfl_ace.py — mock removed.</span></div>`;
+      const scheduleListHTML = hasGames ? gamesNFL.map(g=>`<div class="glass" style="padding:10px 12px;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><div><b>${g.a} @ ${g.b}</b><div class="mini">${g.date||''} ${g.time||''} • ${g.tv||''}</div></div><span class="badge ${g.hot?'hot':''}">${g.ouPick||''}</span></div>`).join('') : `<div class="empty" style="margin:12px 0;padding:20px;"><div style="font-size:28px;">🏈</div><b>No NFL games today</b><span>Check calendar for month view or run nfl_ace.py</span></div>`;
+      const scheduleHTML = `${calendarHTML}<div style="margin-top:4px;"><b style="font-size:13px;letter-spacing:-0.02em;">Today's Schedule</b><span class="mini" style="margin-left:8px;color:var(--muted);">${now.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span><div style="margin-top:8px;">${scheduleListHTML}</div></div>`;
+
       function divTable(conf, divName, rows){ return `<div class="glass table-card"><div class="table-head"><h3>${conf} ${divName}</h3><span class="badge">${rows.length} TEAMS</span></div><table class="mini-table"><tr><th style="text-align:left;width:50%;">Team</th><th>W</th><th>L</th><th>PCT</th><th>GB</th></tr>${rows.map((r,i)=>{const pct=(r.w/(r.w+r.l)).toFixed(3).replace('0.','.'); const gb=i===0?'—':((rows[0].w - r.w + r.l - rows[0].l)/2).toFixed(1); return `<tr><td style="text-align:left;font-weight:700;">${r.t}</td><td>${r.w}</td><td>${r.l}</td><td>${pct}</td><td>${gb}</td></tr>`;}).join('')}</table></div>`; }
       const standHTML = `<div class="league-grid">${Object.keys(standings).flatMap(conf=> Object.keys(standings[conf]).map(div=> divTable(conf, div, standings[conf][div]) )).join('')}</div>`;
-      mount.innerHTML = `<div class="stats-tab-row" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;"><button class="chip active" data-nfl-stab="schedule">📅 Schedule</button><button class="chip" data-nfl-stab="standings">📊 Standings</button></div><div id="nflTabSchedule">${scheduleHTML}</div><div id="nflTabStandings" style="display:none">${standHTML}</div>`;
-      mount.querySelectorAll('[data-nfl-stab]').forEach(tab=>{ tab.addEventListener('click', ()=>{ mount.querySelectorAll('[data-nfl-stab]').forEach(t=>t.classList.remove('active')); tab.classList.add('active'); const w=tab.dataset.nflStab; document.getElementById('nflTabSchedule').style.display = w==='schedule'?'':'none'; document.getElementById('nflTabStandings').style.display = w==='standings'?'':'none'; beep('click'); }); });
+
+      mount.innerHTML = `
+        <div class="stats-tab-row" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;position:sticky;top:0;z-index:5;">
+          <button class="chip active" data-nfl-stab="schedule">📅 Schedule</button>
+          <button class="chip" data-nfl-stab="standings">📊 Standings</button>
+        </div>
+        <div id="nflTabSchedule">${scheduleHTML}</div>
+        <div id="nflTabStandings" style="display:none">${standHTML}</div>`;
+      mount.querySelectorAll('[data-nfl-stab]').forEach(tab=>{
+        tab.addEventListener('click', ()=>{
+          mount.querySelectorAll('[data-nfl-stab]').forEach(t=>t.classList.remove('active'));
+          tab.classList.add('active');
+          const w=tab.dataset.nflStab;
+          document.getElementById('nflTabSchedule').style.display = w==='schedule'?'':'none';
+          document.getElementById('nflTabStandings').style.display = w==='standings'?'':'none';
+          beep('click');
+        });
+      });
     }
     function renderNBAStandings(){
       const mount=$('#nbaStandingsMount'); if(!mount) return;
       const live = window.PARLAYOS_NBA_DATA; const standings = (live && live.standings) || NBA_STANDINGS;
+      const now=new Date();
+      const mName=now.toLocaleString('en-US',{month:'long',year:'numeric'});
+      const allGames = (live && Array.isArray(live.games) ? live.games : []);
+      const gamesByDate = getGamesByDateFromLive(allGames);
+      const grid=buildSportMonthGrid(now, gamesByDate, gamesNBA.length);
+      const calendarHTML = `
+        <div class="glass panel-pad" style="border-radius:22px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+            <b style="font-size:13px;letter-spacing:-0.02em;">${mName} • NBA</b>
+            <span class="badge">${gamesNBA.length} TODAY • ${allGames.length} THIS MONTH</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;margin-bottom:4px;">${grid.DOW.map(d=>`<div class="mini" style="padding:3px 0;font-size:9.5px;">${d}</div>`).join('')}</div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">${grid.eC}${grid.dC}</div>
+        </div>`;
+
       const hasGames = gamesNBA.length>0;
-      const scheduleHTML = hasGames ? gamesNBA.map(g=>`<div class="glass" style="padding:10px 12px;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><div><b>${g.a} @ ${g.b}</b><div class="mini">${g.date||''} ${g.time||''} • ${g.tv||''}</div></div><span class="badge ${g.hot?'hot':''}">${g.ouPick||''}</span></div>`).join('') : `<div class="empty" style="margin:12px 0;padding:20px;"><div style="font-size:28px;">🏀</div><b>No NBA schedule</b><span>Run nba_ace.py — mock removed.</span></div>`;
+      const scheduleListHTML = hasGames ? gamesNBA.map(g=>`<div class="glass" style="padding:10px 12px;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><div><b>${g.a} @ ${g.b}</b><div class="mini">${g.date||''} ${g.time||''} • ${g.tv||''}</div></div><span class="badge ${g.hot?'hot':''}">${g.ouPick||''}</span></div>`).join('') : `<div class="empty" style="margin:12px 0;padding:20px;"><div style="font-size:28px;">🏀</div><b>No NBA games today</b><span>Check calendar for month view or run nba_ace.py</span></div>`;
+      const scheduleHTML = `${calendarHTML}<div style="margin-top:4px;"><b style="font-size:13px;letter-spacing:-0.02em;">Today's Schedule</b><span class="mini" style="margin-left:8px;color:var(--muted);">${now.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span><div style="margin-top:8px;">${scheduleListHTML}</div></div>`;
+
       function divTable(conf, divName, rows){ return `<div class="glass table-card"><div class="table-head"><h3>${conf} ${divName}</h3><span class="badge">${rows.length} TEAMS</span></div><table class="mini-table"><tr><th style="text-align:left;width:50%;">Team</th><th>W</th><th>L</th><th>PCT</th><th>GB</th></tr>${rows.map((r,i)=>{const pct=(r.w/(r.w+r.l)).toFixed(3).replace('0.','.'); const gb=i===0?'—':((rows[0].w - r.w + r.l - rows[0].l)/2).toFixed(1); return `<tr><td style="text-align:left;font-weight:700;">${r.t}</td><td>${r.w}</td><td>${r.l}</td><td>${pct}</td><td>${gb}</td></tr>`;}).join('')}</table></div>`; }
       const standHTML = `<div class="league-grid">${Object.keys(standings).flatMap(conf=> Object.keys(standings[conf]).map(div=> divTable(conf, div, standings[conf][div]) )).join('')}</div>`;
-      mount.innerHTML = `<div class="stats-tab-row" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;"><button class="chip active" data-nba-stab="schedule">📅 Schedule</button><button class="chip" data-nba-stab="standings">📊 Standings</button></div><div id="nbaTabSchedule">${scheduleHTML}</div><div id="nbaTabStandings" style="display:none">${standHTML}</div>`;
-      mount.querySelectorAll('[data-nba-stab]').forEach(tab=>{ tab.addEventListener('click', ()=>{ mount.querySelectorAll('[data-nba-stab]').forEach(t=>t.classList.remove('active')); tab.classList.add('active'); const w=tab.dataset.nbaStab; document.getElementById('nbaTabSchedule').style.display = w==='schedule'?'':'none'; document.getElementById('nbaTabStandings').style.display = w==='standings'?'':'none'; beep('click'); }); });
+
+      mount.innerHTML = `
+        <div class="stats-tab-row" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;position:sticky;top:0;z-index:5;">
+          <button class="chip active" data-nba-stab="schedule">📅 Schedule</button>
+          <button class="chip" data-nba-stab="standings">📊 Standings</button>
+        </div>
+        <div id="nbaTabSchedule">${scheduleHTML}</div>
+        <div id="nbaTabStandings" style="display:none">${standHTML}</div>`;
+      mount.querySelectorAll('[data-nba-stab]').forEach(tab=>{
+        tab.addEventListener('click', ()=>{
+          mount.querySelectorAll('[data-nba-stab]').forEach(t=>t.classList.remove('active'));
+          tab.classList.add('active');
+          const w=tab.dataset.nbaStab;
+          document.getElementById('nbaTabSchedule').style.display = w==='schedule'?'':'none';
+          document.getElementById('nbaTabStandings').style.display = w==='standings'?'':'none';
+          beep('click');
+        });
+      });
     }
 
         function boot(){
@@ -2600,157 +3132,145 @@ const TEAMS = [];
     
     // ── END USER DB ──
 
-        // ── ACCESS GATE (20-digit + master hash + DENY LIST) ─────────────────────
+        
+    
+    // ── ACCESS GATE FIXED - NO SKIP - BLUR - BUTTONS WORK ─────────────────────
     (function(){
       const SESSION_KEY = 'parlayos_key_session';
       const LEGACY_SESSION = 'parlayos_session';
       const MASTER_KEY = "";
       const MASTER_HASH = "fc444e53502bf09ce58df44fc05799c7c10d0aee0c664036ad27e63c2abb88a6";
       const GATE_ID = 'accessGate';
-      async function sha256(message){
-        const buf = new TextEncoder().encode(message);
-        const hashBuf = await crypto.subtle.digest('SHA-256', buf);
-        return Array.from(new Uint8Array(hashBuf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+      const COVER_ID = 'coverPage';
+      const BLUR_ID = 'gateBlurOverlay';
+      function getOverlay(){ return document.getElementById(BLUR_ID); }
+      function updateBlur(){
+        const cover = document.getElementById(COVER_ID);
+        const gate = document.getElementById(GATE_ID);
+        const coverVis = cover && getComputedStyle(cover).display !== 'none';
+        const gateVis = gate && getComputedStyle(gate).display !== 'none';
+        if(coverVis || gateVis){
+          document.body.classList.add('gate-blur-active');
+          const ov=getOverlay(); if(ov) ov.style.opacity='1';
+        } else {
+          document.body.classList.remove('gate-blur-active');
+          const ov=getOverlay(); if(ov) ov.style.opacity='0';
+          document.body.style.overflow='';
+        }
       }
-      function isValidFormat(key){
-        if(MASTER_KEY && key === MASTER_KEY) return true;
-        if(/^\d{12}$/.test(key)) return true;
-        return /^\d{20}$/.test(key);
-      }
-      function getAllowedHashes(){
-        try{ const db = window._USER_DB || {}; return Object.values(db).filter(u=>u.active!==false).map(u=>u.password_hash).filter(Boolean); }catch{ return []; }
-      }
-      function getDeniedHashes(){ try{ return window._DENIED_HASHES || []; }catch{ return []; } }
+      async function sha256(msg){ const b=new TextEncoder().encode(msg); const h=await crypto.subtle.digest('SHA-256',b); return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join(''); }
+      function isValidFormat(k){ if(MASTER_KEY && k===MASTER_KEY) return true; if(/^\d{12}$/.test(k)) return true; return /^\d{20}$/.test(k); }
+      function getAllowed(){ try{ const db=window._USER_DB||{}; return Object.values(db).filter(u=>u.active!==false).map(u=>u.password_hash).filter(Boolean);}catch{return[];} }
+      function getDenied(){ try{ return window._DENIED_HASHES||[];}catch{return[];} }
       function hasValidSession(){
         try{
-          const raw = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY) || localStorage.getItem(LEGACY_SESSION);
+          const raw=sessionStorage.getItem(SESSION_KEY)||localStorage.getItem(SESSION_KEY)||localStorage.getItem(LEGACY_SESSION);
           if(!raw) return false;
-          const data = JSON.parse(raw);
-          if(data.expires){ const exp = new Date(data.expires); if(exp < new Date()) return false; }
-          if(data.hash && getDeniedHashes().includes(data.hash)) return false;
-          return !!data.hash || !!data.userId;
-        }catch{ return false; }
+          const d=JSON.parse(raw);
+          if(d.expires){ const e=new Date(d.expires); if(e<new Date()) return false; }
+          if(d.hash && getDenied().includes(d.hash)) return false;
+          return !!d.hash || !!d.userId;
+        }catch{return false;}
       }
       function createGate(){
         if(document.getElementById(GATE_ID)) return document.getElementById(GATE_ID);
-        const div = document.createElement('div');
-        div.id = GATE_ID;
-        div.style.cssText = 'position:fixed;inset:0;z-index:10001;display:none;align-items:center;justify-content:center;padding:20px;background:linear-gradient(180deg,#0a0e18,#1a2240);font-family:system-ui;backdrop-filter:blur(12px);';
-        div.innerHTML = `
-          <div style="width:100%;max-width:400px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:32px;padding:40px 32px;text-align:center;">
-            <div style="font-size:42px;font-weight:900;background:linear-gradient(135deg,#ff2f4a,#5c7cff);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:6px;">ParlayOS</div>
-            <div style="color:rgba(255,255,255,0.5);font-size:13px;margin-bottom:24px;">MLB NFL NBA Edge Scanner</div>
-            <div style="text-align:left;margin-bottom:14px;">
-              <label style="color:rgba(255,255,255,0.6);font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Your emailed code:</label>
-              <input id="gatePassword" type="text" inputmode="numeric" pattern="\\d*" maxlength="20" placeholder="Enter 20-digit code" autocomplete="one-time-code" style="width:100%;padding:14px 16px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:white;font-size:18px;letter-spacing:0.12em;text-align:center;outline:none;box-sizing:border-box;" />
-              <div style="margin-top:8px;display:flex;justify-content:space-between;"><span style="font-size:11px;color:rgba(255,255,255,0.35);">20 digits only</span><span id="charCount" style="font-size:11px;color:rgba(255,255,255,0.35);font-family:monospace;">0/20</span></div>
-            </div>
-            <button id="gateSubmit" style="width:100%;padding:14px;background:linear-gradient(135deg,#ff2f4a,#ff6a3d);color:white;font-weight:700;font-size:15px;border:none;border-radius:16px;cursor:pointer;">Unlock</button>
-            <div id="gateError" style="color:#ff6a6a;font-size:13px;margin-top:14px;min-height:20px;"></div>
-          </div>
-        `;
+        const div=document.createElement('div');
+        div.id=GATE_ID;
+        div.style.cssText='position:fixed;inset:0;z-index:10001;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(10,14,24,0.52);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);';
+        div.innerHTML=`<div style="width:100%;max-width:400px;background:linear-gradient(180deg, rgba(32,42,64,0.72), rgba(18,26,42,0.55));border:1px solid rgba(255,255,255,0.14);border-radius:32px;padding:32px;text-align:center;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);"><div style="font-size:38px;font-weight:900;background:linear-gradient(135deg,#ff2f4a,#5c7cff);-webkit-background-clip:text;background-clip:text;color:transparent;">ParlayOS</div><div style="color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:20px;">Enter Access Code</div><input id="gatePassword" type="text" inputmode="numeric" maxlength="20" placeholder="Enter 20-digit code" style="width:100%;padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:white;font-size:18px;text-align:center;letter-spacing:0.12em;outline:none;"><div style="margin-top:6px;display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.35);"><span>20 digits</span><span id="charCount">0/20</span></div><button id="gateSubmit" style="width:100%;margin-top:14px;padding:14px;background:linear-gradient(135deg,#ff2f4a,#ff6a3d);color:white;font-weight:700;border:none;border-radius:16px;cursor:pointer;">Unlock</button><div id="gateError" style="color:#ff6a6a;font-size:13px;margin-top:12px;min-height:18px;"></div></div>`;
         document.body.appendChild(div);
         return div;
       }
       function showGate(){
-        if(hasValidSession()){ const g=document.getElementById(GATE_ID); if(g) g.style.display='none'; document.body.style.overflow=''; const app=document.querySelector('.app-shell'); if(app) app.style.pointerEvents=''; return; }
-        const gate = createGate(); gate.style.display='flex'; document.body.style.overflow='hidden'; const app=document.querySelector('.app-shell'); if(app) app.style.pointerEvents='none'; setTimeout(()=>{ const i=document.getElementById('gatePassword'); if(i) i.focus(); }, 100);
+        if(hasValidSession()){
+          const g=document.getElementById(GATE_ID); if(g) g.style.display='none';
+          const c=document.getElementById(COVER_ID); if(c) c.style.display='none';
+          document.body.style.overflow='';
+          updateBlur();
+          return;
+        }
+        const gate=createGate();
+        gate.style.display='flex';
+        document.body.style.overflow='hidden';
+        updateBlur();
+        setTimeout(()=>{ const i=document.getElementById('gatePassword'); if(i) i.focus(); }, 100);
       }
-      function hideGate(){ const g=document.getElementById(GATE_ID); if(g) g.style.display='none'; document.body.style.overflow=''; const app=document.querySelector('.app-shell'); if(app) app.style.pointerEvents=''; }
-      async function attemptLogin(rawVal){
-        const input = document.getElementById('gatePassword'); const error = document.getElementById('gateError'); const submit = document.getElementById('gateSubmit');
-        const val = (rawVal!==undefined ? rawVal : (input?.value||'')).trim();
-        if(!val){ if(error) error.textContent='Please type your key:'; return false; }
-        if(!isValidFormat(val)){ if(error) error.textContent = val.length!==20 && val.length!==12 ? `Code must be 20 digits (you entered ${val.length})` : 'Invalid format – 20 digits only'; return false; }
-        if(submit){ submit.disabled=true; submit.textContent='Verifying...'; }
+      function hideGate(){
+        const g=document.getElementById(GATE_ID); if(g) g.style.display='none';
+        document.body.style.overflow='';
+        updateBlur();
+      }
+      async function attemptLogin(v){
+        const input=document.getElementById('gatePassword');
+        const err=document.getElementById('gateError');
+        const btn=document.getElementById('gateSubmit');
+        const val=(v!==undefined? v : (input?.value||'')).trim();
+        if(!val){ if(err) err.textContent='Enter code'; return false; }
+        if(!isValidFormat(val)){ if(err) err.textContent='20 digits required'; return false; }
+        if(btn){ btn.disabled=true; btn.textContent='Verifying...'; }
         try{
-          const hash = await sha256(val);
-          const denied = getDeniedHashes();
-          if(denied.includes(hash)){ if(error) error.textContent='This code has been revoked.'; if(input){ input.value=''; input.focus(); } return false; }
-          const allowed = getAllowedHashes();
-          const isMaster = (MASTER_KEY && val===MASTER_KEY) || hash===MASTER_HASH;
-          const isAllowed = isMaster || allowed.includes(hash);
-          if(isAllowed){
-            let matched = null; const db = window._USER_DB || {}; for(const [id,u] of Object.entries(db)){ if(u.password_hash===hash || (isMaster && id==='usr_master')){ matched={id, ...u}; break; } }
-            if(isMaster && !matched) matched = {id:'usr_master', name:'Master', email:'master@parlayos.local', expires:'2035-12-31'};
-            // ── Reject an already-expired code at login, don't just rely
-            //    on the periodic session check to catch it afterward.
-            //    Previously a code whose `expires` date had already
-            //    passed was still accepted here — hasValidSession() would
-            //    only catch it on the NEXT check (at most 30s later with
-            //    the periodic check above, but with no periodic check at
-            //    all before that fix, this could have granted access
-            //    indefinitely in an already-open tab). A code that's
-            //    already past its expiry should never grant a session in
-            //    the first place; this is checked here, before the
-            //    session is ever written, with a specific message rather
-            //    than the generic "invalid code" text.
-            if(matched?.expires){
-              const expDate = new Date(matched.expires);
-              if(!isNaN(expDate) && expDate < new Date()){
-                if(error) error.textContent = 'This code expired on ' + matched.expires + '.';
-                if(input){ input.value=''; input.focus(); }
-                return false;
-              }
-            }
-            const sessionData = {hash, userId: matched?.id||null, name: matched?.name||null, email: matched?.email||null, expires: matched?.expires||null, at: new Date().toISOString()};
-            sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
-            try{ localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData)); }catch{}
-            hideGate(); if(error) error.textContent=''; return true;
-          }else{ if(error) error.textContent='Invalid code. Check your emailed 20-digit code.'; if(input){ input.value=''; input.focus(); } return false; }
-        }catch(e){ if(error) error.textContent='Error verifying.'; return false; }finally{ if(submit){ submit.disabled=false; submit.textContent='Unlock'; } }
+          const hash=await sha256(val);
+          if(getDenied().includes(hash)){ if(err) err.textContent='Code revoked'; return false; }
+          const allowed=getAllowed();
+          const isMaster=hash===MASTER_HASH;
+          if(isMaster || allowed.includes(hash)){
+            let matched=null; const db=window._USER_DB||{};
+            for(const [id,u] of Object.entries(db)){ if(u.password_hash===hash || (isMaster && id==='usr_master')){ matched={id,...u}; break; } }
+            if(isMaster && !matched) matched={id:'usr_master',expires:'2035-12-31'};
+            if(matched?.expires){ const ed=new Date(matched.expires); if(!isNaN(ed) && ed<new Date()){ if(err) err.textContent='Expired '+matched.expires; return false; } }
+            const sess={hash,userId:matched?.id||null,expires:matched?.expires||null,at:new Date().toISOString()};
+            sessionStorage.setItem(SESSION_KEY, JSON.stringify(sess));
+            try{ localStorage.setItem(SESSION_KEY, JSON.stringify(sess)); }catch{}
+            const cover=document.getElementById(COVER_ID); if(cover) cover.style.display='none';
+            hideGate();
+            document.body.classList.remove('gate-blur-active');
+            const ov=getOverlay(); if(ov) ov.style.opacity='0';
+            document.body.style.overflow='';
+            updateBlur();
+            return true;
+          } else { if(err) err.textContent='Invalid code'; if(input){ input.value=''; input.focus(); } return false; }
+        }catch{ if(err) err.textContent='Error'; return false; }finally{ if(btn){ btn.disabled=false; btn.textContent='Unlock'; } }
       }
-      window._showKeyGate = showGate; window._showPasswordGate = showGate; window._attemptKeyLogin = attemptLogin;
-
-      // ── Periodic expiry check ──────────────────────────────────────────
-      // hasValidSession() already correctly compares the stored session's
-      // `expires` date against `new Date()` (see its definition above) —
-      // that logic was never wrong. What was missing is anything calling
-      // it WHILE the app is already open and unlocked: previously
-      // hasValidSession() only ran inside showGate() (at boot, or when the
-      // cover page's style changed) and the MutationObserver on #coverPage
-      // (same trigger, cover-page-specific). Neither fires once someone is
-      // already past the gate and using the app — a session that expired
-      // at, say, 2am while the tab sat open overnight would stay silently
-      // unlocked in that tab indefinitely, since nothing was watching.
-      //
-      // checkSessionStillValid() below is the one thing this adds: call
-      // hasValidSession() again periodically, and the instant it comes
-      // back false while the gate ISN'T already showing, re-lock via
-      // showGate() immediately rather than waiting for a reload. 30
-      // seconds is frequent enough that a stated "5 day" code expires
-      // within about 5 days plus at most 30 seconds, not "5 days plus
-      // however long the tab happens to stay open" — while being cheap
-      // enough (one Date comparison) that running it twice a minute has
-      // no meaningful cost. A visibilitychange listener supplements the
-      // interval specifically for the common case of a backgrounded tab:
-      // browsers throttle setInterval heavily on hidden tabs (sometimes to
-      // once a minute or slower), so the moment someone switches BACK to
-      // this tab is exactly when a check needs to run promptly, rather
-      // than waiting for the next throttled interval tick.
-      function checkSessionStillValid(){
-        const gateEl = document.getElementById(GATE_ID);
-        const gateCurrentlyShowing = gateEl && getComputedStyle(gateEl).display !== 'none';
-        if(gateCurrentlyShowing) return;  // already locked, nothing to do
-        if(!hasValidSession()) showGate();
-      }
-      setInterval(checkSessionStillValid, 30000);
-      document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) checkSessionStillValid(); });
+      window._showKeyGate=showGate; window._showPasswordGate=showGate; window._attemptKeyLogin=attemptLogin; window._updateGateBlur=updateBlur;
 
       function initGate(){
-        document.addEventListener('input', (e)=>{ if(e.target && e.target.id==='gatePassword'){ let v = e.target.value.replace(/\D/g,'').slice(0,20); e.target.value = v; const counter = document.getElementById('charCount'); if(counter){ counter.textContent = `${v.length}/20`; counter.style.color = v.length===20 || v.length===12 ? '#7aeea0' : 'rgba(255,255,255,0.35)'; } } });
+        document.addEventListener('input', (e)=>{ if(e.target && e.target.id==='gatePassword'){ let v=e.target.value.replace(/\D/g,'').slice(0,20); e.target.value=v; const c=document.getElementById('charCount'); if(c){ c.textContent=v.length+'/20'; c.style.color=v.length===20?'#7aeea0':'rgba(255,255,255,0.35)'; } } });
         document.addEventListener('click', (e)=>{ if(e.target && e.target.id==='gateSubmit'){ e.preventDefault(); attemptLogin(); } });
-        document.addEventListener('keydown', (e)=>{ const gate = document.getElementById(GATE_ID); if(!gate || gate.style.display==='none') return; if(e.key==='Enter'){ const inp=document.getElementById('gatePassword'); if(document.activeElement===inp){ e.preventDefault(); attemptLogin(); } } });
-        const origDismiss = window.dismissCover;
-        window.dismissCover = function(){ const cover = document.getElementById('coverPage'); if(cover) cover.style.display='none'; if(typeof origDismiss==='function' && origDismiss!==window.dismissCover){ try{ origDismiss(); }catch{} } showGate(); };
-        const coverForm = document.getElementById('coverForm');
-        if(coverForm){ coverForm.addEventListener('submit', function(e){ const cover = document.getElementById('coverPage'); if(cover) cover.style.display='none'; setTimeout(()=>showGate(), 10); }, true); }
-        const cover = document.getElementById('coverPage');
-        if(cover){ const obs = new MutationObserver(()=>{ const hidden = cover.style.display==='none' || getComputedStyle(cover).display==='none'; if(hidden && !hasValidSession()) showGate(); }); obs.observe(cover, {attributes:true, attributeFilter:['style']}); }
+        document.addEventListener('keydown', (e)=>{ const g=document.getElementById(GATE_ID); if(!g || getComputedStyle(g).display==='none') return; if(e.key==='Enter'){ const i=document.getElementById('gatePassword'); if(document.activeElement===i){ e.preventDefault(); attemptLogin(); } } });
+
+        const origDismiss=window.dismissCover;
+        window.dismissCover=function(){
+          const cover=document.getElementById(COVER_ID);
+          if(cover) cover.style.display='none';
+          if(typeof origDismiss==='function' && origDismiss!==window.dismissCover){ try{ origDismiss(); }catch{} }
+          showGate();
+          updateBlur();
+        };
+
+        const cover=document.getElementById(COVER_ID);
+        if(cover){
+          const obs=new MutationObserver(()=>{ const hid=cover.style.display==='none' || getComputedStyle(cover).display==='none'; if(hid && !hasValidSession()){ showGate(); } updateBlur(); });
+          obs.observe(cover,{attributes:true,attributeFilter:['style']});
+        }
+
+        // Always show cover on page load — clear session so cover appears every time
+        sessionStorage.removeItem(SESSION_KEY);
+        try { localStorage.removeItem(SESSION_KEY); localStorage.removeItem(LEGACY_SESSION); } catch{}
+        if(false && hasValidSession()){
+          const c=document.getElementById(COVER_ID); if(c) c.style.display='none';
+          const g=document.getElementById(GATE_ID); if(g) g.style.display='none';
+          document.body.classList.remove('gate-blur-active');
+        } else {
+          document.body.classList.add('gate-blur-active');
+          const ov=getOverlay(); if(ov) ov.style.opacity='1';
+        }
+        updateBlur();
       }
       if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', initGate); else initGate();
-    })(); 
+    })();
     // ── END ACCESS GATE ───────────────────────────────────────────────────
+    //   FIXED ───────────────────────────────────────────────────
+    //   ───────────────────────────────────────────────────
 
     // ═══════════════════════════════════════════════════════════════════
     // BANKROLL TRACKER
@@ -3435,10 +3955,17 @@ document.querySelectorAll('.cover-tab').forEach(btn => {
 // a dismissCover function exists as a safe fallback if the ACCESS GATE
 // script somehow failed to load, without ever being able to silently
 // override the real one.
+// Fallback removed - gate logic now in main IIFE ensures no skipping
 if (typeof window.dismissCover !== 'function') {
   window.dismissCover = function() {
     const cover = document.getElementById('coverPage');
     if (cover) cover.style.display = 'none';
+    if (typeof window._showPasswordGate === 'function') {
+      window._showPasswordGate();
+    }
+    if (typeof window._updateGateBlur === 'function') {
+      window._updateGateBlur();
+    }
   };
 }
 
@@ -3497,6 +4024,139 @@ if (typeof window.dismissCover !== 'function') {
       <div class="meta"><b id="bubbleCount">0/3</b><span id="bubblePct">0%</span></div>
     </button>
   </div>
+
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
+
+
+
+
+
+
+
+
+
+<style id="final-fix-v9-body">
+/* 1. REMOVE CARDS FROM BEHIND ALL CHIPS - HIGH SPECIFICITY FOR BOTH LIGHT/DARK */
+html body .quick-nav,
+body .quick-nav,
+html body.dark .quick-nav,
+body.dark .quick-nav,
+html.dark body .quick-nav,
+html.light body .quick-nav,
+html body.light .quick-nav,
+body.light .quick-nav,
+#screen-dashboard .quick-nav,
+#screen-standings .quick-nav,
+#screen-nfl-standings .quick-nav,
+#screen-nba-standings .quick-nav,
+#screen-calendar .quick-nav {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  margin: 0 0 12px 0 !important;
+  border-radius: 0 !important;
+}
+
+html body .toolbar,
+body .toolbar,
+html body.dark .toolbar,
+body.dark .toolbar,
+html.dark body .toolbar,
+#screen-dashboard .toolbar,
+#screen-nfl-dashboard .toolbar,
+#screen-nba-dashboard .toolbar {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+html body .stats-tab-row,
+body .stats-tab-row,
+html body.dark .stats-tab-row,
+body.dark .stats-tab-row,
+html.dark body .stats-tab-row,
+html body .chip-row,
+body .chip-row,
+body.dark .chip-row,
+html body.dark .chip-row {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  margin: 0 0 10px 0 !important;
+  border-radius: 0 !important;
+}
+
+/* 2. TITLE BAR - handled by REFRACTIVE GLASS SYSTEM */
+
+/* os-window: transparent blur — handled by REFRACTIVE GLASS SYSTEM */
+html body .screen,
+body .screen {
+  background: transparent !important;
+}
+
+/* 3. FIX COLOR MISMATCH ON STATS SCREEN - MLB/NBA/NFL - DARK MODE */
+body.dark .game {
+  background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)) !important;
+  border-color: rgba(255,255,255,0.14) !important;
+}
+body.dark .game div[style*="background:rgba(255,255,255,0.48)"],
+body.dark .game div[style*="background: rgba(255,255,255,0.48)"],
+html body.dark .game div[style*="rgba(255,255,255,0.48)"] {
+  background: rgba(32,42,64,0.72) !important;
+  background-color: rgba(32,42,64,0.72) !important;
+  border-color: rgba(255,255,255,0.14) !important;
+  color: #eef2ff !important;
+}
+body.dark .game div[style*="background:rgba(255,255,255,0.48)"] span,
+body.dark .game div[style*="background:rgba(255,255,255,0.48)"] b,
+body.dark .game div[style*="background:rgba(255,255,255,0.48)"] div {
+  color: #cbd5e1 !important;
+}
+/* Fix inner pitcher stat blocks - light gray becoming dark glass */
+body.dark .game > div > div[style*="border-radius:12px"] {
+  background: rgba(32,42,64,0.72) !important;
+  border-color: rgba(255,255,255,0.14) !important;
+}
+/* Also for NBA/NFL cards if they use same pattern */
+body.dark .cards .game,
+body.dark #dashboardCards .game,
+body.dark #nflDashboardCards .game,
+body.dark #nbaDashboardCards .game {
+  background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)) !important;
+}
+
+/* Search square removal */
+html body .search input,
+body.dark .search input,
+#dashSearch, #nflDashSearch, #nbaDashSearch {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Menu numbers left, text centered */
+html body .menu-btn .num { justify-content: flex-start !important; text-align: left !important; align-self: flex-start !important; width: 100% !important; }
+html body .menu-btn h3, html body .menu-btn p { text-align: center !important; width: 100% !important; margin-left: auto !important; margin-right: auto !important; }
+html body .menu-btn p { padding-right: 0 !important; }
+</style>
 
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
