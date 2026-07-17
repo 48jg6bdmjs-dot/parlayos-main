@@ -105,6 +105,27 @@
 :where(code, pre, kbd, samp) {
   font-family: "Optimistic Mono", ui-monospace, monospace;
 }
+</style><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
 
 /* ── V5 FIX PLACEHOLDER — consolidated below ── */
 
@@ -1432,6 +1453,377 @@ body.gate-blur-active .app-shell {
 #accessGate { pointer-events: auto !important; }
 #accessGate * { pointer-events: auto !important; }
 </style>
+<style id="menu-landscape-and-keyboard-fix">
+/* --- 1. Landscape: Menu button right next to Edge Scanner, but hidden on main menu --- */
+#titleBackBtn:not(.show),
+.title-back-btn:not(.show) {
+  display: none !important;
+}
+.title-back-btn.show,
+#titleBackBtn.show {
+  display: inline-flex !important;
+}
+
+@media (orientation: landscape) {
+  .titlebar {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
+  }
+  .titlebar .traffic {
+    order: 1 !important;
+    flex: 0 0 auto !important;
+  }
+  .titlebar .title-center {
+    position: static !important;
+    left: auto !important;
+    transform: none !important;
+    order: 2 !important;
+    flex: 1 1 auto !important;
+    margin-left: 12px !important;
+    justify-content: flex-start !important;
+  }
+  /* Only when visible - .show - should it move right */
+  #titleBackBtn.show,
+  .title-back-btn.show {
+    order: 3 !important;
+    margin-left: auto !important;
+    margin-right: 10px !important;
+    position: static !important;
+    transform: none !important;
+  }
+  .title-actions {
+    order: 4 !important;
+    margin-left: 0 !important;
+    flex: 0 0 auto !important;
+  }
+  /* Force hide on desktop even in landscape */
+  body.is-desktop #titleBackBtn,
+  body.is-desktop .title-back-btn {
+    display: none !important;
+  }
+}
+@media (min-width: 900px) and (max-height: 650px) {
+  .titlebar .title-center {
+    position: static !important;
+    transform: none !important;
+    flex: 1 1 auto !important;
+    margin-left: 12px !important;
+  }
+  #titleBackBtn.show {
+    margin-left: auto !important;
+    order: 3 !important;
+  }
+  body.is-desktop #titleBackBtn {
+    display: none !important;
+  }
+}
+
+/* --- 2. Keyboard gap fix for mobile --- */
+html { height: -webkit-fill-available; }
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+}
+.os-window, #osWindow {
+  height: 100vh;
+  height: 100dvh;
+  height: 100svh;
+  min-height: -webkit-fill-available;
+}
+.viewport {
+  height: 100% !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+.screen {
+  min-height: 0 !important;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom)) !important;
+}
+body.keyboard-open { overflow: hidden; }
+</style>
+<style id="fantasy-card-alignment-fix">
+/* --- RESET outer panels that were broken by previous broad selector --- */
+#screen-fantasy .glass.glass-blur.panel-pad {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 14px !important;
+  text-align: left !important;
+  justify-content: unset !important;
+}
+#screen-fantasy .glass.glass-blur:not(.panel-pad) {
+  /* salary used bar - keep its flex */
+  display: flex !important;
+}
+
+/* Ensure containers are full width, column, no clipping */
+#fantasyPlayerPool,
+#fantasyCrewSlots,
+#fantasyShopList,
+#fantasyGameFilter,
+#fantasyPositionFilter {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+#fantasyPlayerPool,
+#fantasyCrewSlots {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  align-items: stretch !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* --- Player row cards - properly aligned full width --- */
+#fantasyPlayerPool > .glass,
+#fantasyPlayerPool > div.glass,
+#fantasyCrewSlots > .glass,
+#fantasyCrewSlots > div.glass,
+#fantasyCrewSlots > .glass.glass-blur,
+#fantasyShopList > .glass,
+#fantasyShopList > div.glass {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  padding: 12px 14px !important;
+  border-radius: 14px !important;
+  gap: 12px !important;
+  text-align: left !important;
+  overflow: hidden !important;
+}
+
+/* Text side */
+#fantasyPlayerPool > .glass > div:first-child,
+#fantasyPlayerPool > div.glass > div:first-child {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+}
+
+/* Crew slots - POS label fixed */
+#fantasyCrewSlots > .glass > div:nth-child(1) {
+  flex: 0 0 52px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  opacity: 0.6 !important;
+  white-space: nowrap !important;
+}
+#fantasyCrewSlots > .glass > div:nth-child(2) {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-size: 14px !important;
+  text-align: left !important;
+}
+
+/* Proportionate +Add / Remove buttons */
+#fantasyPlayerPool .btn[data-addplayer],
+#fantasyPlayerPool .btn.primary,
+#screen-fantasy .glass .btn[data-addplayer],
+#screen-fantasy .glass .btn.primary,
+#fantasyCrewSlots .btn,
+#fantasyShopList .btn {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: 64px !important;
+  max-width: 86px !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  padding: 0 14px !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  box-shadow: 0 4px 12px rgba(255,47,74,0.22) !important;
+}
+#fantasyCrewSlots .btn[data-removeslot] {
+  min-width: 32px !important;
+  max-width: 32px !important;
+  width: 32px !important;
+  height: 30px !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  background: rgba(0,0,0,0.06) !important;
+  color: var(--muted) !important;
+  border: 1px solid rgba(0,0,0,0.08) !important;
+  box-shadow: none !important;
+}
+
+/* Fix outer scroll clipping */
+#screen-fantasy {
+  overflow-x: hidden !important;
+}
+#screen-fantasy .viewport,
+#screen-fantasy #viewport {
+  overflow-x: hidden !important;
+}
+</style>
+
+
+
+<script id="keyboard-gap-fix-js">
+(function(){
+  function resetViewport(){
+    try {
+      window.scrollTo(0,0);
+      if(document.documentElement) document.documentElement.scrollTop = 0;
+      if(document.body) document.body.scrollTop = 0;
+      var vp = document.getElementById('viewport');
+      if(vp) vp.scrollTop = 0;
+      var active = document.querySelector('.screen.active');
+      if(active) active.scrollTop = 0;
+      var os = document.getElementById('osWindow');
+      if(os) os.scrollTop = 0;
+      var h = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+      document.documentElement.style.setProperty('--app-vh', h + 'px');
+      void document.body.offsetHeight;
+      window.dispatchEvent(new Event('resize'));
+      setTimeout(function(){ window.dispatchEvent(new Event('resize')); }, 150);
+      setTimeout(function(){ 
+        document.documentElement.style.removeProperty('--app-vh'); 
+        document.body.style.height = '';
+        document.documentElement.style.height = '';
+      }, 400);
+    } catch(e){}
+  }
+  function patchGateObserver(){
+    var gate = document.getElementById('accessGate');
+    if(!gate || gate._kbPatched) return;
+    gate._kbPatched = true;
+    var obs = new MutationObserver(function(mutations){
+      mutations.forEach(function(m){
+        if(m.attributeName === 'style'){
+          var isHidden = gate.style.display === 'none' || getComputedStyle(gate).display === 'none';
+          if(isHidden){
+            document.body.style.overflow = '';
+            document.body.classList.remove('gate-blur-active');
+            setTimeout(resetViewport, 30);
+            setTimeout(resetViewport, 200);
+            setTimeout(resetViewport, 550);
+          }
+        }
+      });
+    });
+    obs.observe(gate, {attributes: true, attributeFilter: ['style']});
+  }
+  function bindInput(){
+    var inp = document.getElementById('gatePassword');
+    if(!inp || inp.dataset.kbBound) return;
+    inp.dataset.kbBound = '1';
+    inp.addEventListener('focus', function(){ document.body.classList.add('keyboard-open'); });
+    inp.addEventListener('blur', function(){
+      document.body.classList.remove('keyboard-open');
+      setTimeout(resetViewport, 30);
+      setTimeout(resetViewport, 180);
+      setTimeout(resetViewport, 400);
+      setTimeout(resetViewport, 700);
+    });
+  }
+  if(window.visualViewport){
+    var lastH = window.visualViewport.height;
+    window.visualViewport.addEventListener('resize', function(){
+      var gate = document.getElementById('accessGate');
+      var gateVisible = gate && getComputedStyle(gate).display !== 'none';
+      if(!gateVisible){
+        if(window.visualViewport.height > lastH + 10){ setTimeout(resetViewport, 30); }
+        lastH = window.visualViewport.height;
+      }
+    });
+  }
+  window.addEventListener('pageshow', function(){ setTimeout(resetViewport, 100); });
+  function init(){
+    patchGateObserver();
+    bindInput();
+    var bodyObs = new MutationObserver(function(){ patchGateObserver(); bindInput(); });
+    bodyObs.observe(document.body, {childList: true, subtree: false});
+    setTimeout(resetViewport, 600);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+<script id="menu-hide-on-desktop-fix">
+(function(){
+  // Ensure body gets is-desktop class based on current screen
+  function updateDesktopClass(screenName){
+    try {
+      var isDesktop = (screenName === 'desktop') || document.getElementById('screen-desktop')?.classList.contains('active');
+      document.body.classList.toggle('is-desktop', !!isDesktop);
+      var btn = document.getElementById('titleBackBtn');
+      if(btn){
+        if(isDesktop){
+          btn.classList.remove('show');
+          btn.style.display = 'none';
+        } else {
+          // let existing logic handle show, but ensure display if show present
+          if(btn.classList.contains('show')) btn.style.display = '';
+        }
+      }
+    } catch(e){}
+  }
+  // Patch switchScreen if exists
+  function patchSwitch(){
+    if(window.switchScreen && !window.switchScreen._patchedMenu){
+      var orig = window.switchScreen;
+      window.switchScreen = function(next){
+        var res = orig.apply(this, arguments);
+        setTimeout(function(){ updateDesktopClass(next); }, 10);
+        return res;
+      };
+      window.switchScreen._patchedMenu = true;
+    }
+  }
+  // Also watch screen changes via MutationObserver
+  function observeScreens(){
+    var viewport = document.getElementById('viewport');
+    if(!viewport) return;
+    var obs = new MutationObserver(function(){
+      var active = document.querySelector('.screen.active');
+      if(active) updateDesktopClass(active.dataset.screen || active.id.replace('screen-',''));
+    });
+    obs.observe(viewport, {attributes: true, subtree: true, attributeFilter: ['class']});
+  }
+  function init(){
+    patchSwitch();
+    observeScreens();
+    // initial
+    setTimeout(function(){
+      var active = document.querySelector('.screen.active');
+      if(active) updateDesktopClass(active.dataset.screen || 'desktop');
+      else updateDesktopClass('desktop');
+    }, 100);
+    setInterval(patchSwitch, 1000);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </head>
 <body>
   <div id="gateBlurOverlay" aria-hidden="true"></div>
@@ -4208,5 +4600,5 @@ html body .menu-btn h3, html body .menu-btn p { text-align: center !important; w
 html body .menu-btn p { padding-right: 0 !important; }
 </style>
 
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
