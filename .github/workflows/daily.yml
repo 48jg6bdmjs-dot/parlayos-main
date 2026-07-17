@@ -1,0 +1,61 @@
+name: Daily ParlayOS Update
+
+# ── Combined from two previously-separate schedules ──────────────────────
+# daily.yml.txt ran once at 9:00 UTC; Daily.yml.txt ran twice, at 0:00 and
+# 12:00 UTC. Per instruction, this keeps 9:00 and 12:00 UTC (not the
+# original 0:00 + 12:00, and not 9:00 alone) as the two daily run times.
+"on":
+  schedule:
+    - cron: '0 9 * * *'     # 9:00 UTC
+    - cron: '0 12 * * *'    # 12:00 UTC
+  workflow_dispatch:         # Allows manual trigger from the GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+
+      # ── run_all.py replaces the old direct "python mlb_ace.py" call ──
+      # run_all.py runs mlb_ace.py, nfl_ace.py, and nba_ace.py in
+      # sequence against the same ParlayOS.html, with its OWN internal
+      # failure isolation: if one sport's API/data source fails, the
+      # other two still run and still write their picks — run_all.py
+      # prints a clear per-sport summary either way. It exits 1 if ANY
+      # of the three failed, which is the right signal for a human
+      # skimming Action logs, but wrong for THIS step specifically: a
+      # single sport's outage shouldn't block committing the other two
+      # sports' perfectly good picks, or block the mlb_backtest.py step
+      # that follows. `|| echo "..."` lets a partial failure surface
+      # loudly in the log (the real error text from run_all.py's own
+      # output is unaffected) without stopping the job, so a partial
+      # night's picks still land and get committed and mlb_backtest.py
+      # still runs.
+      - name: Run all three prediction engines (MLB, NFL, NBA)
+        run: python run_all.py || echo "::warning::run_all.py reported at least one sport failed — see log above for which. Continuing to commit whatever succeeded."
+
+      # mlb_backtest.py tunes MLB's thresholds in sports_config.json
+      # (min_edge, min/max_total_line) against graded outcomes. NFL and
+      # NBA have no equivalent backtest script yet — this step only
+      # affects MLB's tuning, not NFL/NBA's, until nfl_backtest.py /
+      # nba_backtest.py exist.
+      # Non-fatal for the same reason as the run_all.py step above: if
+      # this fails (e.g. no fresh graded rows to analyze on a night MLB's
+      # own picks also failed), that shouldn't block the commit step
+      # below from saving whatever DID succeed this run.
+      - run: python mlb_backtest.py || echo "::warning::mlb_backtest.py failed — see log above. Continuing to commit whatever picks succeeded this run."
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sports_config.json picks_log.csv nfl_picks_log.csv nba_picks_log.csv ParlayOS.html
+          git diff --staged --quiet || git commit -m "auto-update: MLB/NFL/NBA picks, config, and live HTML data"
+          git push
