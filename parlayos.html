@@ -219,7 +219,7 @@
   color: var(--ink) !important;
 }
 body.dark .empty {
-  background: rgba(32,42,64,0.72) !important;
+  background: rgba(255,255,255,0.06) !important;
   border-color: rgba(255,255,255,0.14) !important;
   color: #eef2ff !important;
 }
@@ -252,8 +252,6 @@ body.dark .empty b { color: #eef2ff !important; }
   margin: 0 0 14px !important;
   padding: 10px 12px !important;
   background: linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.52) 100%) !important;
-  backdrop-filter: blur(18px) saturate(1.4) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(1.4) !important;
   border: 1px solid rgba(255,255,255,0.72) !important;
   border-radius: 16px !important;
   box-shadow: 0 4px 18px rgba(23,37,73,0.06) !important;
@@ -269,8 +267,6 @@ body.dark .empty b { color: #eef2ff !important; }
   margin: 0 0 14px !important;
   padding: 10px 12px !important;
   background: linear-gradient(180deg, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.48) 100%) !important;
-  backdrop-filter: blur(18px) saturate(1.4) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(1.4) !important;
   border: 1px solid rgba(255,255,255,0.68) !important;
   border-radius: 16px !important;
   box-shadow: 0 4px 18px rgba(23,37,73,0.05) !important;
@@ -286,8 +282,6 @@ body.dark .empty b { color: #eef2ff !important; }
   margin: 0 0 12px !important;
   padding: 8px 12px !important;
   background: linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.42) 100%) !important;
-  backdrop-filter: blur(16px) saturate(1.3) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(1.3) !important;
   border: 1px solid rgba(255,255,255,0.6) !important;
   border-radius: 14px !important;
 }
@@ -328,12 +322,12 @@ body.dark .empty b { color: #eef2ff !important; }
   color: var(--ink) !important;
 }
 body.dark .empty {
-  background: rgba(32,42,64,0.72) !important;
+  background: rgba(255,255,255,0.06) !important;
   border-color: rgba(255,255,255,0.14) !important;
   color: #eef2ff !important;
 }
 body.dark .toolbar, body.dark .quick-nav, body.dark .stats-tab-row {
-  background: linear-gradient(180deg, rgba(32,42,64,0.82) 0%, rgba(18,26,42,0.52) 100%) !important;
+  background: transparent !important;
   border-color: rgba(255,255,255,0.14) !important;
 }
 
@@ -647,7 +641,7 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
     .summary { display:flex; flex-direction:column; gap:10px; }
     .kpi { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
     .kpi > div { border-radius:16px; background: rgba(255,255,255,0.86); border:1px solid rgba(255,255,255,0.92); padding: 12px; }
-    body.dark .kpi > div { background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)); border-color: rgba(255,255,255,0.14); }
+    body.dark .kpi > div { background: rgba(18,24,40,0.22); border-color: rgba(255,255,255,0.12); }
     .kpi .k { font-family:var(--mono); font-size:10px; letter-spacing:.12em; color:var(--muted); font-weight:800; text-transform:uppercase; }
     .kpi .v { font-size:18px; font-weight:860; margin-top:6px; letter-spacing:-0.03em; }
     .ev { padding: 12px; border-radius:16px; background: linear-gradient(90deg, rgba(92,124,255,0.14), rgba(255,47,74,0.10)); border:1px solid rgba(92,124,255,0.16); display:flex; justify-content:space-between; align-items:center; gap:10px; }
@@ -658,8 +652,8 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
     .pool button .r { font-family:var(--mono); font-size:11px; color:var(--muted); font-weight:800; }
     .pool button:disabled { opacity:0.45; cursor:default; }
     body.dark .pool button {
-      background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72));
-      border-color: rgba(255,255,255,0.14);
+      background: rgba(18,24,40,0.22);
+      border-color: rgba(255,255,255,0.12);
     }
     body.dark .pool button .l { color: var(--ink); }
     body.dark .pool button .r { color: var(--muted); }
@@ -681,7 +675,7 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
       height: 64px; border-radius:18px; border:1px solid rgba(255,255,255,0.92); background: rgba(255,255,255,0.84);
       box-shadow: var(--shadow-sm); display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 0 14px;
     }
-    body.dark .toggle { background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)); border-color: rgba(255,255,255,0.14); }
+    body.dark .toggle { background: rgba(18,24,40,0.22); border-color: rgba(255,255,255,0.12); }
     .toggle .left { display:flex; flex-direction:column; gap:2px; }
     .toggle .left b{ font-size:13px; letter-spacing:-0.01em; }
     .toggle .left span{ font-size:12px; color:var(--muted); line-height:1.3; }
@@ -712,7 +706,7 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
       transition: transform .38s cubic-bezier(.2,.8,.2,1), opacity .28s ease;
       opacity:0; pointer-events:none;
     }
-    body.dark .dock { background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)); border-color: rgba(255,255,255,0.14); }
+    body.dark .dock { background: rgba(18,24,40,0.58); border-color: rgba(255,255,255,0.14); backdrop-filter: blur(20px) saturate(1.5); -webkit-backdrop-filter: blur(20px) saturate(1.5); }
     .dock.show{ transform: translateX(-50%) translateY(0); opacity:1; pointer-events:auto; }
     .dock .app { width:40px; height:40px; border-radius:12px; border:1px solid rgba(255,255,255,0.9); background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.66)); display:grid; place-items:center; font-weight:900; }
     .overlay {
@@ -725,7 +719,7 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
       text-align:center; padding: 22px; border-radius:28px; background: rgba(255,255,255,0.88); border:1px solid rgba(255,255,255,0.92); box-shadow: var(--shadow);
       min-width:min(360px, calc(100vw - 32px));
     }
-    body.dark .shutdown { background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)); border-color: rgba(255,255,255,0.14); }
+    body.dark .shutdown { background: rgba(18,24,40,0.58); border-color: rgba(255,255,255,0.14); }
     .shutdown h2{ margin:0; letter-spacing:-0.04em; font-size:22px; }
     .shutdown p{ margin:8px 0 0; color:var(--muted); font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:800; }
 
@@ -844,7 +838,7 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
       padding: 8px 10px; border-radius: 12px; background: rgba(255,255,255,0.7); border:1px solid rgba(28,34,48,0.08);
       font-size: 12.5px;
     }
-    body.dark .parlay-bubble-panel .item { background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)); border-color: rgba(255,255,255,0.14); }
+    body.dark .parlay-bubble-panel .item { background: rgba(18,24,40,0.22); border-color: rgba(255,255,255,0.12); }
     .parlay-bubble-panel .item b { font-weight: 700; }
     .parlay-bubble-panel .item button { height:26px; padding:0 8px; font-size:11px; border-radius:8px; border:1px solid rgba(28,34,48,0.12); background:white; }
     .parlay-bubble-panel .foot {
@@ -869,17 +863,15 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
     }
     body.dark .os-window { background: linear-gradient(180deg, rgba(18,24,40,0.92), rgba(10,14,24,0.96)); border-color: rgba(255,255,255,0.10); }
     body.dark body.dark .menu-btn, body.dark .pill, body.dark .parlay-bubble-panel {
-      background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.62)) !important;
-      backdrop-filter: blur(28px) saturate(1.5) !important;
-      -webkit-backdrop-filter: blur(28px) saturate(1.5) !important;
-      border: 1px solid rgba(255,255,255,0.16) !important;
-      box-shadow: 0 12px 36px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(255,255,255,0.06) !important;
+      background: rgba(18,24,40,0.22) !important;
+      border: 1px solid rgba(255,255,255,0.12) !important;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -1px 0 rgba(255,255,255,0.04) !important;
       color: var(--ink) !important;
     }
     body.dark .glass, body.dark .game, body.dark .meta, body.dark .qbtn, body.dark .crumb-btn, body.dark .btn, body.dark .slot, body.dark .market, body.dark .table-card, body.dark .status-lines div, body.dark .notice, body.dark .clock-card {
-      background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.62)) !important;
-      border: 1px solid rgba(255,255,255,0.16) !important;
-      box-shadow: 0 12px 36px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(255,255,255,0.06) !important;
+      background: rgba(18,24,40,0.22) !important;
+      border: 1px solid rgba(255,255,255,0.12) !important;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -1px 0 rgba(255,255,255,0.04) !important;
       color: var(--ink) !important;
     }
     body.dark .glass::before, body.dark .menu-btn::before, body.dark .game::before {
@@ -918,18 +910,18 @@ body.dark .badge.edge { background: linear-gradient(180deg, rgba(255,47,74,0.22)
 .parlay-bubble { z-index:9999 !important; pointer-events:none; }
 .parlay-bubble-btn { pointer-events:auto !important; background:transparent !important; border:none !important; box-shadow:none !important; padding:0 !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
 .parlay-bubble-btn .icon { width:56px; height:56px; border-radius:50%; background:linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.62)); backdrop-filter:blur(18px) saturate(1.6); -webkit-backdrop-filter:blur(18px) saturate(1.6); box-shadow:0 10px 30px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.9); display:grid; place-items:center; }
-body.dark .parlay-bubble-btn .icon { background:linear-gradient(180deg, rgba(40,52,78,0.92), rgba(22,30,48,0.88)) !important; }
+body.dark .parlay-bubble-btn .icon { background:rgba(255,255,255,0.14) !important; border:1px solid rgba(255,255,255,0.20) !important; }
 
 body.dark { --bg:#070a12; --bg-2:#0e1422; --ink:#eef2ff; --muted:#a6b0c6; --line:rgba(255,255,255,0.14); --glass:rgba(18,24,38,0.62); --glass-2:rgba(22,30,48,0.78); --card:rgba(22,30,48,0.64); }
 body.dark .os-window { background:linear-gradient(180deg, rgba(18,24,40,0.92), rgba(10,14,24,0.96)); border-color:rgba(255,255,255,0.10); }
-body.dark body.dark .glass, body.dark .menu-btn, body.dark .game, body.dark .meta, body.dark .qbtn, body.dark .crumb-btn, body.dark .pill, body.dark .btn, body.dark .slot, body.dark .market, body.dark .table-card, body.dark .parlay-bubble-panel, body.dark .clock-card { background:linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.62)) !important; border:1px solid rgba(255,255,255,0.16) !important; color:var(--ink) !important; }
+body.dark body.dark .glass, body.dark .menu-btn, body.dark .game, body.dark .meta, body.dark .qbtn, body.dark .crumb-btn, body.dark .pill, body.dark .btn, body.dark .slot, body.dark .market, body.dark .table-card, body.dark .parlay-bubble-panel, body.dark .clock-card { background:rgba(18,24,40,0.22) !important; border:1px solid rgba(255,255,255,0.12) !important; color:var(--ink) !important; }
 body.dark .breadcrumb { background:rgba(16,22,36,0.84) !important; border:1px solid rgba(255,255,255,0.14) !important; border-radius:14px; padding:8px 12px; }
 body.dark .crumb-path b { color:#eef2ff !important; }
 body.dark .crumb-path span { color:rgba(166,176,198,0.85) !important; }
 body.dark pre, body.dark code, body.dark .mono { background:rgba(0,0,0,0.38) !important; color:#cbd5e1 !important; border:1px solid rgba(255,255,255,0.12) !important; }
 
 .menu-btn, .pill, .parlay-bubble-panel {
-  backdrop-filter:blur(28px) saturate(1.6) !important; -webkit-backdrop-filter:blur(28px) saturate(1.6) !important;
+  /* backdrop-filter removed — 16+ simultaneous compositor layers crash iOS */
 }
 .glass::before, .menu-btn::before, .game::before { content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; background:linear-gradient(105deg, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0) 70%, rgba(255,255,255,0.16) 100%); }
 
@@ -941,12 +933,12 @@ body.dark pre, body.dark code, body.dark .mono { background:rgba(0,0,0,0.38) !im
     .btn.primary-picked { background: rgba(92,124,255,0.18) !important; color: #5c7cff !important; opacity: 0.6; pointer-events:none; border: 1px solid rgba(92,124,255,0.3); }
 .chip { background: rgba(255,255,255,0.68) !important; border:1px solid rgba(28,34,48,0.12) !important; color:#5b6a84 !important; }
 .chip.active { background:#1c2230 !important; color:white !important; border-color:#1c2230 !important; }
-body.dark .btn { background: rgba(32,42,64,0.88) !important; border-color: rgba(255,255,255,0.16) !important; color:#eef2ff !important; }
+body.dark .btn { background: rgba(255,255,255,0.10) !important; border-color: rgba(255,255,255,0.16) !important; color:#eef2ff !important; }
 body.dark .btn.primary { background: linear-gradient(180deg, #ff4d67, #d9233f) !important; color:white !important; }
-body.dark .chip { background: rgba(32,42,64,0.72) !important; border-color: rgba(255,255,255,0.14) !important; color:#a6b0c6 !important; }
+body.dark .chip { background: rgba(255,255,255,0.10) !important; border-color: rgba(255,255,255,0.14) !important; color:#d1d8e8 !important; }
 body.dark .chip.active { background:#eef2ff !important; color:#0a0e18 !important; }
 .crumb-btn { background: rgba(255,255,255,0.78) !important; color:#1c2230 !important; }
-body.dark .crumb-btn { background: rgba(32,42,64,0.88) !important; color:#eef2ff !important; }
+body.dark .crumb-btn { background: rgba(255,255,255,0.10) !important; color:#eef2ff !important; }
 
 /* ── REFRACTIVE GLASS SYSTEM ── */
 /* 1. Window background: transparent blur */
@@ -968,9 +960,10 @@ body.dark .os-window {
 }
 
 /* 2. Refractive glass on ALL elements — NO per-element backdrop-filter (perf) */
-.game, .menu-btn, .glass, .chip, .badge, .pill, .market, .meta,
-.qbtn, .crumb-btn, .btn, .slot, .table-card, .status-lines div,
-.notice, .clock-card, .search, .parlay-bubble-panel, .cal-cell,
+/* .menu-btn, .game, .table-card, .search excluded — have stronger per-element backgrounds */
+.glass, .chip, .badge, .pill, .market, .meta,
+.qbtn, .crumb-btn, .btn, .slot, .status-lines div,
+.notice, .clock-card, .parlay-bubble-panel, .cal-cell,
 .breadcrumb, .toolbar, .logo, .odds-grid {
   position: relative;
   background: rgba(255,255,255,0.18) !important;
@@ -1151,12 +1144,13 @@ body.dark .crumb-link { color:#a6b0c6 !important; }
 body.dark #dashSearch, body.dark .search-input, body.dark input[type="search"], body.dark .search-bar input { background: rgba(18,24,38,0.86) !important; border:0 !important; color:#eef2ff !important; }
 body.dark #dashSearch::placeholder { color:#8a97b1 !important; }
 
-body.dark .table-card thead th, body.dark .standings-head, body.dark .table-head { background: rgba(18,24,38,0.92) !important; color:#a6b0c6 !important; }
-body.dark .table-card thead { background: rgba(18,24,38,0.92) !important; }
-body.dark .table-card th { color:#8a97b1 !important; }
-body.dark .table-card td { color:#e6eaf3 !important; border-color: rgba(255,255,255,0.08) !important; }
+body.dark .table-card thead th, body.dark .standings-head, body.dark .table-head { background: rgba(255,255,255,0.06) !important; color: #eef2ff !important; border-bottom-color: rgba(255,255,255,0.10) !important; }
+body.dark .table-card thead { background: rgba(255,255,255,0.06) !important; }
+body.dark .table-card th { color: #94a3b8 !important; }
+body.dark .table-card td { color: #e6eaf3 !important; border-color: rgba(255,255,255,0.08) !important; }
 body.dark .table-card tr { border-color: rgba(255,255,255,0.06) !important; }
-body.dark .table-card .club-badge, body.dark .table-card .badge-count { background: rgba(255,255,255,0.10) !important; color:#cbd5e1 !important; }
+body.dark .table-card .club-badge, body.dark .table-card .badge-count { background: rgba(255,255,255,0.10) !important; color: #cbd5e1 !important; }
+body.dark .table-head h3 { color: #eef2ff !important; }
 
 .breadcrumb { /* removed */ }
 .screen { overflow-y:auto; -webkit-overflow-scrolling:touch; padding: 76px 18px calc(82px + env(safe-area-inset-bottom));}
@@ -1205,14 +1199,13 @@ body.dark .mono-block b { color: #e2e8f0 !important; }
 .title-back-btn:hover { background: rgba(255,255,255,0.94); }
 .title-back-btn:active { transform: scale(.95); }
 body.dark .title-back-btn {
-  background: rgba(32,42,64,0.88); border-color: rgba(255,255,255,0.16); color: #eef2ff;
+  background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.16); color: #eef2ff;
 }
 .quick-nav { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
 .quick-nav-btn {
   height: 32px; padding: 0 14px; border-radius: 999px;
   border: 1px solid rgba(28,34,48,0.12);
   background: rgba(255,255,255,0.72);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 12px; font-weight: 700; cursor: pointer;
   color: var(--ink); letter-spacing: -0.01em;
@@ -1221,7 +1214,7 @@ body.dark .title-back-btn {
 .quick-nav-btn:hover { background: rgba(255,255,255,0.94); }
 .quick-nav-btn:active { transform: scale(.96); }
 body.dark .quick-nav-btn {
-  background: rgba(32,42,64,0.88); border-color: rgba(255,255,255,0.16); color: #eef2ff;
+  background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.16); color: #eef2ff;
 }
 .theme-row { display:flex; gap:6px; margin-top:8px; }
 .theme-row .chip { cursor:pointer; }
@@ -1343,16 +1336,13 @@ body .screen {
   background: transparent !important;
 }
 
-/* 3. FIX COLOR MISMATCH ON STATS SCREEN - MLB/NBA/NFL - DARK MODE */
-body.dark .game {
-  background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)) !important;
-  border-color: rgba(255,255,255,0.14) !important;
-}
+/* 3. Inner pitcher/stat blocks inside .game cards — keep them on the same
+      glass system as the card itself instead of a separate solid navy,
+      so they read as one piece of glass in dark mode. */
 body.dark .game div[style*="background:rgba(255,255,255,0.48)"],
 body.dark .game div[style*="background: rgba(255,255,255,0.48)"],
 html body.dark .game div[style*="rgba(255,255,255,0.48)"] {
-  background: rgba(32,42,64,0.72) !important;
-  background-color: rgba(32,42,64,0.72) !important;
+  background: rgba(255,255,255,0.08) !important;
   border-color: rgba(255,255,255,0.14) !important;
   color: #eef2ff !important;
 }
@@ -1361,17 +1351,9 @@ body.dark .game div[style*="background:rgba(255,255,255,0.48)"] b,
 body.dark .game div[style*="background:rgba(255,255,255,0.48)"] div {
   color: #cbd5e1 !important;
 }
-/* Fix inner pitcher stat blocks - light gray becoming dark glass */
 body.dark .game > div > div[style*="border-radius:12px"] {
-  background: rgba(32,42,64,0.72) !important;
+  background: rgba(255,255,255,0.08) !important;
   border-color: rgba(255,255,255,0.14) !important;
-}
-/* Also for NBA/NFL cards if they use same pattern */
-body.dark .cards .game,
-body.dark #dashboardCards .game,
-body.dark #nflDashboardCards .game,
-body.dark #nbaDashboardCards .game {
-  background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)) !important;
 }
 
 /* Search square removal */
@@ -1453,377 +1435,6 @@ body.gate-blur-active .app-shell {
 #accessGate { pointer-events: auto !important; }
 #accessGate * { pointer-events: auto !important; }
 </style>
-<style id="menu-landscape-and-keyboard-fix">
-/* --- 1. Landscape: Menu button right next to Edge Scanner, but hidden on main menu --- */
-#titleBackBtn:not(.show),
-.title-back-btn:not(.show) {
-  display: none !important;
-}
-.title-back-btn.show,
-#titleBackBtn.show {
-  display: inline-flex !important;
-}
-
-@media (orientation: landscape) {
-  .titlebar {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 0 !important;
-  }
-  .titlebar .traffic {
-    order: 1 !important;
-    flex: 0 0 auto !important;
-  }
-  .titlebar .title-center {
-    position: static !important;
-    left: auto !important;
-    transform: none !important;
-    order: 2 !important;
-    flex: 1 1 auto !important;
-    margin-left: 12px !important;
-    justify-content: flex-start !important;
-  }
-  /* Only when visible - .show - should it move right */
-  #titleBackBtn.show,
-  .title-back-btn.show {
-    order: 3 !important;
-    margin-left: auto !important;
-    margin-right: 10px !important;
-    position: static !important;
-    transform: none !important;
-  }
-  .title-actions {
-    order: 4 !important;
-    margin-left: 0 !important;
-    flex: 0 0 auto !important;
-  }
-  /* Force hide on desktop even in landscape */
-  body.is-desktop #titleBackBtn,
-  body.is-desktop .title-back-btn {
-    display: none !important;
-  }
-}
-@media (min-width: 900px) and (max-height: 650px) {
-  .titlebar .title-center {
-    position: static !important;
-    transform: none !important;
-    flex: 1 1 auto !important;
-    margin-left: 12px !important;
-  }
-  #titleBackBtn.show {
-    margin-left: auto !important;
-    order: 3 !important;
-  }
-  body.is-desktop #titleBackBtn {
-    display: none !important;
-  }
-}
-
-/* --- 2. Keyboard gap fix for mobile --- */
-html { height: -webkit-fill-available; }
-body {
-  min-height: 100vh;
-  min-height: 100dvh;
-  min-height: -webkit-fill-available;
-}
-.os-window, #osWindow {
-  height: 100vh;
-  height: 100dvh;
-  height: 100svh;
-  min-height: -webkit-fill-available;
-}
-.viewport {
-  height: 100% !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch;
-}
-.screen {
-  min-height: 0 !important;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom)) !important;
-}
-body.keyboard-open { overflow: hidden; }
-</style>
-<style id="fantasy-card-alignment-fix">
-/* --- RESET outer panels that were broken by previous broad selector --- */
-#screen-fantasy .glass.glass-blur.panel-pad {
-  display: block !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  padding: 14px !important;
-  text-align: left !important;
-  justify-content: unset !important;
-}
-#screen-fantasy .glass.glass-blur:not(.panel-pad) {
-  /* salary used bar - keep its flex */
-  display: flex !important;
-}
-
-/* Ensure containers are full width, column, no clipping */
-#fantasyPlayerPool,
-#fantasyCrewSlots,
-#fantasyShopList,
-#fantasyGameFilter,
-#fantasyPositionFilter {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  box-sizing: border-box !important;
-}
-#fantasyPlayerPool,
-#fantasyCrewSlots {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 8px !important;
-  align-items: stretch !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-/* --- Player row cards - properly aligned full width --- */
-#fantasyPlayerPool > .glass,
-#fantasyPlayerPool > div.glass,
-#fantasyCrewSlots > .glass,
-#fantasyCrewSlots > div.glass,
-#fantasyCrewSlots > .glass.glass-blur,
-#fantasyShopList > .glass,
-#fantasyShopList > div.glass {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  margin: 0 !important;
-  box-sizing: border-box !important;
-  padding: 12px 14px !important;
-  border-radius: 14px !important;
-  gap: 12px !important;
-  text-align: left !important;
-  overflow: hidden !important;
-}
-
-/* Text side */
-#fantasyPlayerPool > .glass > div:first-child,
-#fantasyPlayerPool > div.glass > div:first-child {
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  font-size: 14px !important;
-  font-weight: 500 !important;
-  line-height: 1.2 !important;
-}
-
-/* Crew slots - POS label fixed */
-#fantasyCrewSlots > .glass > div:nth-child(1) {
-  flex: 0 0 52px !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.04em !important;
-  opacity: 0.6 !important;
-  white-space: nowrap !important;
-}
-#fantasyCrewSlots > .glass > div:nth-child(2) {
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  font-size: 14px !important;
-  text-align: left !important;
-}
-
-/* Proportionate +Add / Remove buttons */
-#fantasyPlayerPool .btn[data-addplayer],
-#fantasyPlayerPool .btn.primary,
-#screen-fantasy .glass .btn[data-addplayer],
-#screen-fantasy .glass .btn.primary,
-#fantasyCrewSlots .btn,
-#fantasyShopList .btn {
-  flex: 0 0 auto !important;
-  width: auto !important;
-  min-width: 64px !important;
-  max-width: 86px !important;
-  height: 30px !important;
-  min-height: 30px !important;
-  padding: 0 14px !important;
-  font-size: 12.5px !important;
-  font-weight: 700 !important;
-  border-radius: 999px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  line-height: 1 !important;
-  box-shadow: 0 4px 12px rgba(255,47,74,0.22) !important;
-}
-#fantasyCrewSlots .btn[data-removeslot] {
-  min-width: 32px !important;
-  max-width: 32px !important;
-  width: 32px !important;
-  height: 30px !important;
-  padding: 0 !important;
-  font-size: 14px !important;
-  background: rgba(0,0,0,0.06) !important;
-  color: var(--muted) !important;
-  border: 1px solid rgba(0,0,0,0.08) !important;
-  box-shadow: none !important;
-}
-
-/* Fix outer scroll clipping */
-#screen-fantasy {
-  overflow-x: hidden !important;
-}
-#screen-fantasy .viewport,
-#screen-fantasy #viewport {
-  overflow-x: hidden !important;
-}
-</style>
-
-
-
-<script id="keyboard-gap-fix-js">
-(function(){
-  function resetViewport(){
-    try {
-      window.scrollTo(0,0);
-      if(document.documentElement) document.documentElement.scrollTop = 0;
-      if(document.body) document.body.scrollTop = 0;
-      var vp = document.getElementById('viewport');
-      if(vp) vp.scrollTop = 0;
-      var active = document.querySelector('.screen.active');
-      if(active) active.scrollTop = 0;
-      var os = document.getElementById('osWindow');
-      if(os) os.scrollTop = 0;
-      var h = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
-      document.documentElement.style.setProperty('--app-vh', h + 'px');
-      void document.body.offsetHeight;
-      window.dispatchEvent(new Event('resize'));
-      setTimeout(function(){ window.dispatchEvent(new Event('resize')); }, 150);
-      setTimeout(function(){ 
-        document.documentElement.style.removeProperty('--app-vh'); 
-        document.body.style.height = '';
-        document.documentElement.style.height = '';
-      }, 400);
-    } catch(e){}
-  }
-  function patchGateObserver(){
-    var gate = document.getElementById('accessGate');
-    if(!gate || gate._kbPatched) return;
-    gate._kbPatched = true;
-    var obs = new MutationObserver(function(mutations){
-      mutations.forEach(function(m){
-        if(m.attributeName === 'style'){
-          var isHidden = gate.style.display === 'none' || getComputedStyle(gate).display === 'none';
-          if(isHidden){
-            document.body.style.overflow = '';
-            document.body.classList.remove('gate-blur-active');
-            setTimeout(resetViewport, 30);
-            setTimeout(resetViewport, 200);
-            setTimeout(resetViewport, 550);
-          }
-        }
-      });
-    });
-    obs.observe(gate, {attributes: true, attributeFilter: ['style']});
-  }
-  function bindInput(){
-    var inp = document.getElementById('gatePassword');
-    if(!inp || inp.dataset.kbBound) return;
-    inp.dataset.kbBound = '1';
-    inp.addEventListener('focus', function(){ document.body.classList.add('keyboard-open'); });
-    inp.addEventListener('blur', function(){
-      document.body.classList.remove('keyboard-open');
-      setTimeout(resetViewport, 30);
-      setTimeout(resetViewport, 180);
-      setTimeout(resetViewport, 400);
-      setTimeout(resetViewport, 700);
-    });
-  }
-  if(window.visualViewport){
-    var lastH = window.visualViewport.height;
-    window.visualViewport.addEventListener('resize', function(){
-      var gate = document.getElementById('accessGate');
-      var gateVisible = gate && getComputedStyle(gate).display !== 'none';
-      if(!gateVisible){
-        if(window.visualViewport.height > lastH + 10){ setTimeout(resetViewport, 30); }
-        lastH = window.visualViewport.height;
-      }
-    });
-  }
-  window.addEventListener('pageshow', function(){ setTimeout(resetViewport, 100); });
-  function init(){
-    patchGateObserver();
-    bindInput();
-    var bodyObs = new MutationObserver(function(){ patchGateObserver(); bindInput(); });
-    bodyObs.observe(document.body, {childList: true, subtree: false});
-    setTimeout(resetViewport, 600);
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-})();
-</script>
-<script id="menu-hide-on-desktop-fix">
-(function(){
-  // Ensure body gets is-desktop class based on current screen
-  function updateDesktopClass(screenName){
-    try {
-      var isDesktop = (screenName === 'desktop') || document.getElementById('screen-desktop')?.classList.contains('active');
-      document.body.classList.toggle('is-desktop', !!isDesktop);
-      var btn = document.getElementById('titleBackBtn');
-      if(btn){
-        if(isDesktop){
-          btn.classList.remove('show');
-          btn.style.display = 'none';
-        } else {
-          // let existing logic handle show, but ensure display if show present
-          if(btn.classList.contains('show')) btn.style.display = '';
-        }
-      }
-    } catch(e){}
-  }
-  // Patch switchScreen if exists
-  function patchSwitch(){
-    if(window.switchScreen && !window.switchScreen._patchedMenu){
-      var orig = window.switchScreen;
-      window.switchScreen = function(next){
-        var res = orig.apply(this, arguments);
-        setTimeout(function(){ updateDesktopClass(next); }, 10);
-        return res;
-      };
-      window.switchScreen._patchedMenu = true;
-    }
-  }
-  // Also watch screen changes via MutationObserver
-  function observeScreens(){
-    var viewport = document.getElementById('viewport');
-    if(!viewport) return;
-    var obs = new MutationObserver(function(){
-      var active = document.querySelector('.screen.active');
-      if(active) updateDesktopClass(active.dataset.screen || active.id.replace('screen-',''));
-    });
-    obs.observe(viewport, {attributes: true, subtree: true, attributeFilter: ['class']});
-  }
-  function init(){
-    patchSwitch();
-    observeScreens();
-    // initial
-    setTimeout(function(){
-      var active = document.querySelector('.screen.active');
-      if(active) updateDesktopClass(active.dataset.screen || 'desktop');
-      else updateDesktopClass('desktop');
-    }, 100);
-    setInterval(patchSwitch, 1000);
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-})();
-</script>
-
 </head>
 <body>
   <div id="gateBlurOverlay" aria-hidden="true"></div>
@@ -2083,7 +1694,9 @@ body.keyboard-open { overflow: hidden; }
 
         <!-- SETTINGS -->
         <section class="screen" data-screen="settings" id="screen-settings">
-          
+          <div class="quick-nav">
+            <button class="quick-nav-btn" data-go="about">ℹ️ About</button>
+          </div>
 
           <div class="settings">
             <div class="toggle-list">
@@ -2132,7 +1745,9 @@ body.keyboard-open { overflow: hidden; }
 
         <!-- ABOUT -->
         <section class="screen" data-screen="about" id="screen-about">
-          
+          <div class="quick-nav">
+            <button class="quick-nav-btn" data-go="settings">⚙️ Settings</button>
+          </div>
           <div class="about">
             <div class="glass glass-blur panel-pad">
               <div style="display:flex; align-items:center; gap:12px;">
@@ -2741,7 +2356,7 @@ const TEAMS = [];
       }
       const pitchHTML = games.length ? games.map(g=>{
         const isDark = document.body.classList.contains('dark');
-        const cardStyle = isDark ? 'background:rgba(32,42,64,0.72);border-radius:12px;padding:9px 7px;border:1px solid rgba(255,255,255,0.14);min-width:0;overflow:hidden;color:#eef2ff;' : 'background:rgba(255,255,255,0.48);border-radius:12px;padding:9px 7px;border:1px solid rgba(255,255,255,0.8);min-width:0;overflow:hidden;';
+        const cardStyle = isDark ? 'background:rgba(255,255,255,0.08);border-radius:12px;padding:9px 7px;border:1px solid rgba(255,255,255,0.14);min-width:0;overflow:hidden;color:#eef2ff;' : 'background:rgba(255,255,255,0.48);border-radius:12px;padding:9px 7px;border:1px solid rgba(255,255,255,0.8);min-width:0;overflow:hidden;';
         function pitcherBlock(side, abbr, name){
           const era=statCell(g[`pitcher${side}_era`],2), whip=statCell(g[`pitcher${side}_whip`],2);
           const k9=statCell(g[`pitcher${side}_k9`],1), ip=g[`pitcher${side}_ip`]||'—';
@@ -3695,10 +3310,7 @@ const TEAMS = [];
           obs.observe(cover,{attributes:true,attributeFilter:['style']});
         }
 
-        // Always show cover on page load — clear session so cover appears every time
-        sessionStorage.removeItem(SESSION_KEY);
-        try { localStorage.removeItem(SESSION_KEY); localStorage.removeItem(LEGACY_SESSION); } catch{}
-        if(false && hasValidSession()){
+        if(hasValidSession()){
           const c=document.getElementById(COVER_ID); if(c) c.style.display='none';
           const g=document.getElementById(GATE_ID); if(g) g.style.display='none';
           document.body.classList.remove('gate-blur-active');
@@ -3995,7 +3607,7 @@ const TEAMS = [];
         let filtered=fantasyGameFilter==='all'?fantasyPlayerPool:fantasyPlayerPool.filter(p=>p.gameId===fantasyGameFilter);
         if(fantasyPosFilter!=='all') filtered=filtered.filter(p=>p.pos===fantasyPosFilter);
         if(!filtered.length){ poolEl.innerHTML=`<div style="padding:24px;text-align:center;color:var(--muted);">No ${fantasySport.toUpperCase()} players — run ${fantasySport}_ace.py</div>`; }
-        else { poolEl.innerHTML=filtered.slice(0,40).map(p=>`<div class="glass" style="padding:10px 14px;border-radius:14px;display:flex;justify-content:space-between;"><div>${p.name} ${p.team} ${p.pos}</div><button class="btn primary" data-addplayer="${p.name}">+ Add</button></div>`).join(''); if(!poolEl._clickWired){ poolEl._clickWired=true; poolEl.addEventListener('click', e=>{ const b=e.target.closest('[data-addplayer]'); if(!b) return; const p=fantasyPlayerPool.find(x=>x.name===b.dataset.addplayer); if(!p) return; for(let i=0;i<contest.slots.length;i++){ if(!fantasyCrew[i] && (contest.slots[i]===p.pos||contest.slots[i]==='FLEX'||contest.slots[i].includes(p.pos))){ fantasyCrew[i]=p; break; } } saveFantasy(); renderFantasy(); }); } }
+        else { poolEl.innerHTML=filtered.slice(0,40).map(p=>`<div class="glass glass-blur fantasy-player-row" style="padding:10px 14px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;"><div style="flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;">${p.name} <span style="opacity:.7;font-weight:500;">${p.team} ${p.pos}</span></div><button class="btn primary fantasy-add-btn" data-addplayer="${p.name}" style="flex:0 0 auto;width:auto;height:32px;padding:0 16px;border-radius:999px;font-size:12.5px;">+ Add</button></div>`).join(''); if(!poolEl._clickWired){ poolEl._clickWired=true; poolEl.addEventListener('click', e=>{ const b=e.target.closest('[data-addplayer]'); if(!b) return; const p=fantasyPlayerPool.find(x=>x.name===b.dataset.addplayer); if(!p) return; for(let i=0;i<contest.slots.length;i++){ if(!fantasyCrew[i] && (contest.slots[i]===p.pos||contest.slots[i]==='FLEX'||contest.slots[i].includes(p.pos))){ fantasyCrew[i]=p; break; } } saveFantasy(); renderFantasy(); }); } }
       }
     }
     function renderFantasyShop(){
@@ -4008,6 +3620,125 @@ const TEAMS = [];
       el.innerHTML=srcPool.slice(0,30).map(p=>`<div class="game" style="padding:10px;">${p.name} ${p.team} ${p.pos}</div>`).join('');
     }
     try{ initFantasy(); }catch(e){}
+
+    // ── Fantasy Crew button listeners ──────────────────────────────────
+    // These buttons existed in the HTML but had zero event listeners —
+    // Clear Crew, Copy Lineup, and Optimize were all purely decorative.
+
+    // CLEAR CREW: reset all slots to null and re-render
+    (function() {
+      const btn = document.getElementById('fantasyClear');
+      if (!btn) return;
+      btn.addEventListener('click', function() {
+        const map = getCurrentContestMap();
+        const contest = map[fantasyContest] || map.classic;
+        fantasyCrew = contest.slots.map(() => null);
+        saveFantasy();
+        renderFantasy();
+        if (typeof beep === 'function') beep('click');
+      });
+    })();
+
+    // COPY LINEUP: format current crew as a human-readable DFS slip and copy
+    (function() {
+      const btn = document.getElementById('fantasyCopy');
+      if (!btn) return;
+      btn.addEventListener('click', function() {
+        const map = getCurrentContestMap();
+        const contest = map[fantasyContest] || map.classic;
+        const filled = fantasyCrew.filter(Boolean);
+        if (!filled.length) {
+          btn.textContent = '⚠ No players';
+          setTimeout(() => { btn.textContent = 'Copy Lineup'; }, 1800);
+          return;
+        }
+        const totalSalary = filled.reduce((s, p) => s + (p.salary || 0), 0);
+        const lines = contest.slots.map((pos, i) => {
+          const p = fantasyCrew[i];
+          return p
+            ? `${pos.padEnd(4)} ${p.name} (${p.team}) $${(p.salary||0).toLocaleString()}`
+            : `${pos.padEnd(4)} ---`;
+        });
+        lines.push('');
+        lines.push(`Total salary: $${totalSalary.toLocaleString()} / $${(contest.salary||50000).toLocaleString()}`);
+        lines.push(`Contest: ${contest.name}`);
+        const text = lines.join('\n');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = '✓ Copied!';
+            setTimeout(() => { btn.textContent = 'Copy Lineup'; }, 1800);
+          }).catch(() => {
+            btn.textContent = '✓ Copied!';
+            setTimeout(() => { btn.textContent = 'Copy Lineup'; }, 1800);
+          });
+        } else {
+          // iOS fallback
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+          document.body.appendChild(ta);
+          ta.focus(); ta.select();
+          try { document.execCommand('copy'); } catch(e) {}
+          document.body.removeChild(ta);
+          btn.textContent = '✓ Copied!';
+          setTimeout(() => { btn.textContent = 'Copy Lineup'; }, 1800);
+        }
+        if (typeof beep === 'function') beep('click');
+      });
+    })();
+
+    // OPTIMIZE: greedy knapsack by proj/salary ratio, respecting salary cap
+    // and slot position requirements. Same approach as real DFS optimizers
+    // (greedy approximation — not LP, but runs instantly in the browser).
+    (function() {
+      const btn = document.getElementById('fantasyOptimize');
+      if (!btn) return;
+      btn.addEventListener('click', function() {
+        ensureFantasyPool();
+        const map = getCurrentContestMap();
+        const contest = map[fantasyContest] || map.classic;
+        const cap = contest.salary || 50000;
+        const slots = contest.slots;
+
+        // Sort pool by proj desc (highest projected points first)
+        const pool = [...fantasyPlayerPool].sort((a, b) => (b.proj || 0) - (a.proj || 0));
+
+        const crew = slots.map(() => null);
+        let usedSalary = 0;
+        const usedNames = new Set();
+
+        // Fill each slot greedily: find highest-proj eligible player that fits
+        for (let i = 0; i < slots.length; i++) {
+          const pos = slots[i];
+          const remaining = slots.length - i - 1;
+          // Reserve at least $3500 per remaining slot (minimum viable salary)
+          const maxForThisSlot = cap - usedSalary - (remaining * 3500);
+
+          for (const p of pool) {
+            if (usedNames.has(p.name)) continue;
+            if ((p.salary || 0) > maxForThisSlot) continue;
+            // Position eligibility: exact match, FLEX (any non-DST/K), or slot includes pos
+            const eligible =
+              p.pos === pos ||
+              (pos === 'FLEX' && !['DST','K','P'].includes(p.pos)) ||
+              (pos === 'UTIL' && !['DST','K'].includes(p.pos)) ||
+              pos.includes(p.pos);
+            if (!eligible) continue;
+            crew[i] = p;
+            usedSalary += (p.salary || 0);
+            usedNames.add(p.name);
+            break;
+          }
+        }
+
+        fantasyCrew = crew;
+        saveFantasy();
+        renderFantasy();
+        btn.textContent = '✓ Optimized';
+        setTimeout(() => { btn.textContent = '⚡ Optimize'; }, 2000);
+        if (typeof beep === 'function') beep('click');
+      });
+    })();
 
     function brQuickLog(label, stakeUSD, odds, won){
       const data = brLoad() || brDefault();
@@ -4477,128 +4208,922 @@ if (typeof window.dismissCover !== 'function') {
 
 
 
-<style id="final-fix-v9-body">
-/* 1. REMOVE CARDS FROM BEHIND ALL CHIPS - HIGH SPECIFICITY FOR BOTH LIGHT/DARK */
-html body .quick-nav,
-body .quick-nav,
-html body.dark .quick-nav,
-body.dark .quick-nav,
-html.dark body .quick-nav,
-html.light body .quick-nav,
-html body.light .quick-nav,
-body.light .quick-nav,
-#screen-dashboard .quick-nav,
-#screen-standings .quick-nav,
-#screen-nfl-standings .quick-nav,
-#screen-nba-standings .quick-nav,
-#screen-calendar .quick-nav {
+
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
+<style id="parlayos-dashboard-full-glass">
+/* Hide numbers */
+html body .menu-btn .num { display: none !important; }
+html body .menu-btn { padding-top: 22px !important; min-height: 112px !important; }
+/* Compact menu buttons on phone (≤480px) so 16 items don't need 3000px of scrolling */
+@media (max-width: 480px) {
+  html body .menu-btn { min-height: 88px !important; padding: 14px 12px 36px !important; }
+  html body .menu-btn h3 { margin: 6px 0 4px !important; font-size: 14px !important; }
+  html body .menu-btn p { font-size: 11.5px !important; line-height: 1.35 !important; }
+}
+
+/* Hide scrollbar */
+html body .screen { overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; }
+html body .screen::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+html body .screen { scrollbar-width: none !important; -ms-overflow-style: none !important; }
+
+/* Dashboard button padding */
+html body .game > .game-actions { display: flex !important; gap: 8px !important; padding: 12px !important; width: 100% !important; box-sizing: border-box !important; }
+html body .game .game-actions .btn { flex: 1 1 0 !important; min-height: 40px !important; height: 40px !important; padding: 0 10px !important; font-size: 13px !important; font-weight: 700 !important; border-radius: 12px !important; }
+
+/* REMOVE LARGE BANNER BEHIND CART */
+html body #parlayPanel,
+html body .parlay-bubble-panel,
+html body #bubbleList,
+html body #parlaySlots,
+html body .build,
+html body #screen-parlay .cards,
+html body #screen-parlay {
   background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
   border: none !important;
-  border-color: transparent !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  padding: 0 !important;
-  margin: 0 0 12px 0 !important;
-  border-radius: 0 !important;
 }
 
+/* Keep individual slot cards as glass, not banner — light mode only;
+   dark mode already gets its glass tone from the REFRACTIVE GLASS SYSTEM. */
+html body:not(.dark) .slot {
+  background: linear-gradient(180deg, rgba(255,255,255,0.34), rgba(255,255,255,0.18)) !important;
+  border: 1px solid rgba(255,255,255,0.34) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.42) !important;
+  backdrop-filter: none !important;
+}
+
+/* FLOATING CART BUTTON ONLY - no banner */
+html body .parlay-bubble,
+html body #parlayBubble {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+html body:not(.dark) .parlay-bubble-btn,
+html body:not(.dark) #parlayBubbleBtn {
+  background: rgba(255,255,255,0.88) !important;
+  border: 1px solid rgba(255,255,255,0.50) !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.60) !important;
+}
+
+/* === DASHBOARD FULL GLASS - MLB/NFL/NBA (light mode) === */
+/* Dark mode already gets consistent glass + legible text from the
+   REFRACTIVE GLASS SYSTEM further up the file, so everything color-related
+   in this section is scoped to light mode only — it must never fight
+   dark mode's own styling the way it used to. */
+
+/* Search box */
+html body:not(.dark) .search,
+html body:not(.dark) #dashSearch,
+html body:not(.dark) #nflDashSearch,
+html body:not(.dark) #nbaDashSearch,
+html body:not(.dark) .toolbar .search {
+  background: rgba(255,255,255,0.28) !important;
+  border: 1px solid rgba(255,255,255,0.38) !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.50) !important;
+}
+html body:not(.dark) .search input { background: transparent !important; color: #1e293b !important; }
+html body:not(.dark) .search input::placeholder { color: rgba(30,41,59,0.55) !important; }
+
+/* Toolbar container transparent (mode-agnostic) */
 html body .toolbar,
-body .toolbar,
-html body.dark .toolbar,
-body.dark .toolbar,
-html.dark body .toolbar,
-#screen-dashboard .toolbar,
-#screen-nfl-dashboard .toolbar,
-#screen-nba-dashboard .toolbar {
-  background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
-  border: none !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  padding: 0 !important;
-  border-radius: 0 !important;
-}
-
-html body .stats-tab-row,
-body .stats-tab-row,
-html body.dark .stats-tab-row,
-body.dark .stats-tab-row,
-html.dark body .stats-tab-row,
 html body .chip-row,
-body .chip-row,
-body.dark .chip-row,
-html body.dark .chip-row {
+html body #dashChips,
+html body #nflDashChips,
+html body #nbaDashChips {
   background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Filter chips: All, Edge >2%, Moneyline - GLASS (light mode) */
+html body:not(.dark) .chip,
+html body:not(.dark) .chip-row .chip,
+html body:not(.dark) #dashChips .chip,
+html body:not(.dark) #nflDashChips .chip,
+html body:not(.dark) #nbaDashChips .chip,
+html body:not(.dark) .toolbar .chip {
+  background: rgba(255,255,255,0.32) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55) !important;
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+html body:not(.dark) .chip.active {
+  background: rgba(255,255,255,0.48) !important;
+  border-color: rgba(255,255,255,0.60) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.70) !important;
+}
+
+/* Shuffle odds (light mode) */
+html body:not(.dark) #dashShuffle,
+html body:not(.dark) #nflDashShuffle,
+html body:not(.dark) #nbaDashShuffle,
+html body:not(.dark) .toolbar .btn {
+  background: rgba(255,255,255,0.32) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55) !important;
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+
+/* GAME CARDS — light mode glass; dark mode is handled by the
+   REFRACTIVE GLASS SYSTEM (no more forcing light glass + dark text
+   into dark mode here). */
+html body:not(.dark) .game,
+html body:not(.dark) #dashboardCards .game,
+html body:not(.dark) #nflDashboardCards .game,
+html body:not(.dark) #nbaDashboardCards .game {
+  background: linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.20)) !important;
+  border: 1px solid rgba(255,255,255,0.40) !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.50) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  color: #1e293b !important;
+}
+
+/* Game head */
+html body:not(.dark) .game-head {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255,255,255,0.22) !important;
+}
+html body:not(.dark) .game-head .tv { color: rgba(30,41,59,0.70) !important; }
+
+/* Badges HOT EDGE / MODEL and % model (light mode) */
+html body:not(.dark) .game .badge,
+html body:not(.dark) .game-head .badge,
+html body:not(.dark) .badge,
+html body:not(.dark) .badge.hot {
+  background: rgba(255,255,255,0.32) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+html body:not(.dark) .badge.hot {
+  background: linear-gradient(180deg, rgba(255,77,103,0.18), rgba(255,77,103,0.10)) !important;
+  border-color: rgba(255,77,103,0.28) !important;
+  color: #be123c !important;
+}
+
+/* Matchup (light mode) */
+html body:not(.dark) .matchup {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255,255,255,0.18) !important;
+}
+html body:not(.dark) .matchup .team { color: #1e293b !important; }
+html body:not(.dark) .matchup .vs { color: rgba(30,41,59,0.55) !important; }
+
+/* Inner market cards: OVER/UNDER, PITCHER K, MONEYLINE (light mode) */
+html body:not(.dark) .market,
+html body:not(.dark) .odds-grid .market,
+html body:not(.dark) #dashboardCards .market,
+html body:not(.dark) #nflDashboardCards .market,
+html body:not(.dark) #nbaDashboardCards .market {
+  background: rgba(255,255,255,0.26) !important;
+  border: 1px solid rgba(255,255,255,0.36) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.42) !important;
+  backdrop-filter: none !important;
+  border-radius: 16px !important;
+}
+html body:not(.dark) .market .label { color: rgba(30,41,59,0.70) !important; }
+html body:not(.dark) .market .pick { color: #1e293b !important; font-weight: 800 !important; }
+html body:not(.dark) .market .mini { color: rgba(30,41,59,0.60) !important; }
+html body:not(.dark) .market .meter { background: rgba(0,0,0,0.08) !important; }
+html body .market .meter i { background: linear-gradient(90deg, #ff4d67, #ff8a3a, #8b8af6) !important; }
+
+/* Bottom buttons (light mode) */
+html body:not(.dark) .game-actions .btn {
+  background: rgba(255,255,255,0.28) !important;
+  border: 1px solid rgba(255,255,255,0.38) !important;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.50) !important;
+  color: #1e293b !important;
+}
+html body .game-actions .btn.primary,
+html body .game-actions .btn.picked,
+html body .game-actions .btn.primary-picked {
+  background: linear-gradient(180deg, rgba(255,77,103,0.92), rgba(217,35,63,0.88)) !important;
+  color: white !important;
+  border-color: rgba(255,255,255,0.42) !important;
+  box-shadow: 0 6px 16px rgba(255,47,74,0.24), inset 0 1px 0 rgba(255,255,255,0.40) !important;
+}
+
+/* Menu and other glass (light mode) */
+html body:not(.dark) .menu-btn,
+html body:not(.dark) .glass,
+html body:not(.dark) .glass-blur {
+  background: linear-gradient(180deg, rgba(255,255,255,0.32), rgba(255,255,255,0.18)) !important;
+  border: 1px solid rgba(255,255,255,0.38) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.48) !important;
+  backdrop-filter: none !important;
+}
+
+/* === FIX: Glass for Menu, Quick-Nav, Search on all screens + Fantasy Crew clickable + +Add sizing === */
+
+/* Menu button ← Menu - glass (light mode; dark mode handled by
+   REFRACTIVE GLASS SYSTEM + the dark-mode fix further down) */
+html body:not(.dark) .title-back-btn,
+html body:not(.dark) #titleBackBtn {
+  background: rgba(255,255,255,0.32) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55) !important;
+  backdrop-filter: blur(18px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.4) !important;
+  color: #1e293b !important;
+  font-weight: 700 !important;
+  border-radius: 999px !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+html body .title-back-btn,
+html body #titleBackBtn {
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 10 !important;
+  border-radius: 999px !important;
+}
+
+/* Quick-nav pills - Parlayinator, MLB Stats, etc - glass (light mode) */
+html body:not(.dark) .quick-nav-btn,
+html body:not(.dark) .quick-nav .quick-nav-btn,
+html body:not(.dark) [data-go].quick-nav-btn {
+  background: rgba(255,255,255,0.32) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55) !important;
+  backdrop-filter: blur(18px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.4) !important;
+  color: #1e293b !important;
+  font-weight: 700 !important;
+  border-radius: 999px !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+html body .quick-nav-btn,
+html body .quick-nav .quick-nav-btn,
+html body [data-go].quick-nav-btn {
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 10 !important;
+  border-radius: 999px !important;
+}
+
+/* Search - glass on EVERY screen (light mode) */
+html body:not(.dark) .search,
+html body:not(.dark) .toolbar .search,
+html body:not(.dark) .screen .search,
+html body:not(.dark) #dashSearch,
+html body:not(.dark) #nflDashSearch,
+html body:not(.dark) #nbaDashSearch,
+html body:not(.dark) #fantasySearch,
+html body:not(.dark) input[type="search"],
+html body:not(.dark) .search input {
+  background: transparent !important;
+}
+html body:not(.dark) .search,
+html body:not(.dark) .toolbar .search,
+html body:not(.dark) div.search {
+  background: rgba(255,255,255,0.32) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55) !important;
+  border-radius: 999px !important;
+}
+html body .search input,
+html body .toolbar .search input {
+  background: transparent !important;
   border: none !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+}
+
+/* Fantasy Crew action buttons - Clear Crew, Copy Lineup, Optimize - glass + clickable (light mode) */
+html body:not(.dark) #fantasyClear,
+html body:not(.dark) #fantasyOptimize,
+html body:not(.dark) .btn#fantasyClear,
+html body:not(.dark) .btn#fantasyOptimize,
+html body:not(.dark) button#fantasyClear,
+html body:not(.dark) button#fantasyOptimize {
+  background: rgba(255,255,255,0.32) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.55) !important;
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+html body #fantasyClear,
+html body #fantasyOptimize,
+html body .btn#fantasyClear,
+html body .btn#fantasyOptimize,
+html body button#fantasyClear,
+html body button#fantasyOptimize {
+  flex: 1 1 0 !important;
+  height: 40px !important;
+  border-radius: 14px !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 10 !important;
+  opacity: 1 !important;
+}
+
+html body #fantasyCopy,
+html body .btn#fantasyCopy,
+html body .btn.primary#fantasyCopy,
+html body button#fantasyCopy {
+  background: linear-gradient(180deg, rgba(255,77,103,0.92), rgba(217,35,63,0.88)) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  box-shadow: 0 6px 16px rgba(255,47,74,0.24), inset 0 1px 0 rgba(255,255,255,0.40) !important;
+  color: white !important;
+  font-weight: 800 !important;
+  flex: 1 1 0 !important;
+  height: 40px !important;
+  border-radius: 14px !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 10 !important;
+  opacity: 1 !important;
+}
+
+/* +Add buttons - FIX SIZE so they don't cover names (mode-agnostic: it's
+   already a solid red brand button in both modes, sizing only here) */
+html body #fantasyPlayerPool .btn,
+html body #fantasyPlayerPool .btn.primary,
+html body .fantasy-add-btn,
+html body button[data-addplayer] {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: 72px !important;
+  max-width: 96px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 0 14px !important;
+  border-radius: 999px !important;
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: -0.01em !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 10 !important;
+  background: linear-gradient(180deg, rgba(255,77,103,0.92), rgba(217,35,63,0.88)) !important;
+  color: white !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  box-shadow: 0 4px 12px rgba(255,47,74,0.20), inset 0 1px 0 rgba(255,255,255,0.40) !important;
+  opacity: 1 !important;
+}
+
+/* Player row - ensure name doesn't get covered */
+html body .fantasy-player-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 12px !important;
+  pointer-events: auto !important;
+}
+html body .fantasy-player-row > div:first-child {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 13.5px !important;
+}
+
+/* Ensure all interactive layers are clickable - fix glass overlay blocking */
+html body #fantasyPlayerPool,
+html body #fantasyCrewSlots,
+html body #fantasyPlayerPool .glass,
+html body #fantasyCrewSlots .glass,
+html body #fantasyPlayerPool .glass-blur,
+html body #fantasyCrewSlots .glass-blur {
+  pointer-events: auto !important;
+}
+html body .glass::before,
+html body .glass::after,
+html body .glass-blur::before,
+html body .glass-blur::after,
+html body .menu-btn::before,
+html body .menu-btn::after,
+html body .game::before,
+html body .game::after,
+html body .quick-nav-btn::before,
+html body .quick-nav-btn::after,
+html body .title-back-btn::before,
+html body .title-back-btn::after,
+html body .search::before,
+html body .search::after {
+  pointer-events: none !important;
+}
+
+/* Remove any disabled look that might block */
+html body #fantasyClear:disabled,
+html body #fantasyCopy:disabled,
+html body #fantasyOptimize:disabled {
+  pointer-events: auto !important;
+  opacity: 1 !important;
+}
+
+/* Small remove button in crew slots */
+html body #fantasyCrewSlots .btn[data-removeslot] {
+  flex: 0 0 auto !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
   padding: 0 !important;
-  margin: 0 0 10px 0 !important;
-  border-radius: 0 !important;
+  border-radius: 999px !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  pointer-events: auto !important;
+  z-index: 10 !important;
 }
 
-/* 2. TITLE BAR - handled by REFRACTIVE GLASS SYSTEM */
-
-/* os-window: transparent blur — handled by REFRACTIVE GLASS SYSTEM */
-html body .screen,
-body .screen {
-  background: transparent !important;
-}
-
-/* 3. FIX COLOR MISMATCH ON STATS SCREEN - MLB/NBA/NFL - DARK MODE */
-body.dark .game {
-  background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)) !important;
-  border-color: rgba(255,255,255,0.14) !important;
-}
-body.dark .game div[style*="background:rgba(255,255,255,0.48)"],
-body.dark .game div[style*="background: rgba(255,255,255,0.48)"],
-html body.dark .game div[style*="rgba(255,255,255,0.48)"] {
-  background: rgba(32,42,64,0.72) !important;
-  background-color: rgba(32,42,64,0.72) !important;
-  border-color: rgba(255,255,255,0.14) !important;
-  color: #eef2ff !important;
-}
-body.dark .game div[style*="background:rgba(255,255,255,0.48)"] span,
-body.dark .game div[style*="background:rgba(255,255,255,0.48)"] b,
-body.dark .game div[style*="background:rgba(255,255,255,0.48)"] div {
-  color: #cbd5e1 !important;
-}
-/* Fix inner pitcher stat blocks - light gray becoming dark glass */
-body.dark .game > div > div[style*="border-radius:12px"] {
-  background: rgba(32,42,64,0.72) !important;
-  border-color: rgba(255,255,255,0.14) !important;
-}
-/* Also for NBA/NFL cards if they use same pattern */
-body.dark .cards .game,
-body.dark #dashboardCards .game,
-body.dark #nflDashboardCards .game,
-body.dark #nbaDashboardCards .game {
-  background: linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.72)) !important;
-}
-
-/* Search square removal */
-html body .search input,
-body.dark .search input,
-#dashSearch, #nflDashSearch, #nbaDashSearch {
-  border: 0 !important;
-  outline: 0 !important;
-  box-shadow: none !important;
-  background: transparent !important;
-}
-
-/* Menu numbers left, text centered */
-html body .menu-btn .num { justify-content: flex-start !important; text-align: left !important; align-self: flex-start !important; width: 100% !important; }
-html body .menu-btn h3, html body .menu-btn p { text-align: center !important; width: 100% !important; margin-left: auto !important; margin-right: auto !important; }
-html body .menu-btn p { padding-right: 0 !important; }
 </style>
 
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
+
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function hasInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)return true}return false}function extractDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return href}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;if(hasInlineMediaSlot(target))return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=extractDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref)&&dataHref.replace(/#.*$/,"")!==loc){e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
+<!-- ── COMPREHENSIVE FIX: navy colors, scroll, menu buttons, search squares ── -->
+<style id="glass-fix-final">
+
+/* ══════════════════════════════════════════════════════════════════
+   GLASS CARD FIX — replace all solid navy backgrounds with
+   translucent glass across every dark-mode card, game, menu-btn.
+
+   Target value being replaced everywhere:
+     linear-gradient(180deg, rgba(32,42,64,0.88), rgba(18,26,42,0.62))
+   Replaced with:
+     translucent glass ~18–25% white with backdrop-filter
+   ══════════════════════════════════════════════════════════════════ */
+
+/* 1. Main card glass — .game, .menu-btn, .glass, .market, .meta etc */
+body.dark .game,
+body.dark .menu-btn,
+body.dark .glass,
+body.dark .market,
+body.dark .meta,
+body.dark .slot,
+body.dark .table-card,
+body.dark .clock-card,
+body.dark .odds-grid,
+body.dark .parlay-bubble-panel,
+body.dark .cal-cell,
+body.dark .notice {
+  background: rgba(255,255,255,0.10) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+
+/* 2. Restore text legibility — white/light on glass */
+body.dark .menu-btn h3,
+body.dark .game h3,
+body.dark h3 { color: #eef2ff !important; }
+
+body.dark .menu-btn p,
+body.dark .game p,
+body.dark .menu-btn .num,
+body.dark p { color: #a6b0c6 !important; }
+
+/* 3. Inner nested cards (pitcher boxes, stat tables inside .game) */
+body.dark .game .game-body > div,
+body.dark .game [style*="rgba(32"],
+body.dark .game [style*="rgba(18"] {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+
+/* 4. Buttons in dark mode — glass not navy */
+body.dark .btn:not(.primary) {
+  background: rgba(255,255,255,0.12) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: #eef2ff !important;
+}
+body.dark .crumb-btn {
+  background: rgba(255,255,255,0.10) !important;
+  color: #eef2ff !important;
+}
+
+/* 5. Shopping cart bubble icon circle — remove dark navy circle,
+      replace with light glass matching the rest of the UI */
+body.dark .parlay-bubble-btn .icon {
+  background: rgba(255,255,255,0.18) !important;
+  backdrop-filter: blur(16px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.30) !important;
+}
+
+/* 6. Quick-nav pills */
+body.dark .quick-nav-btn {
+  background: rgba(255,255,255,0.12) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #e8edf8 !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+/* 7. Titlebar — glass not navy */
+body.dark .titlebar,
+body.dark div.titlebar {
+  background: rgba(255,255,255,0.06) !important;
+  background-image: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12), inset 0 -1px 0 rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(32px) saturate(1.8) brightness(1.12) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(1.8) brightness(1.12) !important;
+}
+
+/* 8. Toolbar: transparent, not navy */
+body.dark .toolbar {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SEARCH SQUARES — remove input border/outline on all screens
+   ══════════════════════════════════════════════════════════════════ */
+html body .search,
+html body .toolbar .search,
+html body div.search {
+  background: rgba(255,255,255,0.22) !important;
+  border: 1px solid rgba(255,255,255,0.36) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.50) !important;
+  border-radius: 999px !important;
+}
+body.dark .toolbar .search,
+html body.dark .search,
+html body.dark .toolbar .search {
+  background: rgba(255,255,255,0.10) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+html body .search input,
+html body .toolbar .search input,
+html body div.search input,
+html body.dark .search input,
+html body.dark .toolbar .search input {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html body .search input:focus,
+html body .toolbar .search input:focus {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+html body .search input { color: #1e293b !important; }
+html body.dark .search input { color: #e2e8f0 !important; }
+html body .search input::placeholder { color: rgba(30,41,59,0.50) !important; }
+html body.dark .search input::placeholder { color: rgba(200,210,230,0.50) !important; }
+
+/* ══════════════════════════════════════════════════════════════════
+   CHIPS — fully transparent
+   ══════════════════════════════════════════════════════════════════ */
+html body .chip,
+html body .chip-row .chip,
+html body #dashChips .chip,
+html body #nflDashChips .chip,
+html body #nbaDashChips .chip,
+html body .toolbar .chip,
+html body.dark .chip,
+html body.dark .chip-row .chip,
+html body.dark #dashChips .chip,
+html body.dark #nflDashChips .chip,
+html body.dark #nbaDashChips .chip,
+html body.dark .toolbar .chip {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html body .chip.active,
+html body .chip-row .chip.active {
+  background: transparent !important;
+  color: var(--ink, #1c2230) !important;
+  border-color: var(--ink, #1c2230) !important;
+  font-weight: 800 !important;
+}
+html body.dark .chip { color: #a6b4cc !important; border-color: rgba(255,255,255,0.18) !important; }
+html body.dark .chip.active { background: transparent !important; color: #eef2ff !important; border-color: rgba(255,255,255,0.65) !important; }
+
+/* ══════════════════════════════════════════════════════════════════
+   SCROLL FIX — hero min-height was blocking scroll past fold
+   ══════════════════════════════════════════════════════════════════ */
+html body .hero { min-height: auto !important; min-height: unset !important; }
+html body .viewport { overflow-y: auto !important; -webkit-overflow-scrolling: touch !important; overflow-x: hidden !important; }
+
+/* ══════════════════════════════════════════════════════════════════
+   MENU BUTTON KEYBOARD BUG — iOS text-selection triggering keyboard
+   ══════════════════════════════════════════════════════════════════ */
+html body .menu-btn {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+/* Prevent text-selection on long-press without breaking tap propagation.
+   pointer-events:none on children kills iOS Safari click bubbling — use
+   user-select:none instead, which only suppresses text selection. */
+html body .menu-btn *,
+html body .menu-grid button * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+/* Explicit pointer-events:auto on the button guarantees taps always land */
+html body .menu-btn,
+html body .menu-grid button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TOOLBAR BUTTONS
+   ══════════════════════════════════════════════════════════════════ */
+html body #dashShuffle,
+html body #nflDashShuffle,
+html body #nbaDashShuffle,
+html body .toolbar .btn:not(.primary) {
+  background: rgba(255,255,255,0.26) !important;
+  border: 1px solid rgba(255,255,255,0.40) !important;
+  color: #1e293b !important;
+}
+html body.dark #dashShuffle,
+html body.dark #nflDashShuffle,
+html body.dark #nbaDashShuffle,
+html body.dark .toolbar .btn:not(.primary) {
+  background: rgba(255,255,255,0.10) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: #e8edf8 !important;
+}
+
+/* Quick-nav pills: glass look via opacity/border, no blur to avoid layer bloat */
+html body .quick-nav-btn {
+  background: rgba(255,255,255,0.26) !important;
+  border: 1px solid rgba(255,255,255,0.40) !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FINAL PASS: remaining solid-navy dark-mode surfaces → glass.
+   NOTE: backdrop-filter intentionally omitted from small/frequent
+   elements (.btn, .chip, .crumb-btn, .kpi, .toggle, etc.) to
+   prevent iOS Safari GPU memory exhaustion and tab crashes.
+   Blur is only applied to large card surfaces where it's visible.
+   Small elements use reduced opacity + border for the glass look.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Large surface elements — blur is perceptible here */
+body.dark .dock,
+body.dark .shutdown {
+  background: rgba(18,24,40,0.58) !important;
+  backdrop-filter: blur(20px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+}
+
+/* Small UI elements — glass look via opacity only, NO backdrop-filter */
+body.dark .kpi > div,
+body.dark .toggle,
+body.dark .parlay-bubble-panel .item,
+body.dark .mono-block {
+  background: rgba(255,255,255,0.10) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+}
+
+/* .btn: glass via opacity only */
+body.dark .btn:not(.primary) {
+  background: rgba(255,255,255,0.10) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #eef2ff !important;
+}
+
+/* .crumb-btn: glass via opacity only */
+body.dark .crumb-btn {
+  background: rgba(255,255,255,0.10) !important;
+  color: #eef2ff !important;
+}
+
+/* .chip: transparent — re-forced since a duplicate rule had
+   re-introduced a navy background later in the file */
+body.dark .chip {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+body.dark .chip.active {
+  background: transparent !important;
+  color: #eef2ff !important;
+  border-color: rgba(255,255,255,0.65) !important;
+}
+/* ══ CRASH FIX: Strip backdrop-filter from all repeated elements ════════
+   87 simultaneous compositor layers caused iOS Safari WebContent crash.
+   Blur kept ONLY on large unique singletons. Everything else: opacity only.
+   This block MUST be last to win the cascade over all prior !important rules.
+   ══════════════════════════════════════════════════════════════════════ */
+.quick-nav-btn,
+html body .quick-nav-btn,
+html body .quick-nav .quick-nav-btn,
+html body [data-go].quick-nav-btn,
+body.dark .quick-nav-btn {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.search,
+html body .search,
+html body .toolbar .search,
+html body div.search,
+html body.dark .search,
+html body.dark .toolbar .search,
+body.dark .toolbar .search {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.toolbar,
+.quick-nav,
+.stats-tab-row,
+.glass-blur,
+.menu-btn,
+.pill,
+.parlay-bubble-panel,
+body.dark .btn:not(.primary),
+body.dark .crumb-btn,
+body.dark .kpi > div,
+body.dark .toggle,
+body.dark .parlay-bubble-panel .item {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+/* .btn#fantasyCopy is the one .primary btn getting blur — remove it */
+.btn.primary, html body #fantasyCopy {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+/* title-back-btn: singleton but small, not worth a layer */
+.title-back-btn {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ══ TEXT LEGIBILITY: white text throughout dark mode ═══════════════
+   Menu cards, standings tables, and all cards need strong white text
+   in dark mode so content is readable against the dark glass surfaces.
+   ══════════════════════════════════════════════════════════════════ */
+body.dark .menu-btn h3,
+body.dark .menu-btn .num,
+body.dark .game h3,
+body.dark .game b,
+body.dark .table-head h3,
+body.dark .table-card td b {
+  color: #eef2ff !important;
+}
+body.dark .menu-btn p,
+body.dark .menu-btn .num,
+body.dark .game .tv,
+body.dark .game .mini {
+  color: #a6b0c6 !important;
+}
+
+/* ══ MENU CARDS: restore proper opaque white background in light mode ══
+   The broad rgba(255,255,255,0.18) "refractive glass" rule was previously
+   washing .menu-btn cards nearly invisible. Restored to the original
+   designed value of 0.92 so cards have proper visual weight.
+   ══════════════════════════════════════════════════════════════════ */
+html body:not(.dark) .menu-btn {
+  background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.72)) !important;
+  border: 1px solid rgba(255,255,255,0.92) !important;
+  color: #1c2230 !important;
+}
+html body:not(.dark) .menu-btn h3 { color: #1c2230 !important; }
+html body:not(.dark) .menu-btn p  { color: #73839a !important; }
+
+</style>
+
+<style id="dark-mode-legibility">
+/* ═══════════════════════════════════════════════════════════════════
+   DARK MODE LEGIBILITY — final cascade pass
+   Everything is full white (#eef2ff) by default. The only intentional
+   exceptions are: placeholder text (needs to look faded), active-chip
+   text (dark text on near-white bg), red danger labels, and the
+   secondary separator in the .tv / monotype data lines (slightly
+   dimmer so primary pick info pops by contrast).
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Universal dark-mode white ────────────────────────────────── */
+body.dark,
+body.dark h1, body.dark h2, body.dark h3, body.dark h4,
+body.dark b, body.dark strong,
+body.dark p, body.dark span:not(.t-badge),
+body.dark li, body.dark label,
+body.dark div { color: #eef2ff !important; }
+
+/* ── 2. Secondary / metadata text — slightly dimmed, still legible ─ */
+body.dark .mini,
+body.dark .tv,
+body.dark .label,
+body.dark .vs,
+body.dark .muted,
+body.dark .date,
+body.dark .mono-block,
+body.dark .market .label,
+body.dark .market .mini,
+body.dark .game-head .tv,
+body.dark .team span,
+body.dark .kpi .k,
+body.dark .slot .mini,
+body.dark .parlay-bubble-panel .foot,
+body.dark #bubbleFoot,
+body.dark #bubbleOdds,
+body.dark #bubblePct,
+body.dark .crumb-link,
+body.dark .ev span,
+body.dark .notice,
+body.dark .pool button .r,
+body.dark .empty,
+body.dark .pill,
+body.dark .toggle .left span { color: #c8d0e8 !important; }
+
+/* ── 3. Primary picks / values — pure white ───────────────────────── */
+body.dark .game b,
+body.dark .game > div > b,
+body.dark .game [style*="font-size:15px"],
+body.dark .game [style*="font-size: 15px"],
+body.dark .market .pick,
+body.dark .market b,
+body.dark .team b,
+body.dark .kpi .v,
+body.dark .table-head h3,
+body.dark td b,
+body.dark .toggle .left b,
+body.dark .slot .leg,
+body.dark .parlay-bubble-panel .head span,
+body.dark .parlay-bubble-panel .item b,
+body.dark #bubbleCount,
+body.dark .crumb-path b,
+body.dark .ev b,
+body.dark .notice b,
+body.dark .mono-block b,
+body.dark .pool button .l,
+body.dark .empty b,
+body.dark .title-center,
+body.dark .quick-nav-btn,
+body.dark .title-back-btn { color: #ffffff !important; }
+
+/* ── 4. Table cells ──────────────────────────────────────────────── */
+body.dark th { color: #c8d0e8 !important; background: rgba(255,255,255,0.06) !important; }
+body.dark td { color: #eef2ff !important; }
+body.dark th, body.dark td { border-bottom-color: rgba(255,255,255,0.08) !important; }
+
+/* ── 5. Badges ──────────────────────────────────────────────────── */
+body.dark .badge { color: #eef2ff !important; }
+body.dark .badge.hot { color: #ff8ca0 !important; }
+
+/* ── 6. Chips — active chip has dark text on near-white bg ──────── */
+body.dark .chip { color: #eef2ff !important; }
+body.dark .chip.active { color: #0a0e18 !important; }
+
+/* ── 7. Buttons ─────────────────────────────────────────────────── */
+body.dark .btn:not(.primary):not(.picked):not(.primary-picked) { color: #eef2ff !important; }
+body.dark .btn.primary, body.dark .btn.picked,
+body.dark .btn.primary-picked { color: #ffffff !important; }
+
+/* ── 8. Search input ─────────────────────────────────────────────── */
+body.dark .search input { color: #eef2ff !important; }
+body.dark .search input::placeholder { color: rgba(255,255,255,0.35) !important; }
+
+/* ── 9. Danger / warning ─────────────────────────────────────────── */
+body.dark .danger-card h4 { color: #ff8ca0 !important; }
+
+/* ── 10. Menu buttons: explicit white headings + readable descriptions */
+body.dark .menu-btn h3 { color: #ffffff !important; }
+body.dark .menu-btn p { color: #c8d0e8 !important; }
+body.dark .menu-btn .num { color: #c8d0e8 !important; }
+
+/* ── 11. Inline styles that hardcode light colors (invert in dark) ── */
+/* Picker description text e.g. var(--muted) inline styles */
+body.dark [style*="color:var(--muted)"],
+body.dark [style*="color: var(--muted)"] { color: #c8d0e8 !important; }
+
+/* ── 12. PRESERVE gradient text clips — must be last ────────────────
+   The ParlayOS logo (h1 span) and any element using
+   background-clip:text NEEDS color:transparent to show the gradient.
+   These must win over the broad white rules above. ─────────────────── */
+body.dark .headline h1 span,
+html body .headline h1 span { color: transparent !important; }
+/* Accent span inside .menu-btn.accent (the MLB Dashboard gradient) */
+html body .menu-btn .accent-text,
+html body .headline span[style*="background-clip"],
+html body [style*="background-clip:text"] span,
+html body [style*="-webkit-background-clip:text"] { color: transparent !important; }
+</style>
+</body>
 </html>
