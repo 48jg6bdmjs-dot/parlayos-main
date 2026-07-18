@@ -1,0 +1,41 @@
+name: ParlayOS Weekly Update
+
+on:
+  schedule:
+    - cron: '0 12 * * 1'  # Mondays 12:00 UTC
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install requests pandas numpy scikit-learn
+      - name: Inject API key from secret if set
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          if [ -n "$ODDS_API_KEY" ]; then
+            python -c "import json,os,pathlib; p=pathlib.Path('sports_config.json'); cfg=json.loads(p.read_text()); cfg['odds_api_key']=os.environ['ODDS_API_KEY']; p.write_text(json.dumps(cfg,indent=2))"
+          fi
+      - name: Run all engines
+        run: python run_all.py
+      - name: Backtest tuner
+        run: |
+          python mlb_backtest.py || true
+          python mlb_fit_weights.py --status || true
+          python mlb_fit_weights.py --calibrate || true
+      - name: Commit updates
+        run: |
+          git config user.name "parlayos-bot"
+          git config user.email "bot@parlayos.local"
+          git add -A
+          git diff --cached --quiet && echo "No changes" || (git commit -m "Weekly ParlayOS update $(date -u +%F) [skip ci]" && git push)
