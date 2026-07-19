@@ -1,4 +1,4 @@
-name: Update Live Scores (LIVE + Auto-push to HTML)
+name: Update Live Scores
 
 on:
   schedule:
@@ -28,17 +28,16 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
 
       - name: Install deps
         run: |
           pip install requests python-dateutil
           echo "__pycache__/" >> .gitignore
 
-      - name: Fetch LIVE + push to HTML
+      - name: Fetch LIVE + push to parlayos.html
         run: |
           python live_scores_fetcher.py
-          cat live_scores.json | head -n 20 || true
+          cat live_scores.json | head -n 30 || true
           find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 
       - name: Commit and push
@@ -46,17 +45,13 @@ jobs:
           git config user.name "parlayos-bot"
           git config user.email "bot@parlayos.app"
           find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-          find . -name "*.pyc" -delete 2>/dev/null || true
-          git add live_scores.json || true
-          git add parlayos.html parlayos_5.html parlayos_2.html index.html 2>/dev/null || true
-          git add ParlayOS.html parlayos_v6.html 2>/dev/null || true
+          git add live_scores.json parlayos.html || true
           git reset -- __pycache__/ 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No changes"
             exit 0
           fi
           COUNT=$(jq -r '.count // 0' live_scores.json 2>/dev/null || echo 0)
-          git commit -m "live: ${COUNT} games + auto-push HTML [skip ci]" || true
+          git commit -m "live: ${COUNT} games to parlayos.html [skip ci]" || true
           for i in 1 2 3 4 5; do git pull --rebase origin main && break; sleep 3; done
           for i in 1 2 3 4 5; do git push origin main && break; git pull --rebase origin main || true; sleep 2; done
-          git push --force-with-lease origin main || true
