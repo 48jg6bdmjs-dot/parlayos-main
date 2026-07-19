@@ -167,7 +167,7 @@ def inject_into_html(live_data):
     """Inject live scores directly into parlayos html files so they show without needing fetch"""
     
     # Find all parlayos html files
-        candidates = [
+    candidates = [
         "parlayos.html",  # ONLY file in repo
     ]
     
