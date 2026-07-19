@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-19T18:08:42.096554+00:00",
+  "updated": "2026-07-19T18:37:45.431254+00:00",
   "count": 10,
   "games": [
     {
@@ -9,8 +9,8 @@
       "away": "CWS",
       "home_name": "Toronto Blue Jays",
       "away_name": "Chicago White Sox",
-      "inning": "End 7",
-      "status": "Live",
+      "inning": "Bottom 9",
+      "status": "Final",
       "detail": "CWS 3 - TOR 0",
       "teams": [
         {
@@ -39,7 +39,7 @@
       "away": "LAD",
       "home_name": "New York Yankees",
       "away_name": "Los Angeles Dodgers",
-      "inning": "Bottom 5",
+      "inning": "Bottom 7",
       "status": "Live",
       "detail": "LAD 3 - NYY 1",
       "teams": [
@@ -69,9 +69,9 @@
       "away": "TB",
       "home_name": "Boston Red Sox",
       "away_name": "Tampa Bay Rays",
-      "inning": "Middle 2",
+      "inning": "Bottom 3",
       "status": "Live",
-      "detail": "TB 1 - BOS 0",
+      "detail": "TB 1 - BOS 1",
       "teams": [
         {
           "name": "Tampa Bay Rays",
@@ -83,13 +83,13 @@
         {
           "name": "Boston Red Sox",
           "abbr": "BOS",
-          "score": 0,
+          "score": 1,
           "logo": "BOS",
           "rec": ""
         }
       ],
       "score_away": 1,
-      "score_home": 0,
+      "score_home": 1,
       "gamePk": 824739
     },
     {
@@ -99,14 +99,14 @@
       "away": "NYM",
       "home_name": "Philadelphia Phillies",
       "away_name": "New York Mets",
-      "inning": "Top 2",
+      "inning": "Top 4",
       "status": "Live",
-      "detail": "NYM 4 - PHI 0",
+      "detail": "NYM 5 - PHI 0",
       "teams": [
         {
           "name": "New York Mets",
           "abbr": "NYM",
-          "score": 4,
+          "score": 5,
           "logo": "NYM",
           "rec": ""
         },
@@ -118,7 +118,7 @@
           "rec": ""
         }
       ],
-      "score_away": 4,
+      "score_away": 5,
       "score_home": 0,
       "gamePk": 823439
     },
@@ -129,9 +129,9 @@
       "away": "TEX",
       "home_name": "Atlanta Braves",
       "away_name": "Texas Rangers",
-      "inning": "End 2",
+      "inning": "Bottom 4",
       "status": "Live",
-      "detail": "TEX 0 - ATL 2",
+      "detail": "TEX 0 - ATL 3",
       "teams": [
         {
           "name": "Texas Rangers",
@@ -143,13 +143,13 @@
         {
           "name": "Atlanta Braves",
           "abbr": "ATL",
-          "score": 2,
+          "score": 3,
           "logo": "ATL",
           "rec": ""
         }
       ],
       "score_away": 0,
-      "score_home": 2,
+      "score_home": 3,
       "gamePk": 824897
     },
     {
@@ -159,9 +159,9 @@
       "away": "PIT",
       "home_name": "Cleveland Guardians",
       "away_name": "Pittsburgh Pirates",
-      "inning": "Middle 2",
+      "inning": "Middle 4",
       "status": "Live",
-      "detail": "PIT 1 - CLE 0",
+      "detail": "PIT 1 - CLE 1",
       "teams": [
         {
           "name": "Pittsburgh Pirates",
@@ -173,13 +173,13 @@
         {
           "name": "Cleveland Guardians",
           "abbr": "CLE",
-          "score": 0,
+          "score": 1,
           "logo": "CLE",
           "rec": ""
         }
       ],
       "score_away": 1,
-      "score_home": 0,
+      "score_home": 1,
       "gamePk": 824411
     },
     {
@@ -189,7 +189,7 @@
       "away": "BAL",
       "home_name": "Houston Astros",
       "away_name": "Baltimore Orioles",
-      "inning": "Top 1",
+      "inning": "Bottom 2",
       "status": "Live",
       "detail": "BAL 0 - HOU 0",
       "teams": [
@@ -219,9 +219,9 @@
       "away": "SD",
       "home_name": "Kansas City Royals",
       "away_name": "San Diego Padres",
-      "inning": "Top 1",
+      "inning": "Top 2",
       "status": "Live",
-      "detail": "SD 0 - KC 0",
+      "detail": "SD 0 - KC 1",
       "teams": [
         {
           "name": "San Diego Padres",
@@ -233,13 +233,13 @@
         {
           "name": "Kansas City Royals",
           "abbr": "KC",
-          "score": 0,
+          "score": 1,
           "logo": "KC",
           "rec": ""
         }
       ],
       "score_away": 0,
-      "score_home": 0,
+      "score_home": 1,
       "gamePk": 824086
     },
     {
@@ -249,7 +249,7 @@
       "away": "MIA",
       "home_name": "Milwaukee Brewers",
       "away_name": "Miami Marlins",
-      "inning": "Top 1",
+      "inning": "Bottom 2",
       "status": "Live",
       "detail": "MIA 0 - MIL 0",
       "teams": [
@@ -279,9 +279,9 @@
       "away": "MIN",
       "home_name": "Chicago Cubs",
       "away_name": "Minnesota Twins",
-      "inning": "Top 1",
+      "inning": "Top 2",
       "status": "Live",
-      "detail": "MIN 0 - CHC 0",
+      "detail": "MIN 0 - CHC 2",
       "teams": [
         {
           "name": "Minnesota Twins",
@@ -293,18 +293,18 @@
         {
           "name": "Chicago Cubs",
           "abbr": "CHC",
-          "score": 0,
+          "score": 2,
           "logo": "CHC",
           "rec": ""
         }
       ],
       "score_away": 0,
-      "score_home": 0,
+      "score_home": 2,
       "gamePk": 824653
     }
   ],
   "mlb_count": 10,
   "nfl_count": 0,
   "nba_count": 0,
-  "next_check": "2026-07-19T18:13:42.096566+00:00"
+  "next_check": "2026-07-19T18:42:45.431264+00:00"
 }
