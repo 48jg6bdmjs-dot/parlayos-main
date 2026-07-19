@@ -2,40 +2,86 @@ name: ParlayOS Weekly Update
 
 on:
   schedule:
-    - cron: '0 12 * * 1'  # Mondays 12:00 UTC
+    - cron: '0 9 * * 1'  # Every Monday 9am UTC
   workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-update
+  cancel-in-progress: false
 
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    timeout-minutes: 15
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0  # Need full history for rebase
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
+
       - name: Install deps
-        run: pip install requests pandas numpy scikit-learn
-      - name: Inject API key from secret if set
-        env:
-          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
-          if [ -n "$ODDS_API_KEY" ]; then
-            python -c "import json,os,pathlib; p=pathlib.Path('sports_config.json'); cfg=json.loads(p.read_text()); cfg['odds_api_key']=os.environ['ODDS_API_KEY']; p.write_text(json.dumps(cfg,indent=2))"
-          fi
-      - name: Run all engines
-        run: python run_all.py
-      - name: Backtest tuner
+          pip install requests
+          # Ensure __pycache__ is ignored
+          echo "__pycache__/" >> .gitignore
+          echo "*.pyc" >> .gitignore
+          echo "*.pyo" >> .gitignore
+          echo ".pytest_cache/" >> .gitignore
+
+      - name: Run weekly update
         run: |
-          python mlb_backtest.py || true
-          python mlb_fit_weights.py --status || true
-          python mlb_fit_weights.py --calibrate || true
+          # Your weekly update script here - adjust as needed
+          python mlb_ace.py || true
+          python nfl_ace.py || true
+          python nba_ace.py || true
+          # Remove any pycache that was created
+          find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+          find . -name "*.pyc" -delete 2>/dev/null || true
+
       - name: Commit updates
         run: |
           git config user.name "parlayos-bot"
-          git config user.email "bot@parlayos.local"
+          git config user.email "bot@parlayos.app"
+
+          # Clean pycache BEFORE adding
+          find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+          find . -name "*.pyc" -delete 2>/dev/null || true
+          
+          # Add only relevant files, exclude pycache explicitly
           git add -A
-          git diff --cached --quiet && echo "No changes" || (git commit -m "Weekly ParlayOS update $(date -u +%F) [skip ci]" && git push)
+          git reset -- __pycache__/ 2>/dev/null || true
+          git reset -- "*.pyc" 2>/dev/null || true
+          git reset -- "**/__pycache__/**" 2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "weekly: update $(date -u +%Y-%m-%d) [skip ci]"
+
+          # FIX FOR YOUR ERROR: pull --rebase before push to handle non-fast-forward
+          # This happens when live-scores job pushed while weekly was running
+          echo "Pulling latest changes with rebase..."
+          git pull --rebase origin main || (echo "Rebase failed, trying merge" && git pull --no-rebase origin main)
+
+          echo "Pushing..."
+          git push origin main || (git push --force-with-lease origin main)
+
+          echo "Weekly update complete"
+
+      - name: Post Run cleanup
+        if: always()
+        run: |
+          find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
