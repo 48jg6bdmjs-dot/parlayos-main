@@ -1,5 +1,5 @@
 """
-nfl_ace.py — NFL prediction engine for ParlayOS.
+nfl_ace.py â€” NFL prediction engine for ParlayOS.
 
 Structural mirror of mlb_ace.py: same has_data gating discipline (a missing
 stat is never compared against a fallback on the other side), same
@@ -7,14 +7,14 @@ empirical-Bayes shrinkage pattern for small in-season samples, same
 required_keys cache-invalidation pattern, same config-driven qualifies
 gating, same EDGE_COMPONENT_COLS logging for a future weight-fit script.
 
-── IMPORTANT — NOT YET LIVE-TESTED ──────────────────────────────────────
+â”€â”€ IMPORTANT â€” NOT YET LIVE-TESTED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 This was written in a sandboxed environment with NO outbound network
-access (egress disabled), so none of the API calls below — ESPN's public
-JSON endpoints or The Odds API — have actually been executed against
+access (egress disabled), so none of the API calls below â€” ESPN's public
+JSON endpoints or The Odds API â€” have actually been executed against
 live data. Endpoint URLs and field names are taken from ESPN's public
 (undocumented) API and The Odds API's published docs, and every fetch is
 wrapped in try/except with has_data=False on failure, so a wrong field
-name should fail safe into the fallback path rather than crash — but
+name should fail safe into the fallback path rather than crash â€” but
 that's a design intent, not a verified guarantee. Before trusting picks
 from this file: run it once, watch stdout for "fetch failed" lines, and
 spot-check a few games' stats against a real box score.
@@ -22,15 +22,15 @@ spot-check a few games' stats against a real box score.
 Also note: The Odds API's free tier has historically only included NBA +
 MLB, with NFL requiring a paid plan. If fetch_live_odds() below returns
 an empty list or an auth/plan error, that's the first thing to check
-against your actual Odds API account tier — it's not a bug in this file.
-──────────────────────────────────────────────────────────────────────────
+against your actual Odds API account tier â€” it's not a bug in this file.
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 Data sources:
-  - The Odds API (americanfootball_nfl sport_key) — moneyline, spreads,
+  - The Odds API (americanfootball_nfl sport_key) â€” moneyline, spreads,
     totals. Same provider/key as MLB; api key now lives in
     sports_config.json instead of being hardcoded (see note in
-    load_config below — mlb_ace.py should migrate to the same file).
-  - ESPN's public site.api.espn.com / sports.core.api.espn.com JSON API —
+    load_config below â€” mlb_ace.py should migrate to the same file).
+  - ESPN's public site.api.espn.com / sports.core.api.espn.com JSON API â€”
     free, no key required. Fills the role MLB_STATS_BASE fills for
     mlb_ace.py: team season stats, injuries, schedules. This is an
     undocumented-but-widely-used API (no official SLA from ESPN), so the
@@ -92,8 +92,8 @@ CONFIG_PATH = os.path.join(HERE, "sports_config.json")
 PICKS_LOG_PATH = os.path.join(HERE, "nfl_picks_log.csv")
 CACHE_DIR = os.path.join(HERE, ".nfl_cache")
 
-# ── NFL team abbreviations (ESPN uses these directly; Odds API uses full
-#    city+name strings, same mismatch mlb_ace.py handles via TEAM_ABBR) ──
+# â”€â”€ NFL team abbreviations (ESPN uses these directly; Odds API uses full
+#    city+name strings, same mismatch mlb_ace.py handles via TEAM_ABBR) â”€â”€
 TEAM_ABBR = {
     'Arizona Cardinals': 'ARI', 'Atlanta Falcons': 'ATL', 'Baltimore Ravens': 'BAL',
     'Buffalo Bills': 'BUF', 'Carolina Panthers': 'CAR', 'Chicago Bears': 'CHI',
@@ -107,7 +107,7 @@ TEAM_ABBR = {
     'San Francisco 49ers': 'SF', 'Seattle Seahawks': 'SEA', 'Tampa Bay Buccaneers': 'TB',
     'Tennessee Titans': 'TEN', 'Washington Commanders': 'WSH',
 }
-# ESPN's internal numeric team IDs — needed for their stats/injuries/schedule
+# ESPN's internal numeric team IDs â€” needed for their stats/injuries/schedule
 # endpoints. Source: sports.core.api.espn.com/v2/sports/football/leagues/nfl/teams
 ESPN_TEAM_IDS = {
     'ARI': 22, 'ATL': 1, 'BAL': 33, 'BUF': 2, 'CAR': 29, 'CHI': 3,
@@ -117,10 +117,10 @@ ESPN_TEAM_IDS = {
     'NYJ': 20, 'PHI': 21, 'PIT': 23, 'SF': 25, 'SEA': 26, 'TB': 27,
     'TEN': 10, 'WSH': 28,
 }
-# NFL stadium coordinates — same role as MLB's STADIUM_LOCATIONS, used for
+# NFL stadium coordinates â€” same role as MLB's STADIUM_LOCATIONS, used for
 # real weather rather than a hardcoded default. Dome/indoor teams are still
 # listed (weather affects the parking lot, not the field), but the edge
-# calc below zeroes out weather_edge for known domes — see is_dome_team.
+# calc below zeroes out weather_edge for known domes â€” see is_dome_team.
 STADIUM_LOCATIONS = {
     'ARI': (33.5276, -112.2626), 'ATL': (33.7554, -84.4008), 'BAL': (39.2780, -76.6227),
     'BUF': (42.7738, -78.7870), 'CAR': (35.2258, -80.8528), 'CHI': (41.8623, -87.6167),
@@ -134,7 +134,7 @@ STADIUM_LOCATIONS = {
     'SF': (37.4032, -121.9698), 'SEA': (47.5952, -122.3316), 'TB': (27.9759, -82.5033),
     'TEN': (36.1665, -86.7713), 'WSH': (38.9078, -76.8645),
 }
-# Known indoor/dome stadiums — weather doesn't affect gameplay here, so
+# Known indoor/dome stadiums â€” weather doesn't affect gameplay here, so
 # weather_edge is forced to 0 rather than computing a real-but-meaningless
 # outdoor-air-at-the-parking-lot number and treating it as a football
 # signal. This is the NFL analog of MLB's PARK_FACTORS mattering per-park;
@@ -147,7 +147,7 @@ HERE_ESPN_CORE = "https://sports.core.api.espn.com/v2/sports/football/leagues/nf
 WEATHER_API = "https://api.open-meteo.com/v1/forecast"
 
 # League-average fallbacks (2025 season, updated periodically like MLB's
-# LEAGUE_AVG_* constants) — used ONLY when a specific fetch fails, never
+# LEAGUE_AVG_* constants) â€” used ONLY when a specific fetch fails, never
 # silently substituted for a "successful" real value.
 LEAGUE_AVG_PPG = 22.5          # points per game
 LEAGUE_AVG_PAPG = 22.5         # points allowed per game
@@ -158,7 +158,7 @@ LEAGUE_AVG_TO_MARGIN = 0.0     # turnover margin per game
 
 
 def _f(s, d=None):
-    """Lenient float parse — returns d (default None) instead of raising."""
+    """Lenient float parse â€” returns d (default None) instead of raising."""
     try:
         return float(str(s).strip())
     except (ValueError, TypeError, AttributeError):
@@ -166,7 +166,7 @@ def _f(s, d=None):
 
 
 def get_cached(key, ttl=3600, required_keys=None):
-    """Identical pattern to mlb_ace.py's get_cached — required_keys makes
+    """Identical pattern to mlb_ace.py's get_cached â€” required_keys makes
     a schema-mismatched cache entry a miss rather than a KeyError deep
     inside code that assumes the new shape."""
     path = os.path.join(CACHE_DIR, f"{key}.pkl")
@@ -195,7 +195,7 @@ def set_cache(key, data):
 def load_config():
     """
     Load sports_config.json's "nfl" section, plus the shared odds_api_key.
-    Same defaulting pattern as mlb_ace.py's load_config — every threshold
+    Same defaulting pattern as mlb_ace.py's load_config â€” every threshold
     has a safe fallback so a missing/partial config file doesn't crash the
     script, it just runs unfiltered (qualifies gating effectively off).
     """
@@ -223,7 +223,7 @@ def load_config():
                 "max_legs": 16, "kelly_fraction": 0.25, "max_stake_pct": 0.05}, ""
 
 
-# Edge component columns — mirrors mlb_ace.py's EDGE_COMPONENT_COLS, for a
+# Edge component columns â€” mirrors mlb_ace.py's EDGE_COMPONENT_COLS, for a
 # future nfl_fit_weights.py to eventually regress against graded outcomes
 # instead of the hand-set weights below.
 EDGE_COMPONENT_COLS = [
@@ -242,10 +242,10 @@ class NFLPredictionEngine:
     def __init__(self, api_key: str):
         self.api_key = api_key
         print(f"NFL engine initialized with API key: {api_key[:8]}..." if api_key else
-              "NFL engine initialized with NO API key — fetch_live_odds will fail")
+              "NFL engine initialized with NO API key â€” fetch_live_odds will fail")
 
     def fetch_live_odds(self) -> List:
-        """Fetch live NFL odds from The Odds API — h2h, spreads, and totals
+        """Fetch live NFL odds from The Odds API â€” h2h, spreads, and totals
         all requested together, since NFL is commonly bet on spread rather
         than moneyline (unlike MLB, where run line is a secondary market
         to moneyline). See module docstring re: free-tier NFL access."""
@@ -257,7 +257,7 @@ class NFLPredictionEngine:
             data = r.json()
             if isinstance(data, dict) and data.get("message"):
                 # The Odds API returns a dict with an error "message" key
-                # (not a list of games) on auth/plan failures — surfacing
+                # (not a list of games) on auth/plan failures â€” surfacing
                 # this explicitly instead of letting len(data) below throw
                 # or silently return 0 games with no explanation.
                 print(f"Odds API error response: {data.get('message')}")
@@ -276,7 +276,7 @@ class NFLPredictionEngine:
         fallbacks are used ONLY when a specific piece fails.
 
         NFL season is short (17 games) relative to MLB's 162, so there's
-        no meaningful "last 10" sub-sample the way MLB has one — full
+        no meaningful "last 10" sub-sample the way MLB has one â€” full
         season-to-date is already the small-sample regime, which is why
         shrinkage below (see calculate_win_probability) uses games played
         as its reliability denominator instead of innings pitched.
@@ -299,7 +299,7 @@ class NFLPredictionEngine:
         # individual field below is read from that same map with its own
         # has_data flag. This replaced an earlier draft of this function
         # that re-fetched/re-derived stat_map across three separate
-        # try/excepts using fragile locals()-existence checks — that
+        # try/excepts using fragile locals()-existence checks â€” that
         # version worked by accident (Python's default REPL-style scoping
         # let it limp along) but was genuinely fragile and confusing to
         # read. One fetch, one parse, then independent has_data checks
@@ -379,13 +379,13 @@ class NFLPredictionEngine:
         """
         Starting QB's current-season Total QBR (ESPN's advanced QB metric,
         0-100 scale, adjusts for game situation the way FIP adjusts a
-        pitcher's ERA for defense/luck — chosen over raw passer rating for
+        pitcher's ERA for defense/luck â€” chosen over raw passer rating for
         the same "more predictive of true talent" reasoning mlb_ace.py
         gives FIP over ERA). has_data False on any fetch failure or if the
         team has no clear starter (e.g. QB controversy, injury, bye).
 
         NFL doesn't have a probable-starter feed the way MLB Stats API
-        does for pitchers — inferring "the starter" here is genuinely
+        does for pitchers â€” inferring "the starter" here is genuinely
         harder than MLB's case, and this is a known simplification: it
         takes the team's leading QB by pass attempts this season, which
         can be wrong in an active QB-change situation. Flagged rather
@@ -417,7 +417,7 @@ class NFLPredictionEngine:
             if qbr is None:
                 result = {"qbr": LEAGUE_AVG_QBR, "has_data": False}
             else:
-                # Small-sample shrinkage — same empirical-Bayes shape as
+                # Small-sample shrinkage â€” same empirical-Bayes shape as
                 # mlb_ace.py's pitcher shrink(), but keyed on games played
                 # this season rather than innings pitched. A QB with 2
                 # starts posting an outlier QBR is exactly the "one bad
@@ -440,7 +440,7 @@ class NFLPredictionEngine:
             return {"qbr": LEAGUE_AVG_QBR, "has_data": False}
 
     def fetch_injuries(self, team_abbr: str) -> Dict:
-        """Real injury report from ESPN's injuries endpoint — coarse
+        """Real injury report from ESPN's injuries endpoint â€” coarse
         headline count, same role as mlb_ace.py's fetch_team_injury_count.
         Gated to has_data=False if the fetch fails or returns nothing."""
         team_id = ESPN_TEAM_IDS.get(team_abbr)
@@ -455,7 +455,7 @@ class NFLPredictionEngine:
                               params={"limit": 100}, timeout=8)
             data = r.json()
             items = data.get("items", [])
-            # Weight OUT/DOUBTFUL more heavily than QUESTIONABLE — a coarse
+            # Weight OUT/DOUBTFUL more heavily than QUESTIONABLE â€” a coarse
             # but real distinction ESPN's injury status field provides,
             # unlike MLB.com's flatter headline-count-only report.
             count = 0.0
@@ -502,18 +502,18 @@ class NFLPredictionEngine:
         "average" in a way that would tilt the model toward whichever
         team happens to have less data available.
 
-        Weight rationale (NFL-specific, not a copy of MLB's weights —
+        Weight rationale (NFL-specific, not a copy of MLB's weights â€”
         the sports have different variance structures: a single NFL game
         has ~16-17 games of season signal behind it at most, vs MLB's
         162, so per-game predictive factors carry relatively more weight
         here since there's less accumulated signal to lean on elsewhere):
           - QB play is the single most predictive individual-player factor
-            in football, analogous to starting pitcher in baseball —
+            in football, analogous to starting pitcher in baseball â€”
             given the largest per-unit weight.
           - Turnover margin is unusually predictive in the NFL specifically
             (more so than in most sports) because turnovers directly flip
             field position and possession count, both of which correlate
-            strongly with scoring — this is a real, well-established NFL
+            strongly with scoring â€” this is a real, well-established NFL
             analytics finding, not an arbitrary weight choice.
           - Offense/defense YPG capture the broader team-quality signal
             that isn't already carried by QBR or points-based team_edge.
@@ -529,13 +529,13 @@ class NFLPredictionEngine:
         home_inj = self.fetch_injuries(home_abbr)
         away_inj = self.fetch_injuries(away_abbr)
 
-        # ── QB edge — largest single weight, same reasoning mlb_ace.py
+        # â”€â”€ QB edge â€” largest single weight, same reasoning mlb_ace.py
         #    gives starting pitcher FIP: the single most predictive
         #    individual-player factor for an individual game outcome.
         has_qb = home_qb["has_data"] and away_qb["has_data"]
         qb_edge = (home_qb["qbr"] - away_qb["qbr"]) * 0.0030 if has_qb else 0.0
 
-        # ── Points-based team quality (season scoring margin) — the NFL
+        # â”€â”€ Points-based team quality (season scoring margin) â€” the NFL
         #    analog of MLB's season run differential. Both offense and
         #    defense sides must have real data before this contributes,
         #    same as mlb_ace.py's has_season_offense/has_season_pitching
@@ -546,10 +546,10 @@ class NFLPredictionEngine:
             away_margin = away_stats["ppg"] - away_stats["papg"]
             team_edge = (home_margin - away_margin) * 0.0040
 
-        # ── Yardage-based offense/defense — a distinct signal from
+        # â”€â”€ Yardage-based offense/defense â€” a distinct signal from
         #    points-based team_edge above (yards is a "how good are they
         #    mechanically" signal; points folds in red-zone efficiency,
-        #    turnovers, special teams — already counted separately below
+        #    turnovers, special teams â€” already counted separately below
         #    for turnovers, so weighted modestly here to avoid double-
         #    counting the turnover component specifically).
         offense_edge = 0.0
@@ -558,24 +558,24 @@ class NFLPredictionEngine:
             offense_edge = (home_stats["ypg"] - away_stats["ypg"]) * 0.000075
             defense_edge = (away_stats["yapg"] - home_stats["yapg"]) * 0.000075
 
-        # ── Turnover margin — unusually predictive in the NFL specifically
+        # â”€â”€ Turnover margin â€” unusually predictive in the NFL specifically
         #    (see docstring rationale above). Both sides need real data.
         turnover_edge = 0.0
         if home_stats["to_has_data"] and away_stats["to_has_data"]:
             turnover_edge = (home_stats["to_margin"] - away_stats["to_margin"]) * 0.010
 
-        # ── Weather — same directional-only-when-outdoor logic as
+        # â”€â”€ Weather â€” same directional-only-when-outdoor logic as
         #    mlb_ace.py, forced to 0 for known dome teams rather than
         #    computing a real-but-meaningless outdoor reading. Cold/wind
         #    generally suppresses NFL scoring (passing especially), so the
-        #    sign here is the opposite of MLB's "warm air helps offense" —
+        #    sign here is the opposite of MLB's "warm air helps offense" â€”
         #    that's intentional, not a copy-paste error.
         weather_edge = 0.0
         if home_abbr not in DOME_TEAMS:
             if weather["temp_f"] < 32 or weather["wind_mph"] > 20:
                 weather_edge = -0.01  # slight suppression, symmetric to both offenses
 
-        # ── Injury burden — coarse OUT/DOUBTFUL/QUESTIONABLE-weighted
+        # â”€â”€ Injury burden â€” coarse OUT/DOUBTFUL/QUESTIONABLE-weighted
         #    count, capped small like mlb_ace.py caps its injury_edge.
         injury_edge = 0.0
         if home_inj["has_data"] and away_inj["has_data"]:
@@ -583,12 +583,12 @@ class NFLPredictionEngine:
             injury_edge = max(-0.02, min(0.02, injury_edge))
 
         home_field_edge = 0.018  # standard, well-established NFL home-field advantage
-        # (Slightly larger than MLB's 0.02 — commonly cited as somewhat
+        # (Slightly larger than MLB's 0.02 â€” commonly cited as somewhat
         # stronger in the NFL, partly due to crowd noise affecting
         # opposing-team communication/snap timing in a way that has less
         # of an analog in baseball.)
 
-        # No real ATS-form or h2h fetch implemented yet in this pass —
+        # No real ATS-form or h2h fetch implemented yet in this pass â€”
         # zeroed rather than faked, same "don't fabricate a signal I
         # haven't actually built" discipline mlb_ace.py applies to wind
         # direction in its weather section.
@@ -617,13 +617,13 @@ class NFLPredictionEngine:
 
     def calculate_total_points(self, game: Dict, posted_total: float) -> Tuple[str, float, float]:
         """
-        O/U direction + edge — NFL analog of mlb_ace.py's expected-runs
+        O/U direction + edge â€” NFL analog of mlb_ace.py's expected-runs
         model. Expected combined points = both teams' season PPG, blended
         toward the matchup (each offense against the OTHER's defensive
         YPG-allowed rate as a modest adjustment), rather than raw PPG
         summed blind to opponent quality.
 
-        Simpler than MLB's model (no per-starter estimate — NFL doesn't
+        Simpler than MLB's model (no per-starter estimate â€” NFL doesn't
         have an analog to "today's starting pitcher" driving the total the
         way SP ERA does) but follows the same "model estimate vs posted
         line, edge via normal-CDF gap" structure.
@@ -634,7 +634,7 @@ class NFLPredictionEngine:
         away_stats = self.fetch_team_season_stats(away_abbr)
 
         _POINTS_SIGMA = 10.0  # NFL game-total std dev is much larger in raw
-                               # points than MLB's ~1.5 runs — this is the
+                               # points than MLB's ~1.5 runs â€” this is the
                                # correct NFL-scale analog, not MLB's constant
                                # reused unadjusted.
         _MARKET_VIG_PROB = 110.0 / 210.0
@@ -651,7 +651,7 @@ class NFLPredictionEngine:
 
         if home_stats["ppg_has_data"] and away_stats["ppg_has_data"]:
             # Each offense's expected points, mildly adjusted by the
-            # opponent's points-allowed rate relative to league average —
+            # opponent's points-allowed rate relative to league average â€”
             # a team facing a weak defense should be expected to outscore
             # their raw season PPG somewhat, and vice versa.
             home_exp = home_stats["ppg"] * (away_stats["papg"] / LEAGUE_AVG_PAPG)
@@ -685,7 +685,7 @@ def load_picks_log():
 
 def write_pick_to_log(pick_dict: dict):
     """Same append-with-header-union pattern as mlb_ace.py's
-    write_pick_to_log — preserves any existing columns in an on-disk file
+    write_pick_to_log â€” preserves any existing columns in an on-disk file
     even if this run's PICKS_LOG_COLS differs, rather than silently
     dropping data on schema drift."""
     file_exists = os.path.exists(PICKS_LOG_PATH)
@@ -715,7 +715,7 @@ def write_pick_to_log(pick_dict: dict):
 
 def _american_to_decimal(price):
     """Convert an American odds price to decimal, or None if price is
-    None/unparseable — used to turn the raw over_price/spread_price ints
+    None/unparseable â€” used to turn the raw over_price/spread_price ints
     fetched from The Odds API into the decimal format ParlayOS.html's
     legOdds()/american() functions expect, same conversion mlb_ace.py
     already applies to moneyline prices."""
@@ -740,7 +740,7 @@ def _picks_to_nfl_games(picks: List) -> List:
     strikeout prop) that ParlayOS.html's marketCard() also reuses for
     NFL/NBA's spread slot, purely because the mock generators picked that
     field name to slot into the same UI code path. For NFL, kLine/kPick
-    below represent the SPREAD, not a strikeout prop — there is no
+    below represent the SPREAD, not a strikeout prop â€” there is no
     pitcher in football. The UI-side fix (making marketCard() render
     correct label text per sport) is handled in ParlayOS.html separately;
     this function's job is just to match the existing field NAMES so
@@ -771,7 +771,7 @@ def _picks_to_nfl_games(picks: List) -> List:
         if game_date_str:
             try:
                 # Same UTC-aware parsing fix mlb_ace.py's _picks_to_v6_games
-                # applies — explicit tzinfo attach, then .astimezone(), not
+                # applies â€” explicit tzinfo attach, then .astimezone(), not
                 # a naive strptime().timestamp() that silently assumes
                 # local time on a UTC string.
                 dt_utc = datetime.strptime(game_date_str, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
@@ -794,7 +794,7 @@ def _picks_to_nfl_games(picks: List) -> List:
         ou_edge = p.get('ou_edge', 0.0)
         if total is None:
             total = 44.5  # neutral NFL-scale placeholder ONLY when no
-                           # bookmaker has posted a total yet — same
+                           # bookmaker has posted a total yet â€” same
                            # "never fabricate a precise-looking fake
                            # number" concern as mlb_ace.py, but NFL's
                            # posted-total coverage is typically near-
@@ -810,7 +810,7 @@ def _picks_to_nfl_games(picks: List) -> List:
         hot = edge > 0.03 or abs(ou_edge) > 0.05
 
         # Real per-market decimal prices, when a bookmaker actually posted
-        # one — None (and therefore omitted below) when unavailable, so
+        # one â€” None (and therefore omitted below) when unavailable, so
         # ParlayOS.html's legOdds() correctly falls back to its flat
         # constant rather than receiving a fabricated precise-looking
         # number for a market that has no real quote yet.
@@ -823,7 +823,7 @@ def _picks_to_nfl_games(picks: List) -> List:
             'cityA': away, 'cityB': home,
             'lgA': 'NFL', 'lgB': 'NFL',
             'total': total, 'ouPick': f'{ou_pick} {total}',
-            'kLine': spread, 'kPick': spread_pick_str,  # SPREAD — see docstring note
+            'kLine': spread, 'kPick': spread_pick_str,  # SPREAD â€” see docstring note
             'mlFav': ml_fav, 'mlPriceDec': ml_price_dec,
             'ouEdge': round(ou_edge, 4), 'kEdge': spread_edge, 'mlEdge': round(edge, 4),
             'model': round(model_prob, 4),
@@ -850,7 +850,7 @@ def export_to_html(picks: List, html_path: str) -> str:
     Inject window.PARLAYOS_NFL_DATA into ParlayOS.html at the existing
     <!--PARLAYOS_NFL_INJECT_POINT--> marker. Deliberately a SEPARATE
     global from window.PARLAYOS_DATA (MLB's), not a merge into the same
-    object — this keeps each sport's export independently re-runnable
+    object â€” this keeps each sport's export independently re-runnable
     (running nfl_ace.py again shouldn't require re-running mlb_ace.py to
     avoid clobbering MLB's data, and vice versa) and matches how
     loadRealData() needs to read three distinct globals rather than one
@@ -878,7 +878,7 @@ def export_to_html(picks: List, html_path: str) -> str:
     html = re.sub(r'\n{3,}', '\n\n', html)
 
     injection_lines = [
-        "    // ── PARLAYOS NFL LIVE DATA (" + run_date + ") ──────────────────",
+        "    // â”€â”€ PARLAYOS NFL LIVE DATA (" + run_date + ") â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€",
         "    window.PARLAYOS_NFL_DATA = {",
         "      runDate: \"" + run_date + "\",",
         "      pickCount: " + str(pick_count) + ",",
@@ -888,7 +888,7 @@ def export_to_html(picks: List, html_path: str) -> str:
         "      if(typeof loadRealData==='function') loadRealData();",
         "      if(typeof renderNFLDashboard==='function') renderNFLDashboard();",
         "    })();",
-        "    // ── END PARLAYOS NFL LIVE DATA ──────────────────────────────────",
+        "    // â”€â”€ END PARLAYOS NFL LIVE DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€",
     ]
     injection = "\n".join(injection_lines)
 
@@ -904,12 +904,12 @@ def export_to_html(picks: List, html_path: str) -> str:
 
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"✓ {pick_count} NFL picks → {html_path}")
+    print(f"âœ“ {pick_count} NFL picks â†’ {html_path}")
     return html_path
 
 
 def run(html_path: str):
-    """Main entry point — mirrors mlb_ace.py's __main__ block structure."""
+    """Main entry point â€” mirrors mlb_ace.py's __main__ block structure."""
     config, api_key = load_config()
     engine = NFLPredictionEngine(api_key)
     odds_data = engine.fetch_live_odds()
@@ -1015,7 +1015,7 @@ def run(html_path: str):
             "total": g.get("real_total") if g.get("real_total") is not None else model_total,
             "ou_pick": ou_pick, "ou_edge": ou_edge,
             "ou_price": g.get("over_price"),  # American price on the OVER side,
-                                               # None if no bookmaker had posted one —
+                                               # None if no bookmaker had posted one â€”
                                                # _picks_to_nfl_games converts this to
                                                # decimal for the frontend, or omits
                                                # ouPriceDec entirely if None, letting
@@ -1046,13 +1046,13 @@ def run(html_path: str):
 
     export_to_html(all_games_data, html_path)
     qualifying = sum(1 for gd in all_games_data if gd["qualifies"])
-    print(f"\n✓ {len(all_games_data)} NFL games exported ({qualifying} qualify at current thresholds)")
-    print(f"✓ Picks → {PICKS_LOG_PATH}")
+    print(f"\nâœ“ {len(all_games_data)} NFL games exported ({qualifying} qualify at current thresholds)")
+    print(f"âœ“ Picks â†’ {PICKS_LOG_PATH}")
     return all_games_data
 
 
 if __name__ == "__main__":
-    # Look for the HTML template the same way mlb_ace.py does — a few
+    # Look for the HTML template the same way mlb_ace.py does â€” a few
     # candidate filenames, first match wins.
     candidates = ["parlayos.html", "parlayos_2.html", "ParlayOS.html", "parlayos_v6.html"]
     html_path = None
