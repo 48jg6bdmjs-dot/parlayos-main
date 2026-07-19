@@ -68,7 +68,7 @@ jobs:
           # per-sport failure isolation above). Checking existence first
           # means a missing log is silently skipped instead of silently
           # discarding every OTHER file's changes too, MLB's included.
-          for f in sports_config.json picks_log.csv nfl_picks_log.csv nba_picks_log.csv ParlayOS.html; do
+          for f in sports_config.json picks_log.csv nfl_picks_log.csv nba_picks_log.csv parlayos.html; do
             if [ -f "$f" ]; then
               git add "$f"
             else
