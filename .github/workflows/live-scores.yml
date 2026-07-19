@@ -2,15 +2,22 @@ name: Update Live Scores (LIVE ONLY)
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # Every 5 minutes
-  workflow_dispatch:  # Manual trigger
+    # AUTOMATIC: Starts at 12pm UTC daily, runs for 12 hours until 12am
+    # For 12pm-12am Eastern, change to: '0 16 * * *'
+    - cron: '0 12 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: live-scores
+  cancel-in-progress: false
+
 jobs:
   update-live-scores:
     runs-on: ubuntu-latest
+    timeout-minutes: 750  # 12.5 hours max - covers full 12pm-12am window
     
     steps:
       - name: Checkout
@@ -27,22 +34,37 @@ jobs:
       - name: Install deps
         run: pip install requests
       
-      - name: Fetch LIVE games only
-        run: |
-          python live_scores_fetcher.py
-          echo "--- live_scores.json ---"
-          cat live_scores.json | head -n 100
-          echo "Count: $(jq '.count' live_scores.json)"
-      
-      - name: Commit if changed
+      - name: Run automatic loop 12pm-12am
         run: |
           git config user.name "parlayos-bot"
           git config user.email "bot@parlayos.app"
-          git add live_scores.json
-          if git diff --staged --quiet; then
-            echo "No live games changed - skip commit"
-          else
-            COUNT=$(jq -r '.count' live_scores.json)
-            git commit -m "live: ${COUNT} live games - $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
-            git push
-          fi
+          
+          START=$(date +%s)
+          END=$((START + 43200))  # 12 hours = 43200 seconds
+          
+          echo "Starting automatic loop: $(date) - will end at $(date -d @$END)"
+          
+          while [ $(date +%s) -lt $END ]; do
+            echo "=== Fetching at $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
+            
+            python live_scores_fetcher.py || echo "Fetch failed, retrying next loop"
+            
+            if [ -f live_scores.json ]; then
+              echo "Count: $(jq -r '.count // 0' live_scores.json 2>/dev/null || echo 'unknown')"
+              
+              git add live_scores.json
+              if ! git diff --staged --quiet; then
+                COUNT=$(jq -r '.count // 0' live_scores.json 2>/dev/null || echo '0')
+                git commit -m "live: ${COUNT} games - $(date -u +%H:%M:%SZ) [skip ci]" || true
+                git push || (git pull --rebase && git push) || true
+              else
+                echo "No changes"
+              fi
+            fi
+            
+            # Sleep 5 minutes (300s) before next fetch
+            echo "Sleeping 5 min..."
+            sleep 300
+          done
+          
+          echo "Finished 12-hour window at $(date)"
