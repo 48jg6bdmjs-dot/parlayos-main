@@ -2,22 +2,17 @@ name: Update Live Scores (LIVE ONLY)
 
 on:
   schedule:
-    # AUTOMATIC: Starts at 12pm UTC daily, runs for 12 hours until 12am
-    # For 12pm-12am Eastern, change to: '0 16 * * *'
-    - cron: '0 12 * * *'
+    # Check every 10 min all day - but script itself checks if games exist
+    # If no games scheduled, it exits immediately (saves API calls + commits)
+    - cron: '*/10 * * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
 
-concurrency:
-  group: live-scores
-  cancel-in-progress: false
-
 jobs:
   update-live-scores:
     runs-on: ubuntu-latest
-    timeout-minutes: 750  # 12.5 hours max - covers full 12pm-12am window
     
     steps:
       - name: Checkout
@@ -32,39 +27,100 @@ jobs:
           cache: 'pip'
       
       - name: Install deps
-        run: pip install requests
+        run: pip install requests python-dateutil
       
-      - name: Run automatic loop 12pm-12am
+      - name: Smart check + fetch LIVE only if games active
+        run: |
+          python - << 'PY'
+          import requests, json, os
+          from datetime import datetime, timezone, timedelta
+
+          # --- SMART SCHEDULE CHECK ---
+          # Checks real MLB schedule for today + tomorrow to see if we should run
+          def get_todays_games():
+              try:
+                  today = datetime.now().strftime("%Y-%m-%d")
+                  url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={today}"
+                  r = requests.get(url, timeout=10).json()
+                  games = []
+                  for d in r.get("dates", []):
+                      for g in d.get("games", []):
+                          game_date = g.get("gameDate")  # UTC ISO like 2026-07-18T23:20:00Z
+                          status = g.get("status", {}).get("abstractGameState", "")
+                          # Parse time
+                          try:
+                              dt = datetime.fromisoformat(game_date.replace("Z", "+00:00"))
+                              games.append({"time": dt, "status": status, "id": g.get("gamePk")})
+                          except:
+                              pass
+                  return games
+              except Exception as e:
+                  print(f"Schedule check failed: {e} - defaulting to RUN")
+                  return [{"time": datetime.now(timezone.utc), "status": "Live"}]  # fail open
+
+          games = get_todays_games()
+          now = datetime.now(timezone.utc)
+          
+          if not games:
+              print("No games scheduled today - skipping live fetch")
+              # Create empty live file so workflow doesn't fail
+              with open("should_run.txt", "w") as f:
+                  f.write("false")
+              exit(0)
+
+          # Check if any game is Live, or starts within next 90 min, or ended within last 60 min
+          should_run = False
+          next_game_in = None
+          for g in games:
+              diff_min = (g["time"] - now).total_seconds() / 60
+              is_live = g["status"] in ("Live", "In Progress", "Preview")
+              # If game started in last 4 hours (240 min) and still not final, consider active
+              if -240 <= diff_min <= 90:
+                  should_run = True
+                  break
+              if diff_min > 0:
+                  if next_game_in is None or diff_min < next_game_in:
+                      next_game_in = diff_min
+
+          print(f"Found {len(games)} games today")
+          for g in games[:5]:
+              print(f"  {g['time']} - {g['status']} - {int((g['time']-now).total_seconds()/60)} min from now")
+
+          if should_run:
+              print("=> Games active or starting soon - WILL fetch live scores")
+              with open("should_run.txt", "w") as f:
+                  f.write("true")
+          else:
+              if next_game_in:
+                  print(f"=> Next game in {int(next_game_in)} min - skipping, will check again next cron")
+              else:
+                  print("=> No more games today - skipping")
+              with open("should_run.txt", "w") as f:
+                  f.write("false")
+          PY
+          
+          SHOULD_RUN=$(cat should_run.txt)
+          if [ "$SHOULD_RUN" != "true" ]; then
+            echo "No active games - exiting without fetch"
+            exit 0
+          fi
+          
+          echo "=== Active window detected - fetching LIVE ==="
+          python live_scores_fetcher.py
+          echo "--- live_scores.json ---"
+          cat live_scores.json | head -n 100 || echo "no file yet"
+          echo "Count: $(jq -r '.count // 0' live_scores.json 2>/dev/null || echo 0)"
+      
+      - name: Commit if changed
+        if: hashFiles('live_scores.json') != ''
         run: |
           git config user.name "parlayos-bot"
           git config user.email "bot@parlayos.app"
-          
-          START=$(date +%s)
-          END=$((START + 43200))  # 12 hours = 43200 seconds
-          
-          echo "Starting automatic loop: $(date) - will end at $(date -d @$END)"
-          
-          while [ $(date +%s) -lt $END ]; do
-            echo "=== Fetching at $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
-            
-            python live_scores_fetcher.py || echo "Fetch failed, retrying next loop"
-            
-            if [ -f live_scores.json ]; then
-              echo "Count: $(jq -r '.count // 0' live_scores.json 2>/dev/null || echo 'unknown')"
-              
-              git add live_scores.json
-              if ! git diff --staged --quiet; then
-                COUNT=$(jq -r '.count // 0' live_scores.json 2>/dev/null || echo '0')
-                git commit -m "live: ${COUNT} games - $(date -u +%H:%M:%SZ) [skip ci]" || true
-                git push || (git pull --rebase && git push) || true
-              else
-                echo "No changes"
-              fi
-            fi
-            
-            # Sleep 5 minutes (300s) before next fetch
-            echo "Sleeping 5 min..."
-            sleep 300
-          done
-          
-          echo "Finished 12-hour window at $(date)"
+          git add live_scores.json
+          if git diff --staged --quiet; then
+            echo "No live games changed - skip commit"
+          else
+            COUNT=$(jq -r '.count // 0' live_scores.json 2>/dev/null || echo 0)
+            git commit -m "live: ${COUNT} live games - $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+            git push || (git pull --rebase && git push) || true
+          fi
