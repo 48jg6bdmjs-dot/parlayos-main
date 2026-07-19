@@ -1,3 +1,13 @@
+# ACCURACY FIXES APPLIED 2026-07-18:
+# - De-vigged market probs (was using single-side implied with vig)
+# - Real away odds fetched (was fabricating away odds from home implied)
+# - Platt calibration applied from mlb_calibration.json (was ignored)
+# - Logit-space edge combination (was linear addition causing 95% saturation)
+# - Halved all edge weights to prevent overconfidence
+# - Fixed total fallback to return 0 edge when no data (was -2.3% fake edge)
+# - Fixed K-line randomness to deterministic K/9 based
+# - Tuned thresholds: min_edge 0%->4% MLB, 3.5% NFL/NBA, max_total 13.5->11.5 MLB
+
 """
 run_all.py — single-command workflow for ParlayOS's three prediction
 engines (mlb_ace.py, nfl_ace.py, nba_ace.py).

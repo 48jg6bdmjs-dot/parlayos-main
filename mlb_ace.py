@@ -10,6 +10,7 @@ from typing import List, Dict, Any, Tuple
 import base64
 import os
 import re
+import math
 
 # Team abbreviations to prevent text overlap
 TEAM_ABBR = {
@@ -66,6 +67,79 @@ PARK_FACTORS = {
 }
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+# --- ACCURACY FIX: de-vig and calibration helpers ---
+import math
+
+def _american_to_implied_prob(american_odds):
+    """Convert American odds to implied prob (0-1)"""
+    try:
+        o = float(str(american_odds).strip().replace("+",""))
+    except:
+        return None
+    if o is None:
+        return None
+    return (-o)/(-o+100.0) if o < 0 else 100.0/(o+100.0)
+
+def _devig_probs(home_odds, away_odds):
+    """De-vig market: true prob = implied / sum(implied)"""
+    hi = _american_to_implied_prob(home_odds)
+    ai = _american_to_implied_prob(away_odds)
+    if hi is None or ai is None:
+        return (hi or 0.5), (ai or 0.5)
+    total = hi + ai
+    if total <= 0:
+        return 0.5, 0.5
+    return hi/total, ai/total
+
+def _logit(p):
+    eps = 1e-6
+    p = min(max(p, eps), 1-eps)
+    return math.log(p/(1-p))
+
+def _sigmoid(x):
+    # numerically stable
+    if x >= 0:
+        return 1.0/(1.0+math.exp(-x))
+    else:
+        e = math.exp(x)
+        return e/(1.0+e)
+
+CALIBRATION_CACHE = None
+def load_platt_calibration():
+    """Load Platt scaling from mlb_calibration.json if present"""
+    global CALIBRATION_CACHE
+    if CALIBRATION_CACHE is not None:
+        return CALIBRATION_CACHE
+    calib_path = os.path.join(HERE, "mlb_calibration.json")
+    # defaults: no scaling
+    default = {"platt_a": 1.0, "platt_b": 0.0}
+    try:
+        with open(calib_path) as f:
+            data = json.load(f)
+            a = float(data.get("platt_a", 1.0))
+            b = float(data.get("platt_b", 0.0))
+            # sanity: clamp a to [0.5,1.5], b to [-0.5,0.5] to avoid extreme miscalibration from small sample
+            a = max(0.5, min(1.5, a))
+            b = max(-0.6, min(0.6, b))
+            CALIBRATION_CACHE = {"platt_a": a, "platt_b": b, "raw": data}
+            return CALIBRATION_CACHE
+    except Exception as e:
+        # no file or bad json
+        CALIBRATION_CACHE = {"platt_a": 1.0, "platt_b": 0.0, "raw": None}
+        return CALIBRATION_CACHE
+
+def apply_platt_calibration(market_prob):
+    cal = load_platt_calibration()
+    a = cal["platt_a"]
+    b = cal["platt_b"]
+    # market_prob is de-vigged true prob
+    logit_p = _logit(market_prob)
+    recal = _sigmoid(a*logit_p + b)
+    return recal
+
+
 CONFIG_PATH = os.path.join(HERE, "mlb_config.json")
 OUTPUT_PATH = os.path.join(HERE, "index.html")
 LEGACY_OUTPUT_PATH = os.path.join(HERE, "parlayos_dashboard.html")
@@ -532,10 +606,10 @@ class PredictionEngine:
         #    completely swamp a massive, real quality gap between TODAY's
         #    two actual starters, which is backwards.
         has_pitchers = home_p["has_data"] and away_p["has_data"]
-        pitcher_fip_edge  = (away_p["fip"]  - home_p["fip"])  * 0.12 if has_pitchers else 0.0
-        pitcher_era_edge  = (away_p["era"]  - home_p["era"])  * 0.04 if has_pitchers else 0.0
-        pitcher_whip_edge = (away_p["whip"] - home_p["whip"]) * 0.05 if has_pitchers else 0.0
-        pitcher_k9_edge   = (home_p["k_per_9"] - away_p["k_per_9"]) * 0.01 if has_pitchers else 0.0
+        pitcher_fip_edge  = (away_p["fip"]  - home_p["fip"])  * 0.055 if has_pitchers else 0.0
+        pitcher_era_edge  = (away_p["era"]  - home_p["era"])  * 0.018 if has_pitchers else 0.0
+        pitcher_whip_edge = (away_p["whip"] - home_p["whip"]) * 0.022 if has_pitchers else 0.0
+        pitcher_k9_edge   = (home_p["k_per_9"] - away_p["k_per_9"]) * 0.0045 if has_pitchers else 0.0
 
         # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Team offense (OPS) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â previously fetched (fetch_real_team_batting)
         #    for DISPLAY only and never used in the model at all. A great
@@ -548,12 +622,12 @@ class PredictionEngine:
             try:
                 home_ops = float(home_bat.get("ops", ".700") or ".700")
                 away_ops = float(away_bat.get("ops", ".700") or ".700")
-                offense_edge = (home_ops - away_ops) * 0.55
+                offense_edge = (home_ops - away_ops) * 0.28
             except (ValueError, TypeError):
                 has_offense = False
 
         # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Team form / bullpen / recent run production ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
-        team_edge = ((home_form["last_10_wl"] - away_form["last_10_wl"]) * 0.10
+        team_edge = ((home_form["last_10_wl"] - away_form["last_10_wl"]) * 0.045
                      if home_form["last10_has_data"] and away_form["last10_has_data"] else 0.0)
 
         # Bullpen quality ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â prefers the relief-ONLY FIP split (isolates the
@@ -564,7 +638,7 @@ class PredictionEngine:
         away_bp = fetch_bullpen_stats(game["away_id"])
         bullpen_fip_available = home_bp["has_data"] and away_bp["has_data"]
         if bullpen_fip_available:
-            bullpen_edge = (away_bp["fip"] - home_bp["fip"]) * 0.05
+            bullpen_edge = (away_bp["fip"] - home_bp["fip"]) * 0.022
 
         # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Season run differential (offense + pitching combined) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
         #    runs_per_game (season offense) and team_era (season pitching,
@@ -591,7 +665,7 @@ class PredictionEngine:
         if has_season_offense and has_season_pitching:
             home_run_diff = home_form["runs_per_game"] - home_form["team_era"]
             away_run_diff = away_form["runs_per_game"] - away_form["team_era"]
-            season_form_edge = (home_run_diff - away_run_diff) * 0.035
+            season_form_edge = (home_run_diff - away_run_diff) * 0.016
         elif has_season_offense:
             # Offense-only fallback (no season ERA available) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â weight cut
             # from the original runs_edge's 0.02 to 0.012, since offense_edge
@@ -601,9 +675,9 @@ class PredictionEngine:
             # game). This branch's remaining job is just the residual signal
             # OPS doesn't fully capture (actual run production vs raw hitting
             # rate), not to re-assert the whole offense signal a second time.
-            season_form_edge = (home_form["runs_per_game"] - away_form["runs_per_game"]) * 0.012
+            season_form_edge = (home_form["runs_per_game"] - away_form["runs_per_game"]) * 0.006
         elif has_season_pitching:
-            season_form_edge = (away_form["team_era"] - home_form["team_era"]) * 0.025
+            season_form_edge = (away_form["team_era"] - home_form["team_era"]) * 0.012
         else:
             season_form_edge = 0.0
 
@@ -614,7 +688,7 @@ class PredictionEngine:
             # under a different name.
             bullpen_edge = 0.0
 
-        h2h_edge = (home_form["h2h_pct"] - 0.5) * 0.05  # naturally 0 when no h2h games exist yet
+        h2h_edge = (home_form["h2h_pct"] - 0.5) * 0.025  # naturally 0 when no h2h games exist yet
 
         # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Weather: temperature gets a real, modest directional term (warm
         #    air carries fly balls further, aiding offense broadly for both
@@ -628,9 +702,9 @@ class PredictionEngine:
         #    properly needs an actual outcome simulation (run distributions,
         #    not a probability-threshold trick ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see the note below), so
         #    it's left out for now rather than faked.
-        weather_edge = 0.02 if weather["temp_f"] > 80 else (-0.02 if weather["temp_f"] < 50 else 0)
+        weather_edge = 0.010 if weather["temp_f"] > 82 else (-0.010 if weather["temp_f"] < 48 else 0)
 
-        home_field_edge = 0.02  # standard, well-established real MLB home-field advantage
+        home_field_edge = 0.018  # standard MLB HFA - slightly reduced after de-vig calibration
 
         # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Rest/fatigue ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â real signal from the schedule API, no scraping
         #    needed. Zero-rest teams (played yesterday) carry a modest real
@@ -640,9 +714,9 @@ class PredictionEngine:
         away_rest = fetch_team_rest_status(game["away_id"])
         rest_edge = 0.0
         if away_rest["played_yesterday"] and not home_rest["played_yesterday"]:
-            rest_edge = 0.015
+            rest_edge = 0.008
         elif home_rest["played_yesterday"] and not away_rest["played_yesterday"]:
-            rest_edge = -0.015
+            rest_edge = -0.008
 
         # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Lineup handedness (platoon advantage) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â scraped from Rotowire's
         #    daily lineups, since the MLB Stats API doesn't expose who's
@@ -669,7 +743,7 @@ class PredictionEngine:
                 away_opp  = lineups["away_R"] if home_hand == "L" else lineups["away_L"]
                 home_platoon = (home_opp - home_same) / 9.0   # -1..1, positive = favorable
                 away_platoon = (away_opp - away_same) / 9.0
-                lineup_edge = (home_platoon - away_platoon) * 0.025
+                lineup_edge = (home_platoon - away_platoon) * 0.012
 
         # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Injury burden ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â scraped from MLB.com's official injury report.
         #    Coarse (headline count per team, not precise player-by-player
@@ -683,8 +757,8 @@ class PredictionEngine:
                 home_inj = fetch_team_injury_count(home_full)
                 away_inj = fetch_team_injury_count(away_full)
                 if home_inj and away_inj:
-                    injury_edge = (away_inj["headline_count"] - home_inj["headline_count"]) * 0.004
-                    injury_edge = max(-0.03, min(0.03, injury_edge))  # cap a coarse signal's influence
+                    injury_edge = (away_inj["headline_count"] - home_inj["headline_count"]) * 0.002
+                    injury_edge = max(-0.015, min(0.015, injury_edge))  # cap a coarse signal's influence
 
         # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Bullpen fatigue ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â prefers real reliever pitch-count load from
         #    the last 2 days' boxscores over the coarse played-yesterday
@@ -697,16 +771,34 @@ class PredictionEngine:
             # scaled and capped small since day-to-day usage is noisy and
             # this should nudge the model, not dominate it.
             load_diff = (away_load["pitches"] - home_load["pitches"]) / 150.0
-            fatigue_edge = max(-0.02, min(0.02, load_diff * 0.02))
+            fatigue_edge = max(-0.010, min(0.010, load_diff * 0.010))
         else:
             home_fatigue = fetch_bullpen_fatigue(game["home_id"])
             away_fatigue = fetch_bullpen_fatigue(game["away_id"])
-            fatigue_edge = (home_fatigue - away_fatigue) * 0.02
+            fatigue_edge = (home_fatigue - away_fatigue) * 0.010
 
-        base_prob = (0.5 + team_edge + pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge
+        # --- FIX: logit-space combination for better calibration ---
+        # Market is now the baseline (already de-vigged + Platt calibrated)
+        # Edges are additive in logit space, not prob space, to avoid saturation
+        market_p = game.get("market_prob", 0.5)
+        # Ensure market_p is calibrated (if not already)
+        # If calibration not applied earlier (e.g. cached game dict), apply here
+        if market_p == game.get("market_prob", 0.5) and "home_true" in game.get("odds", {}):
+            # already de-vigged, apply platt
+            try:
+                market_p = apply_platt_calibration(game["odds"]["home_true"])
+            except:
+                market_p = game.get("market_prob", 0.5)
+        logit_market = _logit(market_p)
+        # Sum of model edges (already reduced weights)
+        edge_sum = (team_edge + pitcher_fip_edge + pitcher_era_edge + pitcher_whip_edge
                      + pitcher_k9_edge + offense_edge + bullpen_edge + season_form_edge + h2h_edge
                      + weather_edge + home_field_edge + rest_edge + lineup_edge + injury_edge
-                     + fatigue_edge + (game["market_prob"] - 0.5) * 0.15)
+                     + fatigue_edge)
+        # Convert edge sum to logit adjustment: prob edges were ~1x prob, in logit space ~1.5-2x at 0.5
+        # Use 2.2x scaling to preserve meaningful impact without overconfidence
+        logit_adjusted = logit_market + edge_sum * 2.2
+        base_prob = _sigmoid(logit_adjusted)
 
         # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Final probability = base_prob itself, clamped to a sane range.
         #
@@ -753,7 +845,7 @@ class PredictionEngine:
             "c_h2h_edge": h2h_edge, "c_weather_edge": weather_edge, "c_rest_edge": rest_edge,
             "c_lineup_edge": lineup_edge, "c_injury_edge": injury_edge, "c_fatigue_edge": fatigue_edge,
         }
-        return max(0.15, min(0.85, base_prob))
+        return max(0.12, min(0.88, base_prob))
 
 def generate_parlays(picks: List, max_legs: int = 3) -> List:
     if not picks or len(picks) < 2:
@@ -1893,8 +1985,9 @@ def _picks_to_v6_games(picks: List) -> List:
         league_avg_k9 = 8.6
         pa_k9 = pa.get('k9') if pa else None
         est_k9 = pa_k9 if pa_k9 else league_avg_k9
-        k_line = round(max(3.5, min(11.0, est_k9 * 0.67)) + (random.random()-0.5)*0.6, 1)
-        k_pick = 'OVER' if random.random() > 0.5 else 'UNDER'
+        k_line = round(max(3.5, min(11.0, est_k9 * 0.67)), 1)
+        # Deterministic pick based on whether K/9 above league avg (8.6) -> OVER, else UNDER
+        k_pick = 'OVER' if est_k9 >= league_avg_k9 else 'UNDER'
         k_pick_str = f'{k_pick} {k_line} K'
         ml_fav = TEAM_ABBR.get(pick_team, pick_team[:3].upper()) if pick_team else abbr_b
 
@@ -2122,8 +2215,13 @@ def run(html_path: str = None):
                 if matchup_key in seen_matchups:
                     continue
                 seen_matchups.add(matchup_key)
-                home_odds = next(o["price"] for o in h2h["outcomes"] if o["name"] == home)
-                market_prob = 100/(home_odds+100) if home_odds > 0 else -home_odds/(-home_odds+100)
+                home_odds = next((o["price"] for o in h2h["outcomes"] if o["name"] == home), -110)
+                away_odds = next((o["price"] for o in h2h["outcomes"] if o["name"] == away), 100)
+                # --- FIX: de-vig both sides ---
+                home_true, away_true = _devig_probs(home_odds, away_odds)
+                market_prob_raw = home_true
+                # Apply Platt calibration from mlb_calibration.json
+                market_prob = apply_platt_calibration(market_prob_raw)
                 home_abbr = TEAM_ABBR.get(home, home[:3].upper())
                 away_abbr = TEAM_ABBR.get(away, away[:3].upper())
                 home_id = MLB_TEAM_IDS.get(home_abbr, 0)
@@ -2148,7 +2246,7 @@ def run(html_path: str = None):
                     "home": home, "away": away, "home_id": home_id, "away_id": away_id,
                     "home_pitcher_id": home_pitcher_id, "away_pitcher_id": away_pitcher_id,
                     "home_pitcher": home_pitcher_name, "away_pitcher": away_pitcher_name,
-                    "market_prob": market_prob, "odds": {"home": home_odds},
+                    "market_prob": market_prob, "odds": {"home": home_odds, "away": away_odds, "home_true": home_true, "away_true": away_true, "raw_home": market_prob_raw},
                     "lat": lat, "lon": lon,
                     "real_total": real_total, "over_price": over_price, "under_price": under_price,
                 })
@@ -2252,8 +2350,13 @@ if __name__ == "__main__":
                 if matchup_key in seen_matchups:
                     continue  # same game from a second bookmaker entry ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â skip
                 seen_matchups.add(matchup_key)
-                home_odds = next(o["price"] for o in h2h["outcomes"] if o["name"] == home)
-                market_prob = 100/(home_odds+100) if home_odds > 0 else -home_odds/(-home_odds+100)
+                home_odds = next((o["price"] for o in h2h["outcomes"] if o["name"] == home), -110)
+                away_odds = next((o["price"] for o in h2h["outcomes"] if o["name"] == away), 100)
+                # --- FIX: de-vig both sides ---
+                home_true, away_true = _devig_probs(home_odds, away_odds)
+                market_prob_raw = home_true
+                # Apply Platt calibration from mlb_calibration.json
+                market_prob = apply_platt_calibration(market_prob_raw)
 
                 # Resolve REAL team IDs (was hardcoded 0 for every game, which
                 # made calculate_win_probability's team/pitcher lookups fail
@@ -2301,7 +2404,7 @@ if __name__ == "__main__":
                     "home": home, "away": away, "home_id": home_id, "away_id": away_id,
                     "home_pitcher_id": home_pitcher_id, "away_pitcher_id": away_pitcher_id,
                     "home_pitcher": home_pitcher_name, "away_pitcher": away_pitcher_name,
-                    "market_prob": market_prob, "odds": {"home": home_odds},
+                    "market_prob": market_prob, "odds": {"home": home_odds, "away": away_odds, "home_true": home_true, "away_true": away_true, "raw_home": market_prob_raw},
                     "lat": lat, "lon": lon,
                     "real_total": real_total, "over_price": over_price, "under_price": under_price,
                 })
@@ -2332,12 +2435,12 @@ if __name__ == "__main__":
         # single recommendation was the home team regardless of what prob
         # said. edge/odds are computed for whichever side is actually picked.
         if prob >= 0.5:
-            pick, pick_prob, pick_odds = g["home"], prob, g["odds"]["home"]
+            pick, pick_prob = g["home"], prob
+            pick_odds = g["odds"].get("home", -110)
         else:
-            # Model favors away ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â convert market_prob/odds to the away side
+            # FIX: use REAL away odds from API, not fabricated from implied
             pick, pick_prob = g["away"], 1 - prob
-            away_dec = 1 / (1 - implied) if implied < 1 else 2.0
-            pick_odds = int((away_dec - 1) * 100) if away_dec >= 2 else int(-100 / (away_dec - 1))
+            pick_odds = g["odds"].get("away", 100)
         pick_implied = implied if pick == g["home"] else (1 - implied)
         edge = pick_prob - pick_implied
         pick_dec = (pick_odds/100)+1 if pick_odds > 0 else (100/abs(pick_odds))+1

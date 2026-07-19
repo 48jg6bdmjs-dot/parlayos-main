@@ -447,6 +447,7 @@ def compute_calibration(rows):
 
 
 def tune_config(analysis):
+    """Improved: tunes BOTH moneyline edge and totals bands, with calibration awareness"""
     cfg = dict(DEFAULTS)
     try:
         with open(CONFIG_PATH) as f:
@@ -455,50 +456,89 @@ def tune_config(analysis):
             if k in cur: cfg[k] = cur[k]
     except Exception: pass
 
-    totals = analysis.get("totals")
     notes = []
-    if not totals or totals["bets"] < MIN_BETS_TO_TUNE:
-        notes.append("only %s graded totals — keeping defaults (need %d)" %
-                     (totals["bets"] if totals else 0, MIN_BETS_TO_TUNE))
-        return cfg, notes
+    # Always start with current values, not defaults, to avoid resetting moneyline tuning when only totals are small
+    prev_min, prev_max = cfg.get("min_total_line", DEFAULTS["min_total_line"]), cfg.get("max_total_line", DEFAULTS["max_total_line"])
+    prev_edge = cfg.get("edge_threshold", DEFAULTS["edge_threshold"])
 
-    be = analysis["by_edge"]
-    tight = be.get("tight (<5%)"); wide = be.get("wide (>10%)")
-    new_edge = cfg["edge_threshold"]
-    if tight and tight["bets"]>=8 and tight["roi"]<-0.03:
-        new_edge += 0.01
-        notes.append("tight-edge totals losing (ROI %+.1f%%, n=%d) -> raise edge to %.1f%%"
-                     % (100*tight["roi"], tight["bets"], 100*new_edge))
-    elif wide and wide["bets"]>=8 and wide["roi"]>0.08 and new_edge>EDGE_MIN+0.005:
-        new_edge -= 0.005
-        notes.append("wide-edge totals strong (ROI %+.1f%%, n=%d) -> lower edge to %.1f%%"
-                     % (100*wide["roi"], wide["bets"], 100*new_edge))
-    cfg["edge_threshold"] = round(min(EDGE_MAX, max(EDGE_MIN, new_edge)), 4)
+    totals = analysis.get("totals")
+    moneylines = analysis.get("moneylines")
+    calibration = analysis.get("calibration", {})
+    overall = analysis.get("overall")
 
-    bl = analysis["by_line"]
-    low, high = bl.get("low (<7.5)"), bl.get("high (>9)")
-    prev_min, prev_max = cfg["min_total_line"], cfg["max_total_line"]
-    new_min, new_max = DEFAULTS["min_total_line"], DEFAULTS["max_total_line"]
-    if low and low["bets"]>=8 and low["roi"]<-0.05:
-        new_min = max(new_min, 7.5)
-        notes.append("low totals (<7.5) losing (ROI %+.1f%%, n=%d) -> min_total_line=7.5"
-                     % (100*low["roi"], low["bets"]))
-    if high and high["bets"]>=8 and high["roi"]<-0.05:
-        new_max = min(new_max, 9.0)
-        notes.append("high totals (>9) losing (ROI %+.1f%%, n=%d) -> max_total_line=9.0"
-                     % (100*high["roi"], high["bets"]))
-    cfg["min_total_line"] = round(max(LINE_FLOOR, new_min), 1)
-    cfg["max_total_line"] = round(min(LINE_CEIL, new_max), 1)
+    # --- Moneyline edge tuning (CRITICAL - previously only tuned totals) ---
+    # This was the biggest gap: mlb_backtest tuned totals but moneyline edge_threshold was never updated from results
+    if moneylines and moneylines["bets"] >= MIN_BETS_TO_TUNE:
+        ml_roi = moneylines["roi"]
+        new_edge = prev_edge
+        if moneylines["bets"] >= 15 and ml_roi < -0.04:
+            # Losing at current threshold - raise it
+            new_edge = min(EDGE_MAX, prev_edge + 0.012)
+            notes.append(f"moneyline losing ROI {ml_roi*100:+.1f}% n={moneylines['bets']} -> raise edge {prev_edge*100:.1f}% -> {new_edge*100:.1f}%")
+        elif moneylines["bets"] >= 20 and ml_roi < -0.02:
+            new_edge = min(EDGE_MAX, prev_edge + 0.006)
+            notes.append(f"moneyline slightly losing ROI {ml_roi*100:+.1f}% -> nudge edge to {new_edge*100:.1f}%")
+        elif moneylines["bets"] >= 25 and ml_roi > 0.06 and prev_edge > EDGE_MIN+0.005:
+            new_edge = max(EDGE_MIN, prev_edge - 0.005)
+            notes.append(f"moneyline strong ROI {ml_roi*100:+.1f}% -> lower edge to {new_edge*100:.1f}%")
+        cfg["edge_threshold"] = round(new_edge, 4)
+        cfg["min_edge"] = round(new_edge, 4)  # keep both keys in sync
+    else:
+        # Not enough moneyline bets, but check calibration for overconfidence signal
+        if calibration and not calibration.get("insufficient"):
+            buckets = calibration.get("buckets", [])
+            # If high confidence buckets are overconfident, raise threshold
+            overconfident = [b for b in buckets if b["gap"] < -0.08 and b["n"]>=5]
+            if overconfident:
+                new_edge = min(EDGE_MAX, prev_edge + 0.008)
+                cfg["edge_threshold"] = round(new_edge,4)
+                cfg["min_edge"] = round(new_edge,4)
+                notes.append(f"calibration shows overconfidence in {len(overconfident)} buckets -> raise edge to {new_edge*100:.1f}%")
+            else:
+                cfg["edge_threshold"] = round(prev_edge,4)
+                cfg["min_edge"] = round(prev_edge,4)
+        else:
+            cfg["edge_threshold"] = round(prev_edge,4)
+            cfg["min_edge"] = round(prev_edge,4)
+            if not totals or totals["bets"] < MIN_BETS_TO_TUNE:
+                notes.append("only %s graded totals, %s moneylines — keeping current thresholds (need %d)" %
+                             (totals["bets"] if totals else 0, moneylines["bets"] if moneylines else 0, MIN_BETS_TO_TUNE))
 
-    if cfg["max_total_line"] > prev_max:
-        notes.append("restoring max_total_line=%.1f (was %.1f)" % (cfg["max_total_line"], prev_max))
-    if cfg["min_total_line"] < prev_min:
-        notes.append("restoring min_total_line=%.1f (was %.1f)" % (cfg["min_total_line"], prev_min))
-    if cfg["min_total_line"] > cfg["max_total_line"]:
-        old_min, old_max = cfg["min_total_line"], cfg["max_total_line"]
-        cfg["min_total_line"] = DEFAULTS["min_total_line"]
-        cfg["max_total_line"] = DEFAULTS["max_total_line"]
-        notes.append("min/max inverted (%.1f > %.1f) — reset to defaults" % (old_min, old_max))
+    # --- Totals band tuning (existing but improved) ---
+    if totals and totals["bets"] >= 8:
+        be = analysis.get("by_edge", {})
+        tight = be.get("tight (<5%)"); wide = be.get("wide (>10%)")
+        # Only adjust edge again slightly based on totals edge performance, don't overwrite moneyline tuning drastically
+        if tight and tight["bets"]>=8 and tight["roi"]<-0.04:
+            # If tight totals losing, ensure min edge is not too low
+            if cfg["edge_threshold"] < 0.045:
+                cfg["edge_threshold"] = 0.045
+                cfg["min_edge"] = 0.045
+                notes.append(f"tight totals losing ROI {tight['roi']*100:+.1f}% -> enforce min edge 4.5%")
+
+        bl = analysis.get("by_line", {})
+        low, high = bl.get("low (<7.5)"), bl.get("high (>9)")
+        new_min, new_max = cfg["min_total_line"], cfg["max_total_line"]
+        if low and low["bets"]>=8 and low["roi"]<-0.05:
+            new_min = max(new_min, 7.5)
+            notes.append("low totals (<7.5) losing (ROI %+.1f%%, n=%d) -> min_total_line=7.5"
+                         % (100*low["roi"], low["bets"]))
+        if high and high["bets"]>=8 and high["roi"]<-0.05:
+            new_max = min(new_max, 9.5)  # was 9.0, now 9.5 to be less aggressive after fix
+            notes.append("high totals (>9) losing (ROI %+.1f%%, n=%d) -> max_total_line=9.5"
+                         % (100*high["roi"], high["bets"]))
+        cfg["min_total_line"] = round(max(LINE_FLOOR, new_min), 1)
+        cfg["max_total_line"] = round(min(LINE_CEIL, new_max), 1)
+
+        if cfg["max_total_line"] > prev_max:
+            notes.append("restoring max_total_line=%.1f (was %.1f)" % (cfg["max_total_line"], prev_max))
+        if cfg["min_total_line"] < prev_min:
+            notes.append("restoring min_total_line=%.1f (was %.1f)" % (cfg["min_total_line"], prev_min))
+        if cfg["min_total_line"] > cfg["max_total_line"]:
+            old_min, old_max = cfg["min_total_line"], cfg["max_total_line"]
+            cfg["min_total_line"] = DEFAULTS["min_total_line"]
+            cfg["max_total_line"] = DEFAULTS["max_total_line"]
+            notes.append("min/max inverted (%.1f > %.1f) — reset to defaults" % (old_min, old_max))
 
     if not notes: notes.append("results within tolerance — thresholds unchanged")
     return cfg, notes

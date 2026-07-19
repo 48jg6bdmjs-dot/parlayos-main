@@ -1,26 +1,23 @@
 {
   "odds_api_key": "16b0a233c6bbe7492dc168a1a46ec469",
-
   "mlb": {
-    "min_edge": 0.0,
-    "min_total_line": 6.0,
-    "max_total_line": 13.5,
+    "min_edge": 0.04,
+    "min_total_line": 6.5,
+    "max_total_line": 11.5,
     "max_legs": 16,
     "kelly_fraction": 0.25,
     "max_stake_pct": 0.05
   },
-
   "nfl": {
-    "min_edge": 0.0,
+    "min_edge": 0.035,
     "min_total_line": 30.0,
     "max_total_line": 60.0,
     "max_legs": 16,
     "kelly_fraction": 0.25,
     "max_stake_pct": 0.05
   },
-
   "nba": {
-    "min_edge": 0.0,
+    "min_edge": 0.035,
     "min_total_line": 190.0,
     "max_total_line": 250.0,
     "max_legs": 16,

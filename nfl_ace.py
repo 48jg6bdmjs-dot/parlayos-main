@@ -47,10 +47,47 @@ from pathlib import Path
 from typing import List, Dict, Any, Tuple
 import os
 import re
+import math
 import pickle
 from time import time as _time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+# --- ACCURACY FIX: de-vig helpers ---
+import math
+
+def _american_to_implied_prob(american_odds):
+    try:
+        o = float(str(american_odds).strip().replace("+",""))
+    except:
+        return None
+    if o is None:
+        return None
+    return (-o)/(-o+100.0) if o < 0 else 100.0/(o+100.0)
+
+def _devig_probs(home_odds, away_odds):
+    hi = _american_to_implied_prob(home_odds)
+    ai = _american_to_implied_prob(away_odds)
+    if hi is None or ai is None:
+        return (hi or 0.5), (ai or 0.5)
+    total = hi + ai
+    if total <= 0:
+        return 0.5, 0.5
+    return hi/total, ai/total
+
+def _logit(p):
+    eps = 1e-6
+    p = min(max(p, eps), 1-eps)
+    return math.log(p/(1-p))
+
+def _sigmoid(x):
+    if x >= 0:
+        return 1.0/(1.0+math.exp(-x))
+    else:
+        e = math.exp(x)
+        return e/(1.0+e)
+
 CONFIG_PATH = os.path.join(HERE, "sports_config.json")
 PICKS_LOG_PATH = os.path.join(HERE, "nfl_picks_log.csv")
 CACHE_DIR = os.path.join(HERE, ".nfl_cache")
@@ -496,7 +533,7 @@ class NFLPredictionEngine:
         #    gives starting pitcher FIP: the single most predictive
         #    individual-player factor for an individual game outcome.
         has_qb = home_qb["has_data"] and away_qb["has_data"]
-        qb_edge = (home_qb["qbr"] - away_qb["qbr"]) * 0.006 if has_qb else 0.0
+        qb_edge = (home_qb["qbr"] - away_qb["qbr"]) * 0.0030 if has_qb else 0.0
 
         # ── Points-based team quality (season scoring margin) — the NFL
         #    analog of MLB's season run differential. Both offense and
@@ -507,7 +544,7 @@ class NFLPredictionEngine:
         if home_stats["ppg_has_data"] and away_stats["ppg_has_data"]:
             home_margin = home_stats["ppg"] - home_stats["papg"]
             away_margin = away_stats["ppg"] - away_stats["papg"]
-            team_edge = (home_margin - away_margin) * 0.008
+            team_edge = (home_margin - away_margin) * 0.0040
 
         # ── Yardage-based offense/defense — a distinct signal from
         #    points-based team_edge above (yards is a "how good are they
@@ -518,14 +555,14 @@ class NFLPredictionEngine:
         offense_edge = 0.0
         defense_edge = 0.0
         if home_stats["ypg_has_data"] and away_stats["ypg_has_data"]:
-            offense_edge = (home_stats["ypg"] - away_stats["ypg"]) * 0.00015
-            defense_edge = (away_stats["yapg"] - home_stats["yapg"]) * 0.00015
+            offense_edge = (home_stats["ypg"] - away_stats["ypg"]) * 0.000075
+            defense_edge = (away_stats["yapg"] - home_stats["yapg"]) * 0.000075
 
         # ── Turnover margin — unusually predictive in the NFL specifically
         #    (see docstring rationale above). Both sides need real data.
         turnover_edge = 0.0
         if home_stats["to_has_data"] and away_stats["to_has_data"]:
-            turnover_edge = (home_stats["to_margin"] - away_stats["to_margin"]) * 0.02
+            turnover_edge = (home_stats["to_margin"] - away_stats["to_margin"]) * 0.010
 
         # ── Weather — same directional-only-when-outdoor logic as
         #    mlb_ace.py, forced to 0 for known dome teams rather than
@@ -542,10 +579,10 @@ class NFLPredictionEngine:
         #    count, capped small like mlb_ace.py caps its injury_edge.
         injury_edge = 0.0
         if home_inj["has_data"] and away_inj["has_data"]:
-            injury_edge = (away_inj["count"] - home_inj["count"]) * 0.008
-            injury_edge = max(-0.04, min(0.04, injury_edge))
+            injury_edge = (away_inj["count"] - home_inj["count"]) * 0.004
+            injury_edge = max(-0.02, min(0.02, injury_edge))
 
-        home_field_edge = 0.025  # standard, well-established NFL home-field advantage
+        home_field_edge = 0.018  # standard, well-established NFL home-field advantage
         # (Slightly larger than MLB's 0.02 — commonly cited as somewhat
         # stronger in the NFL, partly due to crowd noise affecting
         # opposing-team communication/snap timing in a way that has less
@@ -558,10 +595,13 @@ class NFLPredictionEngine:
         ats_form_edge = 0.0
         h2h_edge = 0.0
 
-        base_prob = (0.5 + team_edge + qb_edge + offense_edge + defense_edge
+        market_p = game.get("market_prob", 0.5)
+        logit_market = _logit(market_p)
+        edge_sum = (team_edge + qb_edge + offense_edge + defense_edge
                      + turnover_edge + ats_form_edge + h2h_edge + weather_edge
-                     + injury_edge + home_field_edge
-                     + (game.get("market_prob", 0.5) - 0.5) * 0.15)
+                     + injury_edge + home_field_edge)
+        logit_adjusted = logit_market + edge_sum * 2.0
+        base_prob = _sigmoid(logit_adjusted)
 
         game["_edge_components"] = {
             "c_team_edge": team_edge, "c_qb_edge": qb_edge,
@@ -573,7 +613,7 @@ class NFLPredictionEngine:
         }
         # Same clamp philosophy as mlb_ace.py: a sanity bound, not a
         # substitute for real calibration against graded outcomes.
-        return max(0.15, min(0.85, base_prob))
+        return max(0.12, min(0.88, base_prob))
 
     def calculate_total_points(self, game: Dict, posted_total: float) -> Tuple[str, float, float]:
         """
@@ -618,11 +658,8 @@ class NFLPredictionEngine:
             away_exp = away_stats["ppg"] * (home_stats["papg"] / LEAGUE_AVG_PAPG)
             model_total = home_exp + away_exp
         else:
-            # Insufficient real data for either side — fall back to the
-            # posted total itself as the model estimate (i.e. no edge),
-            # rather than fabricating a number from league averages that
-            # would produce a fake-looking "edge" out of pure noise.
-            model_total = posted_total
+            # FIXED: return 0 edge when no data, not fake -2.3%
+            return 'OVER', round(posted_total,1), 0.0
 
         gap = model_total - posted_total
         if gap >= 0:
@@ -896,8 +933,10 @@ def run(html_path: str):
                     continue
                 seen_matchups.add(matchup_key)
 
-                home_odds = next(o["price"] for o in h2h["outcomes"] if o["name"] == home)
-                market_prob = 100/(home_odds+100) if home_odds > 0 else -home_odds/(-home_odds+100)
+                home_odds = next((o["price"] for o in h2h["outcomes"] if o["name"] == home), -110)
+                away_odds = next((o["price"] for o in h2h["outcomes"] if o["name"] == away), 100)
+                home_true, away_true = _devig_probs(home_odds, away_odds)
+                market_prob = home_true
 
                 home_abbr = TEAM_ABBR.get(home, home[:3].upper())
                 away_abbr = TEAM_ABBR.get(away, away[:3].upper())
@@ -924,7 +963,7 @@ def run(html_path: str):
                 games.append({
                     "home": home, "away": away,
                     "home_abbr": home_abbr, "away_abbr": away_abbr,
-                    "market_prob": market_prob, "odds": {"home": home_odds},
+                    "market_prob": market_prob, "odds": {"home": home_odds, "away": away_odds, "home_true": home_true, "away_true": away_true},
                     "real_total": real_total, "over_price": over_price,
                     "under_price": under_price, "real_spread": real_spread,
                     "spread_price": spread_price,
@@ -950,11 +989,11 @@ def run(html_path: str):
         implied = g["market_prob"]
 
         if prob >= 0.5:
-            pick, pick_prob, pick_odds = g["home"], prob, g["odds"]["home"]
+            pick, pick_prob = g["home"], prob
+            pick_odds = g["odds"].get("home", -110)
         else:
             pick, pick_prob = g["away"], 1 - prob
-            away_dec = 1 / (1 - implied) if implied < 1 else 2.0
-            pick_odds = int((away_dec - 1) * 100) if away_dec >= 2 else int(-100 / (away_dec - 1))
+            pick_odds = g["odds"].get("away", 100)
         pick_implied = implied if pick == g["home"] else (1 - implied)
         edge = pick_prob - pick_implied
         pick_dec = (pick_odds/100)+1 if pick_odds > 0 else (100/abs(pick_odds))+1
