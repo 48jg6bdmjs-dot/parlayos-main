@@ -15500,267 +15500,215 @@ html body #parlayBubble .parlay-bubble-btn,
 </script>
 
 
-<style id="restore-exact-pink-blue-design">
-/* === RESTORE EXACT DESIGN FROM SCREENSHOTS - COVER + GATE === */
-
-/* Full screen vibrant background - pink magenta to blue */
-#coverPage,
-#accessGate,
-div#coverPage,
-div#accessGate {
-  background: radial-gradient(120% 70% at 10% 0%, rgba(255, 90, 210, 0.9) 0%, transparent 60%),
-              radial-gradient(100% 60% at 90% 10%, rgba(160, 90, 255, 0.7) 0%, transparent 55%),
-              radial-gradient(90% 70% at 50% 100%, rgba(50, 130, 255, 0.85) 0%, transparent 60%),
-              linear-gradient(180deg, #ff22c8 0%, #ff1ab4 12%, #e93be8 28%, #b14bff 48%, #7a5bff 68%, #2e7dff 88%, #1a6bff 100%) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  z-index: 10000 !important;
-  overflow: hidden !important;
-}
-
-/* Hide blur overlay that was hiding old screen - we now use opaque gradient bg */
-#gateBlurOverlay {
-  display: none !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-/* Card - glass translucent white 8% */
-#coverPage > div,
+<style id="glow-match-gate-cover-final">
+/* === Match main menu logo glow to gate + cover === */
+#coverPage #coverTabRequest,
+#coverTabRequest,
 #accessGate > div,
-div#coverPage > div,
-div#accessGate > div {
-  background: rgba(255,255,255,0.07) !important;
-  background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.06) 100%) !important;
-  backdrop-filter: blur(22px) saturate(1.3) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(1.3) !important;
-  border: 1.5px solid rgba(255,255,255,0.18) !important;
-  border-radius: 28px !important;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.20) !important;
-  padding: 28px 24px 24px !important;
+#accessGate > div > div {
+  position: relative !important;
+  isolation: isolate !important;
 }
 
-/* Logo - pure white, no gradient, no glow orbs, no underline */
+/* Make cover and gate logos use same gradient as main menu (new ParlayOS orange->yellow->light blue) */
 #coverPage div[style*="font-size:36px"],
 #coverPage #coverTabRequest div[style*="font-size:36px"],
 #accessGate div[style*="font-size:38px"],
 #accessGate div[style*="font-size:36px"],
-#coverPage .logo-glow-wrap,
-#accessGate .logo-glow-wrap,
-#coverPage #coverTabRequest .logo-glow-wrap {
-  background: none !important;
-  -webkit-background-clip: unset !important;
-  background-clip: unset !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18)) !important;
-  text-shadow: 0 1px 12px rgba(0,0,0,0.14) !important;
-  font-weight: 900 !important;
-  letter-spacing: -0.03em !important;
-}
-#coverPage div[style*="font-size:36px"]::after,
-#coverPage div[style*="font-size:36px"]::before,
-#accessGate div[style*="font-size:38px"]::after,
-#accessGate div[style*="font-size:38px"]::before,
-.headline h1::after,
-.headline h1::before {
-  /* Only hide for gate/cover, keep main menu glow handled elsewhere */
-}
-#coverPage div[style*="font-size:36px"]::after,
-#coverPage div[style*="font-size:36px"]::before,
-#accessGate div[style*="font-size:38px"]::after,
-#accessGate div[style*="font-size:38px"]::before {
-  display: none !important;
-}
-#coverPage .logo-glow-wrap,
-#accessGate .logo-glow-wrap,
-#coverPage .logo-glow,
-#accessGate .logo-glow {
-  display: none !important;
-  opacity: 0 !important;
-}
-
-/* Subtitle under logo */
-#coverPage div[style*="MLB Edge Scanner"],
-#accessGate div[style*="Enter Access Code"],
-#coverPage #coverTabRequest div[style*="MLB Edge"],
-#coverPage div[style*="Enter Access Code"] {
-  color: rgba(255,255,255,0.82) !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  text-align: center !important;
-  margin-top: 4px !important;
-}
-
-/* Tabs - Request / About / Legal */
-#coverPage .cover-tab,
-#coverPage button.cover-tab,
-#coverPage div[style*="display:flex"] button.cover-tab {
-  color: rgba(255,255,255,0.55) !important;
-  font-weight: 600 !important;
-  font-size: 13px !important;
-  border-bottom: 2px solid transparent !important;
-  background: none !important;
-}
-#coverPage .cover-tab.active,
-#coverPage button.cover-tab.active {
-  color: rgba(255,255,255,0.92) !important;
-  border-bottom: 2px solid rgba(120,180,255,0.9) !important;
-  box-shadow: 0 2px 8px rgba(120,180,255,0.25) !important;
-}
-
-/* Inputs - translucent pill style matching screenshot */
-#coverPage input[type="text"],
-#coverPage input[type="number"],
-#coverPage input[type="email"],
-#accessGate input[type="text"],
-#accessGate input[type="number"],
-#accessGate input#gatePassword,
-#coverPage input[name="name"],
-#coverPage input[name="age"],
-#coverPage input[name="email"],
-#coverPage input[name="cash_tag"],
-#coverForm input,
-#gatePassword {
-  background: rgba(255,255,255,0.08) !important;
-  background-color: rgba(255,255,255,0.08) !important;
-  border: 1.2px solid rgba(255,255,255,0.18) !important;
-  border-radius: 14px !important;
-  color: rgba(255,255,255,0.92) !important;
-  font-size: 15px !important;
-  padding: 12px 16px !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-}
-#coverPage input::placeholder,
-#accessGate input::placeholder,
-#gatePassword::placeholder {
-  color: rgba(255,255,255,0.42) !important;
-}
-
-/* Small helper text under input */
-#coverPage div[style*="PLOS token"],
-#accessGate div[style*="PLOS token"],
-#coverPage div[style*="0/40"],
-#accessGate div[style*="0/40"],
-#gateError,
-#coverMessage {
-  color: rgba(255,255,255,0.72) !important;
-  font-size: 11.5px !important;
-}
-
-/* Buttons - orange-red gradient exactly like screenshot */
-#coverSubmit,
-#coverForm button[type="submit"],
-#coverForm #coverSubmit,
-#gateSubmit,
-#accessGate button#gateSubmit,
-#accessGate button[type="submit"],
-#accessGate div button[style*="Unlock"],
-#coverPage button[style*="Submit Request"] {
-  background: linear-gradient(135deg, #ff4d6a 0%, #ff6a3e 50%, #ff8a2e 100%) !important;
-  background-color: #ff5a4a !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 14px !important;
-  font-weight: 700 !important;
-  font-size: 15px !important;
-  padding: 14px 20px !important;
-  box-shadow: 0 8px 20px rgba(255,80,90,0.36), 0 2px 8px rgba(0,0,0,0.14) !important;
-  letter-spacing: -0.01em !important;
-}
-
-/* Skip button - translucent */
-#coverPage button[onclick*="dismissCover"],
-#coverPage button[style*="Skip"],
-#coverForm button[onclick*="dismissCover"] {
-  background: rgba(255,255,255,0.08) !important;
-  background-color: rgba(255,255,255,0.08) !important;
-  border: 1.2px solid rgba(255,255,255,0.18) !important;
-  color: rgba(255,255,255,0.82) !important;
-  border-radius: 14px !important;
-  font-weight: 600 !important;
-}
-
-/* Stars - make them visible white dots like screenshot */
-#coverStarsCanvas,
-#gateStarsCanvas,
-#starsCanvas {
-  display: block !important;
-  opacity: 0.9 !important;
-  z-index: 1 !important;
-}
-#coverPage > div,
-#accessGate > div {
-  z-index: 2 !important;
+.headline h1 span,
+#screen-desktop .headline h1 span,
+.glass.headline h1 span {
+  background: linear-gradient(100deg, #ff7a3d 0%, #ff9a3e 14%, #ffb84a 28%, #ffd23a 42%, #ffe88a 55%, #a8d8ff 72%, #7ec1ff 88%, #c7e8ff 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
   position: relative !important;
+  z-index: 2 !important;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.08)) !important;
 }
 
-/* Ensure app-shell hidden when gate active */
-body.gate-blur-active .app-shell {
-  opacity: 0 !important;
+/* Glow wraps for cover and gate - same as .headline */
+#coverTabRequest .logo-glow-wrap,
+#accessGate .logo-glow-wrap,
+#coverPage .logo-glow-wrap {
+  position: absolute !important;
+  inset: -45% -18% -22% -18% !important;
+  z-index: 0 !important;
   pointer-events: none !important;
-  filter: blur(20px) !important;
+  overflow: hidden !important;
+  filter: blur(7px) !important;
+  opacity: 0.95 !important;
+}
+
+/* Orbs - updated to orange/yellow + light blue to match favicon */
+.logo-glow.orb1,
+#coverTabRequest .logo-glow.orb1,
+#accessGate .logo-glow.orb1 {
+  background: radial-gradient(ellipse at 30% 30%, rgba(255,122,69,0.62) 0%, rgba(255,196,64,0.42) 32%, rgba(255,220,120,0.0) 72%) !important;
+}
+.logo-glow.orb2,
+#coverTabRequest .logo-glow.orb2,
+#accessGate .logo-glow.orb2 {
+  background: radial-gradient(ellipse at 70% 40%, rgba(126,193,255,0.58) 0%, rgba(168,216,255,0.28) 42%, transparent 72%) !important;
+}
+.logo-glow.orb3,
+#coverTabRequest .logo-glow.orb3,
+#accessGate .logo-glow.orb3 {
+  background: radial-gradient(ellipse at 50% 50%, rgba(255,138,90,0.22) 0%, rgba(122,184,255,0.18) 52%, transparent 78%) !important;
+}
+
+/* Underline glow matching main menu - same thin gradient line */
+#coverPage div[style*="font-size:36px"]::after,
+#accessGate div[style*="font-size:38px"]::after,
+.headline h1::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: -6px !important;
+  left: 6% !important;
+  right: 6% !important;
+  height: 2px !important;
+  border-radius: 2px !important;
+  background: linear-gradient(90deg, transparent 0%, #ff7a3d 22%, #ffbe3a 48%, #7ec1ff 78%, transparent 100%) !important;
+  opacity: 0.9 !important;
+  filter: blur(0.3px) !important;
+  pointer-events: none !important;
+  z-index: 3 !important;
+  display: block !important;
+}
+
+/* === Remove lineup comparison window from calendar === */
+#dateDetailOverlay,
+#dateDetailModal {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: none !important;
+}
+#dateDetailOverlay.show,
+#dateDetailOverlay[style*="display: flex"] {
+  display: none !important;
+}
+
+/* Make calendar dates do nothing */
+.cal-cell,
+.cal-cell.game,
+.cal-cell.today,
+.cal-cell.win,
+.cal-cell.loss {
+  cursor: default !important;
+  pointer-events: auto !important; /* keep auto but we block click via JS */
+}
+.cal-cell:active,
+.cal-cell:hover {
+  transform: none !important;
+  opacity: 1 !important;
 }
 </style>
 
-<script id="stars-pink-blue-restore">
+<script id="glow-and-calendar-fix-js">
 (function(){
-  function createStarsFor(containerId, canvasId){
-    var container = document.getElementById(containerId);
-    if(!container) return;
-    var existing = document.getElementById(canvasId);
-    if(existing) existing.remove();
-    var canvas = document.createElement('canvas');
-    canvas.id = canvasId;
-    canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;';
-    container.style.position = 'relative';
-    container.prepend(canvas);
-    var ctx = canvas.getContext('2d');
-    var stars = [];
-    function resize(){
-      canvas.width = container.offsetWidth * window.devicePixelRatio;
-      canvas.height = container.offsetHeight * window.devicePixelRatio;
-      canvas.style.width = container.offsetWidth + 'px';
-      canvas.style.height = container.offsetHeight + 'px';
-      ctx.setTransform(window.devicePixelRatio,0,0,window.devicePixelRatio,0,0);
-      stars = [];
-      for(var i=0;i<60;i++){
-        stars.push({
-          x: Math.random()*container.offsetWidth,
-          y: Math.random()*container.offsetHeight,
-          r: Math.random()*1.8 + 0.3,
-          o: Math.random()*0.6 + 0.15,
-          tw: Math.random()*0.02 + 0.005
+  // --- 1. Add glow orbs to cover and gate logos to match main menu ---
+  function addGlowToLogo(logoEl){
+    if(!logoEl) return;
+    var parent = logoEl.parentElement;
+    if(!parent) return;
+    if(parent.querySelector('.logo-glow-wrap')) return;
+    // Ensure parent is relative
+    parent.style.position = 'relative';
+    parent.style.isolation = 'isolate';
+    parent.style.overflow = parent.style.overflow || 'hidden';
+    logoEl.style.position = 'relative';
+    logoEl.style.zIndex = '2';
+    var wrap = document.createElement('div');
+    wrap.className = 'logo-glow-wrap';
+    wrap.setAttribute('aria-hidden','true');
+    wrap.innerHTML = '<div class="logo-glow orb1"></div><div class="logo-glow orb2"></div><div class="logo-glow orb3"></div>';
+    parent.insertBefore(wrap, logoEl);
+  }
+
+  function injectGlows(){
+    try{
+      // Main menu already has it, but ensure
+      var mainLogo = document.querySelector('.headline h1 span');
+      if(mainLogo && !document.querySelector('.headline .logo-glow-wrap')){
+        addGlowToLogo(mainLogo.parentElement);
+      }
+      // Cover page logo
+      var coverLogos = document.querySelectorAll('#coverPage div[style*="font-size:36px"]');
+      coverLogos.forEach(function(l){ addGlowToLogo(l); });
+      // Gate logo - may be inside accessGate
+      var gateLogos = document.querySelectorAll('#accessGate div[style*="font-size:38px"], #accessGate div[style*="font-size:36px"]');
+      gateLogos.forEach(function(l){ addGlowToLogo(l); });
+      // Also dynamic gate that gets created later
+      var dynGate = document.getElementById('accessGate');
+      if(dynGate){
+        var dynLogo = dynGate.querySelector('div[style*="font-size:38px"], div[style*="font-size:36px"]');
+        if(dynLogo) addGlowToLogo(dynLogo);
+      }
+    }catch(e){}
+  }
+
+  // --- 2. Disable calendar popup ---
+  function killCalendarPopup(){
+    try{
+      window.showDateModal = function(){ return; };
+      window.hideDateModal = function(){ return; };
+      var overlay = document.getElementById('dateDetailOverlay');
+      if(overlay){
+        overlay.style.display = 'none';
+        overlay.classList.remove('show');
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+      }
+      var modal = document.getElementById('dateDetailModal');
+      if(modal){
+        modal.style.display = 'none';
+      }
+      // Remove click handlers by cloning? Simplest: block all cal-cell clicks
+    }catch(e){}
+  }
+
+  // Block calendar cell clicks - do nothing
+  document.addEventListener('click', function(e){
+    var cell = e.target.closest && e.target.closest('.cal-cell');
+    if(cell){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      // Do nothing per user request
+      return false;
+    }
+  }, true);
+
+  // Run
+  injectGlows();
+  killCalendarPopup();
+  document.addEventListener('DOMContentLoaded', function(){ injectGlows(); killCalendarPopup(); });
+  window.addEventListener('load', function(){ setTimeout(function(){ injectGlows(); killCalendarPopup(); }, 200); setTimeout(injectGlows, 800); });
+  
+  // Observe for dynamically created gate/cover
+  var obs = new MutationObserver(function(muts){
+    var need = false;
+    muts.forEach(function(m){
+      if(m.addedNodes){
+        m.addedNodes.forEach(function(n){
+          if(n.id === 'accessGate' || n.id === 'coverPage' || (n.querySelector && (n.querySelector('#accessGate') || n.querySelector('#coverPage')))){
+            need = true;
+          }
+          if(n.classList && n.classList.contains('cal-cell')){
+            need = true;
+          }
         });
       }
-    }
-    function draw(){
-      if(!ctx) return;
-      ctx.clearRect(0,0,container.offsetWidth, container.offsetHeight);
-      stars.forEach(function(s){
-        s.o += (Math.random()-0.5)*s.tw;
-        s.o = Math.max(0.1, Math.min(0.9, s.o));
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(255,255,255,'+s.o+')';
-        ctx.fill();
-      });
-      requestAnimationFrame(draw);
-    }
-    window.addEventListener('resize', resize);
-    resize(); draw();
-  }
-  // Recreate for both
-  setTimeout(function(){
-    // For full page backgrounds, also create for body behind
-    createStarsFor('coverPage', 'coverStarsCanvas');
-    createStarsFor('accessGate', 'gateStarsCanvas');
-  }, 300);
-  setTimeout(function(){
-    createStarsFor('coverPage', 'coverStarsCanvas');
-    createStarsFor('accessGate', 'gateStarsCanvas');
-  }, 1000);
+    });
+    if(need){ setTimeout(function(){ injectGlows(); killCalendarPopup(); }, 50); }
+  });
+  obs.observe(document.body, {childList:true, subtree:true});
+
+  // Keep killing popup if something tries to show it
+  setInterval(killCalendarPopup, 1000);
 })();
 </script>
 
