@@ -1860,3 +1860,35 @@ timestamp,date,home,away,abbr_home,abbr_away,pick,abbr_pick,odds,model_prob,edge
 2026-07-20T20:07:39.588307,2026-07-20,Arizona Cardinals,Los Angeles Rams,,,Los Angeles Rams,,-470,78.5,-0.6,-0.6,False,0.0,,10.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
 2026-07-20T20:07:39.588620,2026-07-20,Kansas City Chiefs,Arizona Cardinals,,,Kansas City Chiefs,,-600,82.8,0.5,0.5,False,0.0,,-11.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
 2026-07-20T20:07:39.588991,2026-07-20,Chicago Bears,Jacksonville Jaguars,,,Chicago Bears,,-142,57.2,0.9,0.9,False,0.0,,-2.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.855743,2026-07-20,Seattle Seahawks,New England Patriots,,,Seattle Seahawks,,-192,63.9,0.8,0.8,False,0.0,,-3.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.856068,2026-07-20,Los Angeles Rams,San Francisco 49ers,,,Los Angeles Rams,,-185,63.1,0.8,0.8,False,0.0,,-3.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.856354,2026-07-20,Pittsburgh Steelers,Atlanta Falcons,,,Pittsburgh Steelers,,-142,57.2,0.9,0.9,False,0.0,,-2.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.856632,2026-07-20,Indianapolis Colts,Baltimore Ravens,,,Baltimore Ravens,,-185,61.4,-0.8,-0.8,False,0.0,,3.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.856893,2026-07-20,Houston Texans,Buffalo Bills,,,Buffalo Bills,,-120,51.3,-0.9,-0.9,False,0.0,,1.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.857148,2026-07-20,Carolina Panthers,Chicago Bears,,,Chicago Bears,,-135,54.3,-0.9,-0.9,False,0.0,,2.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.857401,2026-07-20,Cincinnati Bengals,Tampa Bay Buccaneers,,,Cincinnati Bengals,,-192,63.9,0.8,0.8,False,0.0,,-3.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.857671,2026-07-20,Jacksonville Jaguars,Cleveland Browns,,,Jacksonville Jaguars,,-360,75.7,0.7,0.7,False,0.0,,-7.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.857936,2026-07-20,Detroit Lions,New Orleans Saints,,,Detroit Lions,,-325,74.1,0.7,0.7,False,0.0,,-7.0,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.858190,2026-07-20,Tennessee Titans,New York Jets,,,Tennessee Titans,,-142,57.2,0.9,0.9,False,0.0,,-2.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.858443,2026-07-20,Los Angeles Chargers,Arizona Cardinals,,,Los Angeles Chargers,,-575,82.3,0.5,0.5,False,0.0,,-10.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.858743,2026-07-20,Minnesota Vikings,Green Bay Packers,,,Green Bay Packers,,-115,50.2,-0.9,-0.9,False,0.0,,1.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.859005,2026-07-20,Las Vegas Raiders,Miami Dolphins,,,Las Vegas Raiders,,-198,64.5,0.8,0.8,False,0.0,,-3.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.859258,2026-07-20,Philadelphia Eagles,Washington Commanders,,,Philadelphia Eagles,,-218,66.6,0.8,0.8,False,0.0,,-4.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.859522,2026-07-20,New York Giants,Dallas Cowboys,,,Dallas Cowboys,,-148,56.3,-0.9,-0.9,False,0.0,,2.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.859779,2026-07-20,Kansas City Chiefs,Denver Broncos,,,Kansas City Chiefs,,-142,57.2,0.9,0.9,False,0.0,,-2.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.860021,2026-07-20,Buffalo Bills,Detroit Lions,,,Buffalo Bills,,-155,59.2,0.9,0.9,False,0.0,,-3.0,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.860261,2026-07-20,Tennessee Titans,Philadelphia Eagles,,,Philadelphia Eagles,,-205,63.6,-0.8,-0.8,False,0.0,,4.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.860501,2026-07-20,San Francisco 49ers,Miami Dolphins,,,San Francisco 49ers,,-550,81.7,0.5,0.5,False,0.0,,-10.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.860759,2026-07-20,Jacksonville Jaguars,New England Patriots,,,Jacksonville Jaguars,,-118,52.6,0.9,0.9,False,0.0,,-1.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.860998,2026-07-20,Chicago Bears,Philadelphia Eagles,,,Chicago Bears,,-118,52.6,0.9,0.9,False,0.0,,-1.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.861237,2026-07-20,Tampa Bay Buccaneers,Green Bay Packers,,,Green Bay Packers,,-125,52.3,-0.9,-0.9,False,0.0,,1.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.861477,2026-07-20,Green Bay Packers,Chicago Bears,,,Green Bay Packers,,-166,60.8,0.9,0.9,False,0.0,,-3.0,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.861741,2026-07-20,Los Angeles Rams,Arizona Cardinals,,,Los Angeles Rams,,-700,84.5,0.5,0.5,False,0.0,,-13.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.861983,2026-07-20,Baltimore Ravens,Cincinnati Bengals,,,Baltimore Ravens,,-192,63.9,0.8,0.8,False,0.0,,-3.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.862269,2026-07-20,Carolina Panthers,Tampa Bay Buccaneers,,,Tampa Bay Buccaneers,,-118,50.8,-0.9,-0.9,False,0.0,,1.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.862665,2026-07-20,Houston Texans,New York Giants,,,Houston Texans,,-238,68.3,0.8,0.8,False,0.0,,-5.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.863036,2026-07-20,Minnesota Vikings,Indianapolis Colts,,,Minnesota Vikings,,-155,59.2,0.9,0.9,False,0.0,,-3.0,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.863392,2026-07-20,Baltimore Ravens,Jacksonville Jaguars,,,Baltimore Ravens,,-205,65.3,0.8,0.8,False,0.0,,-4.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.863771,2026-07-20,Arizona Cardinals,Los Angeles Rams,,,Los Angeles Rams,,-470,78.5,-0.6,-0.6,False,0.0,,10.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.864127,2026-07-20,Kansas City Chiefs,Arizona Cardinals,,,Kansas City Chiefs,,-600,82.8,0.5,0.5,False,0.0,,-11.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
+2026-07-20T22:01:54.864470,2026-07-20,Chicago Bears,Jacksonville Jaguars,,,Chicago Bears,,-142,57.2,0.9,0.9,False,0.0,,-2.5,Moneyline,team,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.018
