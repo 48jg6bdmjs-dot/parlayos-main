@@ -1,12 +1,14 @@
 {
-  "odds_api_key": "16b0a233c6bbe7492dc168a1a46ec469",
+  "odds_api_key": "9ccbf3d6d5451a4e3addfaf456e45462",
   "mlb": {
-    "min_edge": 0.04,
+    "min_edge": 0.035,
     "min_total_line": 6.5,
     "max_total_line": 11.5,
     "max_legs": 16,
     "kelly_fraction": 0.25,
-    "max_stake_pct": 0.05
+    "max_stake_pct": 0.05,
+    "market_weight": 0.62,
+    "stat_weight": 0.38
   },
   "nfl": {
     "min_edge": 0.035,
@@ -14,7 +16,9 @@
     "max_total_line": 60.0,
     "max_legs": 16,
     "kelly_fraction": 0.25,
-    "max_stake_pct": 0.05
+    "max_stake_pct": 0.05,
+    "market_weight": 0.58,
+    "stat_weight": 0.42
   },
   "nba": {
     "min_edge": 0.035,
@@ -22,6 +26,28 @@
     "max_total_line": 250.0,
     "max_legs": 16,
     "kelly_fraction": 0.25,
-    "max_stake_pct": 0.05
-  }
+    "max_stake_pct": 0.05,
+    "market_weight": 0.6,
+    "stat_weight": 0.4
+  },
+  "version": "ACE V3 ULTRA 2026-07-20",
+  "highlights_enabled": true,
+  "features": [
+    "multi_book_consensus_pinnacle_weighted",
+    "real_probables_hydrate",
+    "pitcher_xFIP_SIERA_KBB_Barrel",
+    "team_wOBA_ISO_splits",
+    "bullpen_fatigue_72h",
+    "park_orientation_wind_vector",
+    "weather_hourly_air_density",
+    "rest_travel_altitude_TNF_bye",
+    "war_weighted_injuries",
+    "lineup_platoon",
+    "monte_carlo_totals",
+    "highlights_mlb_content_api_espn_videos",
+    "ev_kelly_confidence",
+    "four_factors",
+    "epa_proxy",
+    "qb_cpoe"
+  ]
 }
