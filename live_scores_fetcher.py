@@ -8,7 +8,7 @@ But if user opens file:// or GitHub Pages has caching, live data doesn't show.
 
 Now: This script does BOTH:
 1. Writes live_scores.json (for JS fetcher)
-2. Injects live data directly into parlayos_5.html, parlayos.html, parlayos_2.html, index.html
+2. Injects live data directly into parlayos.html, parlayos.html, parlayos.html, index.html
    via window.LIVE_SCORES_DATA so it shows even without fetch
 
 Supports MLB, NFL, NBA - checks real schedule to only fetch when games are active.
@@ -211,7 +211,7 @@ def inject_into_html(live_data):
                         <span style="font-size:11px; opacity:0.6;">Updated ${{new Date().toLocaleTimeString()}} â€¢ No live games</span>
                       </div>
                       <div style="padding:32px; text-align:center; background:rgba(255,255,255,0.10); border-radius:20px; border:1px solid rgba(255,255,255,0.16);">
-                        <div style="font-size:28px; margin-bottom:8px;">ðŸ’¤</div>
+                        <div style="font-size:28px; margin-bottom:8px;">LIVE</div>
                         <b>No live games right now</b>
                         <div style="font-size:12px; opacity:0.6; margin-top:6px;">Checks every 10m with smart schedule</div>
                       </div>
@@ -245,7 +245,7 @@ def inject_into_html(live_data):
                         </div>
                       `).join('')}}
                     </div>
-                    <div class="live-footer"><span>${{g.detail}}</span><span>ðŸ“¡ LIVE</span></div>
+                    <div class="live-footer"><span>${{g.detail}}</span><span>LIVE</span></div>
                   </div>
                 `).join('')}}
               </div>
