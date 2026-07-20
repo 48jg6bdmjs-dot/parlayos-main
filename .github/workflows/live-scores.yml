@@ -1,57 +1,51 @@
-name: Update Live Scores
+name: Update Live Scores (LIVE ONLY)
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
-  workflow_dispatch:
+    # Every 5 minutes from 12pm (noon) to 12am (midnight)
+    # Hours 12-23 UTC = 12pm-11:55pm. GitHub Actions cron is UTC only.
+    # If you want 12pm-12am Eastern, use: '*/5 16-23,0-4 * * *'
+    - cron: '*/5 12-23 * * *'
+  workflow_dispatch:  # Manual trigger
 
 permissions:
   contents: write
 
-concurrency:
-  group: parlayos-main-push
-  cancel-in-progress: false
-
 jobs:
   update-live-scores:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-
+      
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
+          cache: 'pip'
+      
       - name: Install deps
-        run: |
-          pip install requests python-dateutil
-          echo "__pycache__/" >> .gitignore
-
-      - name: Fetch LIVE + push to parlayos.html
+        run: pip install requests
+      
+      - name: Fetch LIVE games only
         run: |
           python live_scores_fetcher.py
-          cat live_scores.json | head -n 30 || true
-          find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-
-      - name: Commit and push
+          echo "--- live_scores.json ---"
+          cat live_scores.json | head -n 100
+          echo "Count: $(jq '.count' live_scores.json)"
+      
+      - name: Commit if changed
         run: |
           git config user.name "parlayos-bot"
           git config user.email "bot@parlayos.app"
-          find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-          git add live_scores.json parlayos.html || true
-          git reset -- __pycache__/ 2>/dev/null || true
+          git add live_scores.json
           if git diff --staged --quiet; then
-            echo "No changes"
-            exit 0
+            echo "No live games changed - skip commit"
+          else
+            COUNT=$(jq -r '.count' live_scores.json)
+            git commit -m "live: ${COUNT} live games - $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+            git push
           fi
-          COUNT=$(jq -r '.count // 0' live_scores.json 2>/dev/null || echo 0)
-          git commit -m "live: ${COUNT} games to parlayos.html [skip ci]" || true
-          for i in 1 2 3 4 5; do git pull --rebase origin main && break; sleep 3; done
-          for i in 1 2 3 4 5; do git push origin main && break; git pull --rebase origin main || true; sleep 2; done
