@@ -1,9 +1,40 @@
 {
-  "updated": "2026-07-20T21:16:01.639302+00:00",
-  "count": 0,
-  "games": [],
-  "mlb_count": 0,
+  "updated": "2026-07-20T22:16:30.172946+00:00",
+  "count": 1,
+  "games": [
+    {
+      "id": "mlb_live_824410",
+      "lg": "MLB",
+      "home": "CLE",
+      "away": "MIN",
+      "home_name": "Cleveland Guardians",
+      "away_name": "Minnesota Twins",
+      "inning": "Top 1",
+      "status": "Live",
+      "detail": "MIN 0 - CLE 0",
+      "teams": [
+        {
+          "name": "Minnesota Twins",
+          "abbr": "MIN",
+          "score": 0,
+          "logo": "MIN",
+          "rec": ""
+        },
+        {
+          "name": "Cleveland Guardians",
+          "abbr": "CLE",
+          "score": 0,
+          "logo": "CLE",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 0,
+      "gamePk": 824410
+    }
+  ],
+  "mlb_count": 1,
   "nfl_count": 0,
   "nba_count": 0,
-  "next_check": "2026-07-20T21:21:01.639316+00:00"
+  "next_check": "2026-07-20T22:21:30.172967+00:00"
 }
