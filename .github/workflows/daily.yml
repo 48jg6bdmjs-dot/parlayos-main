@@ -1,13 +1,15 @@
 name: Daily ParlayOS Update
 
-# ── Combined from two previously-separate schedules ──────────────────────
-# daily.yml.txt ran once at 9:00 UTC; Daily.yml.txt ran twice, at 0:00 and
-# 12:00 UTC. Per instruction, this keeps 9:00 and 12:00 UTC (not the
-# original 0:00 + 12:00, and not 9:00 alone) as the two daily run times.
+# â”€â”€ ACE V3 ULTRA â€” 3x daily schedule â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Runs every 6 hours to catch line movement + lineup confirmations + final highlights
+# 9:00 UTC  = 5:00 AM ET â€” overnight lines, early market
+# 15:00 UTC = 11:00 AM ET â€” injury reports, lineup hints
+# 21:00 UTC = 5:00 PM ET â€” final lineups, weather, closing highlights (most accurate)
 "on":
   schedule:
-    - cron: '0 9 * * *'     # 9:00 UTC
-    - cron: '0 12 * * *'    # 12:00 UTC
+    - cron: '0 9 * * *'     # 9:00 UTC â€” early market scan
+    - cron: '0 15 * * *'    # 15:00 UTC â€” midday injury/lineup update
+    - cron: '0 21 * * *'    # 21:00 UTC â€” final close to game time (highest edge)
   workflow_dispatch:         # Allows manual trigger from the GitHub UI
 
 permissions:
@@ -23,58 +25,29 @@ jobs:
           python-version: '3.10'
       - run: pip install -r requirements.txt
 
-      # ── run_all.py replaces the old direct "python mlb_ace.py" call ──
-      # run_all.py runs mlb_ace.py, nfl_ace.py, and nba_ace.py in
-      # sequence against the same ParlayOS.html, with its OWN internal
-      # failure isolation: if one sport's API/data source fails, the
-      # other two still run and still write their picks — run_all.py
-      # prints a clear per-sport summary either way. It exits 1 if ANY
-      # of the three failed, which is the right signal for a human
-      # skimming Action logs, but wrong for THIS step specifically: a
-      # single sport's outage shouldn't block committing the other two
-      # sports' perfectly good picks, or block the mlb_backtest.py step
-      # that follows. `|| echo "..."` lets a partial failure surface
-      # loudly in the log (the real error text from run_all.py's own
-      # output is unaffected) without stopping the job, so a partial
-      # night's picks still land and get committed and mlb_backtest.py
-      # still runs.
-      - name: Run all three prediction engines (MLB, NFL, NBA)
-        run: python run_all.py || echo "::warning::run_all.py reported at least one sport failed — see log above for which. Continuing to commit whatever succeeded."
+      # â”€â”€ run_all.py V3 ULTRA â€” MLB + NBA + NFL with highlights â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      # Parallel fetching, multi-book Pinnacle-weighted consensus, Monte Carlo totals,
+      # weather V3 wind vector vs park orientation, WAR-weighted injuries, real probables
+      - name: Run all three prediction engines (MLB, NFL, NBA) V3 ULTRA
+        run: python run_all.py || echo "::warning::run_all.py reported at least one sport failed â€” see log above for which. Continuing to commit whatever succeeded."
 
       # mlb_backtest.py tunes MLB's thresholds in sports_config.json
-      # (min_edge, min/max_total_line) against graded outcomes. NFL and
-      # NBA have no equivalent backtest script yet — this step only
-      # affects MLB's tuning, not NFL/NBA's, until nfl_backtest.py /
-      # nba_backtest.py exist.
-      # Non-fatal for the same reason as the run_all.py step above: if
-      # this fails (e.g. no fresh graded rows to analyze on a night MLB's
-      # own picks also failed), that shouldn't block the commit step
-      # below from saving whatever DID succeed this run.
-      - run: python mlb_backtest.py || echo "::warning::mlb_backtest.py failed — see log above. Continuing to commit whatever picks succeeded this run."
+      # (min_edge, min/max_total_line) against graded outcomes.
+      - run: python mlb_backtest.py || echo "::warning::mlb_backtest.py failed â€” see log above. Continuing to commit whatever picks succeeded this run."
 
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # ── Add each file only if it exists ──────────────────────────
-          # `git add fileA fileB fileC` is ONE command: if even one
-          # pathspec matches nothing, the WHOLE thing fails with exit 128
-          # and NONE of the files get staged — not "skip the missing one,
-          # add the rest." nfl_picks_log.csv and nba_picks_log.csv don't
-          # exist until nfl_ace.py/nba_ace.py have successfully run at
-          # least once (a brand-new repo, or a run where one engine
-          # failed before ever writing its log — see run_all.py's
-          # per-sport failure isolation above). Checking existence first
-          # means a missing log is silently skipped instead of silently
-          # discarding every OTHER file's changes too, MLB's included.
+          # â”€â”€ Add each file only if it exists â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           for f in sports_config.json picks_log.csv nfl_picks_log.csv nba_picks_log.csv parlayos.html; do
             if [ -f "$f" ]; then
               git add "$f"
             else
-              echo "::notice::$f does not exist yet — skipping (this is expected on a first run, or if that sport's engine hasn't successfully generated picks yet)"
+              echo "::notice::$f does not exist yet â€” skipping (this is expected on a first run, or if that sport's engine hasn't successfully generated picks yet)"
             fi
           done
 
-          git diff --staged --quiet || git commit -m "auto-update: MLB/NFL/NBA picks, config, and live HTML data"
+          git diff --staged --quiet || git commit -m "auto-update: MLB/NFL/NBA V3 ULTRA picks, highlights + config (3x daily)"
           git push
