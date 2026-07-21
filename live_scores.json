@@ -1,9 +1,190 @@
 {
-  "updated": "2026-07-21T22:13:00.537383+00:00",
-  "count": 0,
-  "games": [],
-  "mlb_count": 0,
+  "updated": "2026-07-21T23:14:20.377399+00:00",
+  "count": 6,
+  "games": [
+    {
+      "id": "mlb_live_824409",
+      "lg": "MLB",
+      "home": "CLE",
+      "away": "MIN",
+      "home_name": "Cleveland Guardians",
+      "away_name": "Minnesota Twins",
+      "inning": "Middle 3",
+      "status": "Live",
+      "detail": "MIN 1 - CLE 0",
+      "teams": [
+        {
+          "name": "Minnesota Twins",
+          "abbr": "MIN",
+          "score": 1,
+          "logo": "MIN",
+          "rec": ""
+        },
+        {
+          "name": "Cleveland Guardians",
+          "abbr": "CLE",
+          "score": 0,
+          "logo": "CLE",
+          "rec": ""
+        }
+      ],
+      "score_away": 1,
+      "score_home": 0,
+      "gamePk": 824409
+    },
+    {
+      "id": "mlb_live_823437",
+      "lg": "MLB",
+      "home": "PHI",
+      "away": "LAD",
+      "home_name": "Philadelphia Phillies",
+      "away_name": "Los Angeles Dodgers",
+      "inning": "Top 1",
+      "status": "Preview",
+      "detail": "LAD 0 - PHI 0",
+      "teams": [
+        {
+          "name": "Los Angeles Dodgers",
+          "abbr": "LAD",
+          "score": 0,
+          "logo": "LAD",
+          "rec": ""
+        },
+        {
+          "name": "Philadelphia Phillies",
+          "abbr": "PHI",
+          "score": 0,
+          "logo": "PHI",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 0,
+      "gamePk": 823437
+    },
+    {
+      "id": "mlb_live_822787",
+      "lg": "MLB",
+      "home": "TOR",
+      "away": "TB",
+      "home_name": "Toronto Blue Jays",
+      "away_name": "Tampa Bay Rays",
+      "inning": "Top 1",
+      "status": "Live",
+      "detail": "TB 0 - TOR 0",
+      "teams": [
+        {
+          "name": "Tampa Bay Rays",
+          "abbr": "TB",
+          "score": 0,
+          "logo": "TB",
+          "rec": ""
+        },
+        {
+          "name": "Toronto Blue Jays",
+          "abbr": "TOR",
+          "score": 0,
+          "logo": "TOR",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 0,
+      "gamePk": 822787
+    },
+    {
+      "id": "mlb_live_824895",
+      "lg": "MLB",
+      "home": "ATL",
+      "away": "SD",
+      "home_name": "Atlanta Braves",
+      "away_name": "San Diego Padres",
+      "inning": "Top 1",
+      "status": "Live",
+      "detail": "SD 0 - ATL 0",
+      "teams": [
+        {
+          "name": "San Diego Padres",
+          "abbr": "SD",
+          "score": 0,
+          "logo": "SD",
+          "rec": ""
+        },
+        {
+          "name": "Atlanta Braves",
+          "abbr": "ATL",
+          "score": 0,
+          "logo": "ATL",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 0,
+      "gamePk": 824895
+    },
+    {
+      "id": "mlb_live_823519",
+      "lg": "MLB",
+      "home": "NYY",
+      "away": "PIT",
+      "home_name": "New York Yankees",
+      "away_name": "Pittsburgh Pirates",
+      "inning": "Postponed",
+      "status": "Final",
+      "detail": "PIT 0 - NYY 0",
+      "teams": [
+        {
+          "name": "Pittsburgh Pirates",
+          "abbr": "PIT",
+          "score": 0,
+          "logo": "PIT",
+          "rec": ""
+        },
+        {
+          "name": "New York Yankees",
+          "abbr": "NYY",
+          "score": 0,
+          "logo": "NYY",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 0,
+      "gamePk": 823519
+    },
+    {
+      "id": "mlb_live_824735",
+      "lg": "MLB",
+      "home": "BOS",
+      "away": "BAL",
+      "home_name": "Boston Red Sox",
+      "away_name": "Baltimore Orioles",
+      "inning": "Postponed",
+      "status": "Final",
+      "detail": "BAL 0 - BOS 0",
+      "teams": [
+        {
+          "name": "Baltimore Orioles",
+          "abbr": "BAL",
+          "score": 0,
+          "logo": "BAL",
+          "rec": ""
+        },
+        {
+          "name": "Boston Red Sox",
+          "abbr": "BOS",
+          "score": 0,
+          "logo": "BOS",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 0,
+      "gamePk": 824735
+    }
+  ],
+  "mlb_count": 6,
   "nfl_count": 0,
   "nba_count": 0,
-  "next_check": "2026-07-21T22:18:00.537396+00:00"
+  "next_check": "2026-07-21T23:19:20.377409+00:00"
 }
