@@ -43,6 +43,11 @@ import itertools
 import json
 import csv
 from datetime import datetime, timezone, timedelta
+try:
+    from zoneinfo import ZoneInfo
+    ET_ZONE = ZoneInfo("America/New_York")
+except:
+    ET_ZONE = timezone.utc
 from pathlib import Path
 from typing import List, Dict, Any, Tuple
 import os
@@ -799,12 +804,12 @@ def _picks_to_nfl_games(picks: List) -> List:
         if game_date_str:
             try:
                 # Same UTC-aware parsing fix mlb_ace.py's _picks_to_v6_games
-                # applies ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â explicit tzinfo attach, then .astimezone(), not
+                # applies ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â explicit tzinfo attach, then .astimezone(ET_ZONE), not
                 # a naive strptime().timestamp() that silently assumes
                 # local time on a UTC string.
                 dt_utc = datetime.strptime(game_date_str, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
                 start_at_ms = int(dt_utc.timestamp() * 1000)
-                dt_local = dt_utc.astimezone()
+                dt_local = dt_utc.astimezone(ET_ZONE)
                 if os.name != 'nt':
                     time_display = dt_local.strftime('%-I:%M %p')
                     date_display = dt_local.strftime('%a %b %-d')
