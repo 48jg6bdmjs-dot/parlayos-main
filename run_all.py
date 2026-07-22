@@ -1,5 +1,5 @@
 """
-run_all.py ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â single-command workflow for ParlayOS (parlayos.html only)
+run_all.py Ã¢â‚¬â€ single-command workflow for ParlayOS (parlayos.html only)
 Runs MLB, NFL, NBA into the single parlayos.html file in repo.
 """
 
@@ -11,13 +11,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 def _find_html_template():
-    """Only parlayos.html exists in repo"""
-    p = os.path.join(HERE, "parlayos.html")
-    if os.path.exists(p):
-        return p
-    p2 = os.path.join(HERE, "index.html")
-    if os.path.exists(p2):
-        return p2
+    """Find ParlayOS template - supports all variants"""
+    for name in ["parlayos_2.html", "parlayos_2_cleaned.html", "parlayos_2_fixed.html", "parlayos.html", "parlayos_fixed.html", "index.html"]:
+        p = os.path.join(HERE, name)
+        if os.path.exists(p):
+            return p
     return None
 
 def _run_one(label, module_name):
