@@ -2,11 +2,10 @@ name: Update Live Scores (LIVE ONLY)
 
 on:
   schedule:
-    # Every 5 minutes from 12pm (noon) to 12am (midnight)
-    # Hours 12-23 UTC = 12pm-11:55pm. GitHub Actions cron is UTC only.
-    # If you want 12pm-12am Eastern, use: '*/5 16-23,0-4 * * *'
-    - cron: '*/5 12-23 * * *'
-  workflow_dispatch:  # Manual trigger
+    # Every 5 minutes, 24/7 - ESPN only returns LIVE when games are on
+    # If you want only noon-midnight ET, use: '*/5 16-23,0-4 * * *'
+    - cron: '*/5 * * * *'
+  workflow_dispatch:  # Allow manual trigger from GitHub UI
 
 permissions:
   contents: write
@@ -28,14 +27,17 @@ jobs:
           cache: 'pip'
       
       - name: Install deps
-        run: pip install requests
+        run: |
+          pip install requests
+          sudo apt-get update -qq && sudo apt-get install -y -qq jq
       
       - name: Fetch LIVE games only
         run: |
           python live_scores_fetcher.py
           echo "--- live_scores.json ---"
-          cat live_scores.json | head -n 100
+          cat live_scores.json | head -n 150
           echo "Count: $(jq '.count' live_scores.json)"
+          echo "Updated: $(jq -r '.updated' live_scores.json)"
       
       - name: Commit if changed
         run: |
