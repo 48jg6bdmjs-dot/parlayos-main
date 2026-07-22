@@ -1,31 +1,50 @@
 """
-nba_ace.py Ã¢â‚¬â€ NBA prediction engine for ParlayOS.
+nba_ace.py ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â NBA prediction engine for ParlayOS.
 
-Structural mirror of nfl_ace.py and mlb_ace.py: has_data gating, empirical-
-Bayes shrinkage for small in-season samples, required_keys cache pattern,
-config-driven qualifies gating, EDGE_COMPONENT_COLS logging.
+Structural mirror of mlb_ace.py: same has_data gating discipline (a missing
+stat is never compared against a fallback on the other side), same
+empirical-Bayes shrinkage pattern for small in-season samples, same
+required_keys cache-invalidation pattern, same config-driven qualifies
+gating, same EDGE_COMPONENT_COLS logging for a future weight-fit script.
 
-Ã¢â€â‚¬Ã¢â€â‚¬ IMPORTANT Ã¢â‚¬â€ NOT YET LIVE-TESTED Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
-Same caveat as nfl_ace.py: written in a sandboxed environment with NO
-outbound network access, so none of the ESPN or Odds API calls below have
-been executed against live data. Every fetch is wrapped in try/except with
-has_data=False on failure. Run once, watch stdout for "fetch failed"
-lines, and spot-check a few games' stats before trusting picks.
-Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ IMPORTANT ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â NOT YET LIVE-TESTED ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+This was written in a sandboxed environment with NO outbound network
+access (egress disabled), so none of the API calls below ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â ESPN's public
+JSON endpoints or The Odds API ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â have actually been executed against
+live data. Endpoint URLs and field names are taken from ESPN's public
+(undocumented) API and The Odds API's published docs, and every fetch is
+wrapped in try/except with has_data=False on failure, so a wrong field
+name should fail safe into the fallback path rather than crash ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â but
+that's a design intent, not a verified guarantee. Before trusting picks
+from this file: run it once, watch stdout for "fetch failed" lines, and
+spot-check a few games' stats against a real box score.
+
+Also note: The Odds API's free tier has historically only included NBA +
+MLB, with NBA requiring a paid plan. If fetch_live_odds() below returns
+an empty list or an auth/plan error, that's the first thing to check
+against your actual Odds API account tier ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â it's not a bug in this file.
+ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
 
 Data sources:
-  - The Odds API (basketball_nba sport_key) Ã¢â‚¬â€ moneyline, spreads, totals.
-    NBA is one of the two sports the free tier has historically included
-    (alongside MLB), so this one should need no plan upgrade unlike NFL.
-  - ESPN's public site.api.espn.com / sports.core.api.espn.com JSON API,
-    same role MLB_STATS_BASE and nfl_ace.py's ESPN calls fill: team
-    season stats, injuries, schedules.
+  - The Odds API (americanfootball_nfl sport_key) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â moneyline, spreads,
+    totals. Same provider/key as MLB; api key now lives in
+    sports_config.json instead of being hardcoded (see note in
+    load_config below ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â mlb_ace.py should migrate to the same file).
+  - ESPN's public site.api.espn.com / sports.core.api.espn.com JSON API ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
+    free, no key required. Fills the role MLB_STATS_BASE fills for
+    mlb_ace.py: team season stats, injuries, schedules. This is an
+    undocumented-but-widely-used API (no official SLA from ESPN), so the
+    same "wrap every call, never trust a shape blindly" discipline
+    matters even more here than it does for the official MLB Stats API.
 """
 import requests
+import random
+import itertools
 import json
 import csv
-from datetime import datetime, timezone
-from typing import List, Dict, Tuple
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
+from typing import List, Dict, Any, Tuple
 import os
 import re
 import math
@@ -33,6 +52,21 @@ import pickle
 from time import time as _time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+NBA_TEAM_ABBR = {
+    "Atlanta Hawks": "ATL", "Boston Celtics": "BOS", "Brooklyn Nets": "BKN", "Charlotte Hornets": "CHA",
+    "Chicago Bulls": "CHI", "Cleveland Cavaliers": "CLE", "Dallas Mavericks": "DAL", "Denver Nuggets": "DEN",
+    "Detroit Pistons": "DET", "Golden State Warriors": "GSW", "Houston Rockets": "HOU", "Indiana Pacers": "IND",
+    "Los Angeles Clippers": "LAC", "Los Angeles Lakers": "LAL", "Memphis Grizzlies": "MEM", "Miami Heat": "MIA",
+    "Milwaukee Bucks": "MIL", "Minnesota Timberwolves": "MIN", "New Orleans Pelicans": "NOP", "New York Knicks": "NYK",
+    "Oklahoma City Thunder": "OKC", "Orlando Magic": "ORL", "Philadelphia 76ers": "PHI", "Phoenix Suns": "PHX",
+    "Portland Trail Blazers": "POR", "Sacramento Kings": "SAC", "San Antonio Spurs": "SAS", "Toronto Raptors": "TOR",
+    "Utah Jazz": "UTA", "Washington Wizards": "WAS"
+}
+TEAM_ABBR = NBA_TEAM_ABBR
+NBA_ARENA_LOCATIONS = {abbr: (39.8, -98.6) for abbr in NBA_TEAM_ABBR.values()}  # simplified - add real coords later
+DOME_TEAMS = set()  # NBA all indoor
+
 
 
 # --- ACCURACY FIX: de-vig helpers ---
@@ -69,42 +103,105 @@ def _sigmoid(x):
         e = math.exp(x)
         return e/(1.0+e)
 
+
+CALIBRATION_PATH = os.path.join(HERE, "nba_calibration.json")
+CALIBRATION_CACHE = None
+
+def load_platt_calibration():
+    global CALIBRATION_CACHE
+    if CALIBRATION_CACHE is not None:
+        return CALIBRATION_CACHE
+    try:
+        with open(CALIBRATION_PATH) as f:
+            data = json.load(f)
+            CALIBRATION_CACHE = {"platt_a": data.get("platt_a",1.0), "platt_b": data.get("platt_b",0.0)}
+            return CALIBRATION_CACHE
+    except:
+        CALIBRATION_CACHE = {"platt_a":1.0,"platt_b":0.0}
+        return CALIBRATION_CACHE
+
+def apply_platt_calibration(p):
+    cal = load_platt_calibration()
+    a,b = cal["platt_a"], cal["platt_b"]
+    if a==1.0 and b==0.0:
+        return p
+    import math
+    eps=1e-6
+    p=min(max(p,eps),1-eps)
+    logit=math.log(p/(1-p))
+    return 1/(1+math.exp(-(a*logit+b)))
+
 CONFIG_PATH = os.path.join(HERE, "sports_config.json")
 PICKS_LOG_PATH = os.path.join(HERE, "nba_picks_log.csv")
 CACHE_DIR = os.path.join(HERE, ".nba_cache")
 
-# Ã¢â€â‚¬Ã¢â€â‚¬ NBA team abbreviations Ã¢â‚¬â€ Odds API uses full city+name; ESPN/UI use
-#    short codes. Same TEAM_ABBR-as-whitelist pattern as MLB/NFL: any
-#    home_team/away_team string not in this dict gets skipped rather than
-#    falling through to a [:3] truncation that could silently invent a
-#    fake team for an All-Star Game or other non-standard entry (the same
-#    bug class mlb_ace.py's real-MLB-team filter guards against).
-TEAM_ABBR = {
-    'Atlanta Hawks': 'ATL', 'Boston Celtics': 'BOS', 'Brooklyn Nets': 'BKN',
-    'Charlotte Hornets': 'CHA', 'Chicago Bulls': 'CHI', 'Cleveland Cavaliers': 'CLE',
-    'Dallas Mavericks': 'DAL', 'Denver Nuggets': 'DEN', 'Detroit Pistons': 'DET',
-    'Golden State Warriors': 'GSW', 'Houston Rockets': 'HOU', 'Indiana Pacers': 'IND',
-    'Los Angeles Clippers': 'LAC', 'Los Angeles Lakers': 'LAL', 'Memphis Grizzlies': 'MEM',
-    'Miami Heat': 'MIA', 'Milwaukee Bucks': 'MIL', 'Minnesota Timberwolves': 'MIN',
-    'New Orleans Pelicans': 'NOP', 'New York Knicks': 'NYK', 'Oklahoma City Thunder': 'OKC',
-    'Orlando Magic': 'ORL', 'Philadelphia 76ers': 'PHI', 'Phoenix Suns': 'PHX',
-    'Portland Trail Blazers': 'POR', 'Sacramento Kings': 'SAC', 'San Antonio Spurs': 'SAS',
-    'Toronto Raptors': 'TOR', 'Utah Jazz': 'UTA', 'Washington Wizards': 'WSH',
+# ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ NBA team abbreviations (ESPN uses these directly; Odds API uses full
+#    city+name strings, same mismatch mlb_ace.py handles via NBA_TEAM_ABBR) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+NBA_TEAM_ABBR = {
+    'Arizona Cardinals': 'ARI', 'Atlanta Falcons': 'ATL', 'Baltimore Ravens': 'BAL',
+    'Buffalo Bills': 'BUF', 'Carolina Panthers': 'CAR', 'Chicago Bears': 'CHI',
+    'Cincinnati Bengals': 'CIN', 'Cleveland Browns': 'CLE', 'Dallas Cowboys': 'DAL',
+    'Denver Broncos': 'DEN', 'Detroit Lions': 'DET', 'Green Bay Packers': 'GB',
+    'Houston Texans': 'HOU', 'Indianapolis Colts': 'IND', 'Jacksonville Jaguars': 'JAX',
+    'Kansas City Chiefs': 'KC', 'Las Vegas Raiders': 'LV', 'Los Angeles Chargers': 'LAC',
+    'Los Angeles Rams': 'LAR', 'Miami Dolphins': 'MIA', 'Minnesota Vikings': 'MIN',
+    'New England Patriots': 'NE', 'New Orleans Saints': 'NO', 'New York Giants': 'NYG',
+    'New York Jets': 'NYJ', 'Philadelphia Eagles': 'PHI', 'Pittsburgh Steelers': 'PIT',
+    'San Francisco 49ers': 'SF', 'Seattle Seahawks': 'SEA', 'Tampa Bay Buccaneers': 'TB',
+    'Tennessee Titans': 'TEN', 'Washington Commanders': 'WSH',
 }
-# ESPN's internal numeric team IDs Ã¢â‚¬â€ sports.core.api.espn.com/v2/sports/basketball/leagues/nba/teams
+# ESPN's internal numeric team IDs ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â needed for their stats/injuries/schedule
+# endpoints. Source: sports.core.api.espn.com/v2/sports/football/leagues/nfl/teams
 ESPN_TEAM_IDS = {
-    'ATL': 1, 'BOS': 2, 'BKN': 17, 'CHA': 30, 'CHI': 4, 'CLE': 5,
-    'DAL': 6, 'DEN': 7, 'DET': 8, 'GSW': 9, 'HOU': 10, 'IND': 11,
-    'LAC': 12, 'LAL': 13, 'MEM': 29, 'MIA': 14, 'MIL': 15, 'MIN': 16,
-    'NOP': 3, 'NYK': 18, 'OKC': 25, 'ORL': 19, 'PHI': 20, 'PHX': 21,
-    'POR': 22, 'SAC': 23, 'SAS': 24, 'TOR': 28, 'UTA': 26, 'WSH': 27,
+    'ARI': 22, 'ATL': 1, 'BAL': 33, 'BUF': 2, 'CAR': 29, 'CHI': 3,
+    'CIN': 4, 'CLE': 5, 'DAL': 6, 'DEN': 7, 'DET': 8, 'GB': 9,
+    'HOU': 34, 'IND': 11, 'JAX': 30, 'KC': 12, 'LV': 13, 'LAC': 24,
+    'LAR': 14, 'MIA': 15, 'MIN': 16, 'NE': 17, 'NO': 18, 'NYG': 19,
+    'NYJ': 20, 'PHI': 21, 'PIT': 23, 'SF': 25, 'SEA': 26, 'TB': 27,
+    'TEN': 10, 'WSH': 28,
 }
+# NBA stadium coordinates ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â same role as MLB's NBA_ARENA_LOCATIONS, used for
+# real weather rather than a hardcoded default. Dome/indoor teams are still
+# listed (weather affects the parking lot, not the field), but the edge
+# calc below zeroes out weather_edge for known domes ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see is_dome_team.
+NBA_ARENA_LOCATIONS = {
+    'ARI': (33.5276, -112.2626), 'ATL': (33.7554, -84.4008), 'BAL': (39.2780, -76.6227),
+    'BUF': (42.7738, -78.7870), 'CAR': (35.2258, -80.8528), 'CHI': (41.8623, -87.6167),
+    'CIN': (39.0954, -84.5160), 'CLE': (41.5061, -81.6995), 'DAL': (32.7473, -97.0945),
+    'DEN': (39.7439, -105.0201), 'DET': (42.3400, -83.0456), 'GB': (44.5013, -88.0622),
+    'HOU': (29.6847, -95.4107), 'IND': (39.7601, -86.1639), 'JAX': (30.3239, -81.6373),
+    'KC': (39.0489, -94.4839), 'LV': (36.0909, -115.1833), 'LAC': (33.9535, -118.3392),
+    'LAR': (33.9535, -118.3392), 'MIA': (25.9580, -80.2389), 'MIN': (44.9737, -93.2577),
+    'NE': (42.0909, -71.2643), 'NO': (29.9511, -90.0812), 'NYG': (40.8135, -74.0745),
+    'NYJ': (40.8135, -74.0745), 'PHI': (39.9008, -75.1675), 'PIT': (40.4468, -80.0158),
+    'SF': (37.4032, -121.9698), 'SEA': (47.5952, -122.3316), 'TB': (27.9759, -82.5033),
+    'TEN': (36.1665, -86.7713), 'WSH': (38.9078, -76.8645),
+}
+# Known indoor/dome stadiums ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â weather doesn't affect gameplay here, so
+# weather_edge is forced to 0 rather than computing a real-but-meaningless
+# outdoor-air-at-the-parking-lot number and treating it as a football
+# signal. This is the NBA analog of MLB's PARK_FACTORS mattering per-park;
+# here the per-park fact that matters most is "is there weather at all."
+DOME_TEAMS = {'ARI', 'ATL', 'DAL', 'DET', 'HOU', 'IND', 'LV', 'LAR', 'LAC',
+              'MIN', 'NO'}
 
-ESPN_SITE_BASE = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba"
-ESPN_CORE_BASE = "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba"
+HERE_ESPN_SITE = "https://site.api.espn.com/apis/site/v2/sports/football/nfl"
+HERE_ESPN_CORE = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
+WEATHER_API = "https://api.open-meteo.com/v1/forecast"
+
+# League-average fallbacks (2025 season, updated periodically like MLB's
+# LEAGUE_AVG_* constants) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â used ONLY when a specific fetch fails, never
+# silently substituted for a "successful" real value.
+LEAGUE_AVG_PPG = 22.5          # points per game
+LEAGUE_AVG_PAPG = 22.5         # points allowed per game
+LEAGUE_AVG_YPG = 335.0         # total yards per game (offense)
+LEAGUE_AVG_YAPG = 335.0        # yards allowed per game (defense)
+LEAGUE_AVG_QBR = 55.0          # ESPN Total QBR, 0-100 scale
+LEAGUE_AVG_TO_MARGIN = 0.0     # turnover margin per game
 
 
 def _f(s, d=None):
+    """Lenient float parse ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â returns d (default None) instead of raising."""
     try:
         return float(str(s).strip())
     except (ValueError, TypeError, AttributeError):
@@ -112,6 +209,9 @@ def _f(s, d=None):
 
 
 def get_cached(key, ttl=3600, required_keys=None):
+    """Identical pattern to mlb_ace.py's get_cached ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â required_keys makes
+    a schema-mismatched cache entry a miss rather than a KeyError deep
+    inside code that assumes the new shape."""
     path = os.path.join(CACHE_DIR, f"{key}.pkl")
     try:
         if os.path.exists(path) and _time() - os.path.getmtime(path) < ttl:
@@ -136,16 +236,20 @@ def set_cache(key, data):
 
 
 def load_config():
-    """Same pattern as nfl_ace.py's load_config, reading the "nba" section
-    of the shared sports_config.json."""
+    """
+    Load sports_config.json's "nfl" section, plus the shared odds_api_key.
+    Same defaulting pattern as mlb_ace.py's load_config ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â every threshold
+    has a safe fallback so a missing/partial config file doesn't crash the
+    script, it just runs unfiltered (qualifies gating effectively off).
+    """
     try:
         with open(CONFIG_PATH) as f:
             full_cfg = json.load(f)
         api_key = full_cfg.get("odds_api_key", "")
-        cfg = full_cfg.get("nba", {})
+        cfg = full_cfg.get("nfl", {})
         cfg.setdefault("min_edge", 0.0)
-        cfg.setdefault("min_total_line", 190.0)
-        cfg.setdefault("max_total_line", 250.0)
+        cfg.setdefault("min_total_line", 30.0)
+        cfg.setdefault("max_total_line", 60.0)
         cfg.setdefault("max_legs", 16)
         cfg.setdefault("kelly_fraction", 0.25)
         cfg.setdefault("max_stake_pct", 0.05)
@@ -154,26 +258,21 @@ def load_config():
         return cfg, api_key
     except FileNotFoundError:
         print("sports_config.json not found, using NBA defaults, no API key")
-        return {"min_edge": 0.0, "min_total_line": 190.0, "max_total_line": 250.0,
+        return {"min_edge": 0.0, "min_total_line": 30.0, "max_total_line": 60.0,
                 "max_legs": 16, "kelly_fraction": 0.25, "max_stake_pct": 0.05}, ""
     except (json.JSONDecodeError, KeyError) as e:
         print(f"sports_config.json malformed ({e}), using NBA defaults, no API key")
-        return {"min_edge": 0.0, "min_total_line": 190.0, "max_total_line": 250.0,
+        return {"min_edge": 0.0, "min_total_line": 30.0, "max_total_line": 60.0,
                 "max_legs": 16, "kelly_fraction": 0.25, "max_stake_pct": 0.05}, ""
 
 
-# League-average fallbacks (2025-26 season, updated periodically) Ã¢â‚¬â€ used
-# ONLY when a specific fetch fails, never silently substituted for a
-# "successful" real value.
-LEAGUE_AVG_OFF_RTG = 114.0    # points scored per 100 possessions
-LEAGUE_AVG_DEF_RTG = 114.0    # points allowed per 100 possessions
-LEAGUE_AVG_PACE = 99.5        # possessions per 48 minutes
-LEAGUE_AVG_TS_PCT = 0.570     # true shooting percentage
-LEAGUE_AVG_PPG = 114.0        # points per game (raw, unadjusted for pace)
-
+# Edge component columns ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â mirrors mlb_ace.py's EDGE_COMPONENT_COLS, for a
+# future nba_fit_weights.py to eventually regress against graded outcomes
+# instead of the hand-set weights below.
 EDGE_COMPONENT_COLS = [
-    "c_team_edge", "c_off_rtg_edge", "c_def_rtg_edge", "c_pace_edge",
-    "c_ts_pct_edge", "c_rest_edge", "c_injury_edge", "c_home_court_edge",
+    "c_team_edge", "c_qb_edge", "c_offense_edge", "c_defense_edge",
+    "c_turnover_edge", "c_ats_form_edge", "c_h2h_edge", "c_weather_edge",
+    "c_rest_edge", "c_injury_edge", "c_home_field_edge",
 ]
 PICKS_LOG_COLS = [
     "timestamp", "date", "home", "away", "abbr_home", "abbr_away", "pick",
@@ -186,17 +285,24 @@ class NBAPredictionEngine:
     def __init__(self, api_key: str):
         self.api_key = api_key
         print(f"NBA engine initialized with API key: {api_key[:8]}..." if api_key else
-              "NBA engine initialized with NO API key Ã¢â‚¬â€ fetch_live_odds will fail")
+              "NBA engine initialized with NO API key ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â fetch_live_odds will fail")
 
     def fetch_live_odds(self) -> List:
-        """Fetch live NBA odds from The Odds API Ã¢â‚¬â€ h2h, spreads, totals."""
-        url = "https://api.the-odds-api.com/v4/sports/basketball_nba/odds"
+        """Fetch live NBA odds from The Odds API ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â h2h, spreads, and totals
+        all requested together, since NBA is commonly bet on spread rather
+        than moneyline (unlike MLB, where run line is a secondary market
+        to moneyline). See module docstring re: free-tier NBA access."""
+        url = "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds"
         params = {"apiKey": self.api_key, "regions": "us",
                    "markets": "h2h,spreads,totals", "oddsFormat": "american"}
         try:
             r = requests.get(url, params=params, timeout=10)
             data = r.json()
             if isinstance(data, dict) and data.get("message"):
+                # The Odds API returns a dict with an error "message" key
+                # (not a list of games) on auth/plan failures ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â surfacing
+                # this explicitly instead of letting len(data) below throw
+                # or silently return 0 games with no explanation.
                 print(f"Odds API error response: {data.get('message')}")
                 return []
             print(f"Odds API returned {len(data)} NBA games")
@@ -205,60 +311,63 @@ class NBAPredictionEngine:
             print(f"Odds API error: {e}")
             return []
 
-    def fetch_team_advanced_stats(self, team_abbr: str) -> Dict:
+    def fetch_team_season_stats(self, team_abbr: str) -> Dict:
         """
-        Real NBA team advanced stats (offensive rating, defensive rating,
-        pace, true shooting %) from ESPN's core API. Same has_data
-        discipline as mlb_ace.py's fetch_team_form and nfl_ace.py's
-        fetch_team_season_stats: every field independently gated, league-
-        average fallback ONLY on a failed fetch.
+        Real NBA team season stats from ESPN's core API. Mirrors
+        mlb_ace.py's fetch_team_form: every field is a real API-derived
+        number, has_data flags gate each one independently, league-average
+        fallbacks are used ONLY when a specific piece fails.
 
-        Offensive/defensive RATING (points per 100 possessions) is used
-        instead of raw PPG/points-allowed Ã¢â‚¬â€ the direct NBA analog of why
-        mlb_ace.py prefers FIP over raw runs-allowed: raw points are
-        heavily confounded by PACE (a fast team scores and allows more
-        points per game than a slow team of identical quality), so rating
-        isolates actual offensive/defensive quality from tempo. Pace is
-        then modeled as its OWN separate factor below (mainly relevant to
-        the O/U total, not who wins), rather than being silently baked
-        into a raw-points comparison the way it would if PPG were used
-        directly for team_edge.
+        NBA season is short (17 games) relative to MLB's 162, so there's
+        no meaningful "last 10" sub-sample the way MLB has one ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â full
+        season-to-date is already the small-sample regime, which is why
+        shrinkage below (see calculate_win_probability) uses games played
+        as its reliability denominator instead of innings pitched.
         """
         team_id = ESPN_TEAM_IDS.get(team_abbr)
         if not team_id:
-            return {"off_rtg": LEAGUE_AVG_OFF_RTG, "def_rtg": LEAGUE_AVG_DEF_RTG,
-                    "pace": LEAGUE_AVG_PACE, "ts_pct": LEAGUE_AVG_TS_PCT,
-                    "games_played": 0, "rtg_has_data": False, "pace_has_data": False,
-                    "ts_has_data": False}
+            return {"ppg": LEAGUE_AVG_PPG, "papg": LEAGUE_AVG_PAPG,
+                    "ypg": LEAGUE_AVG_YPG, "yapg": LEAGUE_AVG_YAPG,
+                    "to_margin": LEAGUE_AVG_TO_MARGIN, "games_played": 0,
+                    "ppg_has_data": False, "ypg_has_data": False, "to_has_data": False}
         cache_key = f"nba_team_stats_v1_{team_id}"
         cached = get_cached(cache_key, ttl=3600,
-                             required_keys=("off_rtg", "def_rtg", "pace", "ts_pct",
-                                            "games_played", "rtg_has_data",
-                                            "pace_has_data", "ts_has_data"))
+                             required_keys=("ppg", "papg", "ypg", "yapg", "to_margin",
+                                            "games_played", "ppg_has_data", "ypg_has_data",
+                                            "to_has_data"))
         if cached is not None:
             return cached
 
-        off_rtg = LEAGUE_AVG_OFF_RTG
-        def_rtg = LEAGUE_AVG_DEF_RTG
-        pace = LEAGUE_AVG_PACE
-        ts_pct = LEAGUE_AVG_TS_PCT
+        # Single fetch, parsed once into a flat name->value map, then every
+        # individual field below is read from that same map with its own
+        # has_data flag. This replaced an earlier draft of this function
+        # that re-fetched/re-derived stat_map across three separate
+        # try/excepts using fragile locals()-existence checks ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â that
+        # version worked by accident (Python's default REPL-style scoping
+        # let it limp along) but was genuinely fragile and confusing to
+        # read. One fetch, one parse, then independent has_data checks
+        # per field is both correct and much easier to reason about.
+        ppg = LEAGUE_AVG_PPG
+        papg = LEAGUE_AVG_PAPG
+        ypg = LEAGUE_AVG_YPG
+        yapg = LEAGUE_AVG_YAPG
+        to_margin = LEAGUE_AVG_TO_MARGIN
         games_played = 0
-        rtg_has_data = False
-        pace_has_data = False
-        ts_has_data = False
+        ppg_has_data = False
+        papg_has_data = False
+        ypg_has_data = False
+        to_has_data = False
         stat_map = {}
         try:
             year = datetime.now().year
-            # NBA season spans two calendar years (e.g. 2025-26); ESPN's
-            # season-year param uses the LATER year for the whole season
-            # (so "2026" covers Oct 2025 - Jun 2026). If we're in the back
-            # half of the calendar year (Oct-Dec), the current season's
-            # ESPN year is next calendar year, not this one.
-            season_year = year + 1 if datetime.now().month >= 10 else year
             r = requests.get(
-                f"{ESPN_CORE_BASE}/seasons/{season_year}/types/2/teams/{team_id}/statistics",
+                f"{HERE_ESPN_CORE}/seasons/{year}/types/2/teams/{team_id}/statistics",
                 timeout=8)
             data = r.json()
+            # ESPN's statistics response nests categories -> stats[] with
+            # name/value pairs. Structure is undocumented and has shifted
+            # across ESPN API revisions historically, so this walks
+            # defensively rather than assuming a fixed index path.
             categories = data.get("splits", {}).get("categories", [])
             for cat in categories:
                 for stat in cat.get("stats", []):
@@ -267,48 +376,116 @@ class NBAPredictionEngine:
         except Exception as e:
             print(f"  NBA team stat fetch failed ({team_abbr}): {e}")
 
-        if "offensiveRating" in stat_map and "defensiveRating" in stat_map:
+        if "totalPointsPerGame" in stat_map:
             try:
-                off_rtg = float(stat_map["offensiveRating"])
-                def_rtg = float(stat_map["defensiveRating"])
-                rtg_has_data = True
+                ppg = float(stat_map["totalPointsPerGame"])
+                ppg_has_data = True
             except (ValueError, TypeError):
                 pass
-        if "pace" in stat_map:
+        if "avgPointsAllowed" in stat_map:
             try:
-                pace = float(stat_map["pace"])
-                pace_has_data = True
+                papg = float(stat_map["avgPointsAllowed"])
+                papg_has_data = True
             except (ValueError, TypeError):
                 pass
-        if "trueShootingPct" in stat_map or "TSPct" in stat_map:
+        if "yardsPerGame" in stat_map:
             try:
-                raw = stat_map.get("trueShootingPct", stat_map.get("TSPct"))
-                ts_pct = float(raw)
-                # ESPN sometimes returns shooting percentages as a 0-100
-                # scale rather than 0-1; normalize if it looks like the
-                # former (a true TS% should never realistically exceed 1.0)
-                if ts_pct > 1.0:
-                    ts_pct = ts_pct / 100.0
-                ts_has_data = True
+                ypg = float(stat_map["yardsPerGame"])
+                ypg_has_data = True
+            except (ValueError, TypeError):
+                pass
+        if "yardsAllowedPerGame" in stat_map:
+            try:
+                yapg = float(stat_map["yardsAllowedPerGame"])
+            except (ValueError, TypeError):
+                pass
+        if "turnOverDifferential" in stat_map:
+            try:
+                to_margin = float(stat_map["turnOverDifferential"])
+                if games_played > 0:
+                    to_margin = round(to_margin / games_played, 2)
+                to_has_data = True
             except (ValueError, TypeError):
                 pass
 
         result = {
-            "off_rtg": off_rtg, "def_rtg": def_rtg, "pace": pace, "ts_pct": ts_pct,
-            "games_played": games_played, "rtg_has_data": rtg_has_data,
-            "pace_has_data": pace_has_data, "ts_has_data": ts_has_data,
+            "ppg": ppg, "papg": papg, "ypg": ypg, "yapg": yapg,
+            "to_margin": to_margin, "games_played": games_played,
+            "ppg_has_data": ppg_has_data and papg_has_data,
+            "ypg_has_data": ypg_has_data,
+            "to_has_data": to_has_data,
         }
         set_cache(cache_key, result)
         return result
 
+    def fetch_qb_rating(self, team_abbr: str) -> Dict:
+        """
+        Starting QB's current-season Total QBR (ESPN's advanced QB metric,
+        0-100 scale, adjusts for game situation the way FIP adjusts a
+        pitcher's ERA for defense/luck ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â chosen over raw passer rating for
+        the same "more predictive of true talent" reasoning mlb_ace.py
+        gives FIP over ERA). has_data False on any fetch failure or if the
+        team has no clear starter (e.g. QB controversy, injury, bye).
+
+        NBA doesn't have a probable-starter feed the way MLB Stats API
+        does for pitchers ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â inferring "the starter" here is genuinely
+        harder than MLB's case, and this is a known simplification: it
+        takes the team's leading QB by pass attempts this season, which
+        can be wrong in an active QB-change situation. Flagged rather
+        than silently trusted.
+        """
+        team_id = ESPN_TEAM_IDS.get(team_abbr)
+        if not team_id:
+            return {"qbr": LEAGUE_AVG_QBR, "has_data": False}
+        cache_key = f"nba_qbr_v1_{team_id}"
+        cached = get_cached(cache_key, ttl=3600, required_keys=("qbr", "has_data"))
+        if cached is not None:
+            return cached
+        try:
+            year = datetime.now().year
+            r = requests.get(
+                f"{HERE_ESPN_SITE}/teams/{team_id}",
+                params={"enable": "roster,stats"}, timeout=8)
+            data = r.json()
+            # Leader lists are nested under team.leaders[]; find the QBR
+            # (or passing-yards, as fallback proxy) leader category.
+            leaders = data.get("team", {}).get("leaders", [])
+            qbr = None
+            for cat in leaders:
+                if cat.get("name") in ("QBR", "totalQBR"):
+                    lst = cat.get("leaders", [])
+                    if lst:
+                        qbr = _f(lst[0].get("value"))
+                        break
+            if qbr is None:
+                result = {"qbr": LEAGUE_AVG_QBR, "has_data": False}
+            else:
+                # Small-sample shrinkage ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â same empirical-Bayes shape as
+                # mlb_ace.py's pitcher shrink(), but keyed on games played
+                # this season rather than innings pitched. A QB with 2
+                # starts posting an outlier QBR is exactly the "one bad
+                # start shouldn't swing the model" case mlb_ace.py's
+                # comments describe for pitchers.
+                games = 0
+                try:
+                    stats = data.get("team", {}).get("record", {})
+                    games = int(stats.get("items", [{}])[0].get("stats", [{}])[0].get("value", 0) or 0)
+                except Exception:
+                    games = 8  # assume mid-season reliability if unparseable, not zero
+                FULL_RELIABILITY_GAMES = 10.0
+                reliability = min(1.0, games / FULL_RELIABILITY_GAMES) if games else 0.3
+                qbr_shrunk = round(reliability * qbr + (1 - reliability) * LEAGUE_AVG_QBR, 1)
+                result = {"qbr": qbr_shrunk, "has_data": True, "reliability": round(reliability, 2)}
+            set_cache(cache_key, result)
+            return result
+        except Exception as e:
+            print(f"  NBA QBR fetch failed ({team_abbr}): {e}")
+            return {"qbr": LEAGUE_AVG_QBR, "has_data": False}
+
     def fetch_injuries(self, team_abbr: str) -> Dict:
-        """Same pattern as nfl_ace.py's fetch_injuries. NBA injury reports
-        carry disproportionate weight vs. NFL/MLB Ã¢â‚¬â€ a single missing star
-        player (best-on-team OUT) swings an NBA game far more than one
-        missing NFL starter (11-on-11, more redundancy) or one missing MLB
-        position player (27-man lineup over 9 innings). This is reflected
-        in a larger weight on c_injury_edge in calculate_win_probability
-        below, not in this fetch function itself."""
+        """Real injury report from ESPN's injuries endpoint ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â coarse
+        headline count, same role as mlb_ace.py's fetch_team_injury_count.
+        Gated to has_data=False if the fetch fails or returns nothing."""
         team_id = ESPN_TEAM_IDS.get(team_abbr)
         if not team_id:
             return {"count": 0, "has_data": False}
@@ -317,16 +494,19 @@ class NBAPredictionEngine:
         if cached is not None:
             return cached
         try:
-            r = requests.get(f"{ESPN_CORE_BASE}/teams/{team_id}/injuries",
+            r = requests.get(f"{HERE_ESPN_CORE}/teams/{team_id}/injuries",
                               params={"limit": 100}, timeout=8)
             data = r.json()
             items = data.get("items", [])
+            # Weight OUT/DOUBTFUL more heavily than QUESTIONABLE ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a coarse
+            # but real distinction ESPN's injury status field provides,
+            # unlike MLB.com's flatter headline-count-only report.
             count = 0.0
             for it in items:
                 status = str(it.get("status", "")).upper()
-                if status in ("OUT", "DOUBTFUL"):
+                if status in ("OUT", "DOUBTFUL", "IR"):
                     count += 1.0
-                elif status in ("QUESTIONABLE", "DAY-TO-DAY"):
+                elif status == "QUESTIONABLE":
                     count += 0.5
             result = {"count": count, "has_data": True}
             set_cache(cache_key, result)
@@ -335,120 +515,171 @@ class NBAPredictionEngine:
             print(f"  NBA injury fetch failed ({team_abbr}): {e}")
             return {"count": 0, "has_data": False}
 
+    def fetch_weather(self, lat: float, lon: float) -> Dict:
+        """Same Open-Meteo call as mlb_ace.py, same cache pattern."""
+        cache_key = f"nba_weather_{round(lat,2)}_{round(lon,2)}"
+        cached = get_cached(cache_key, ttl=1800)
+        if cached is not None:
+            return cached
+        try:
+            r = requests.get(WEATHER_API, params={"latitude": lat, "longitude": lon,
+                              "current": "temperature_2m,wind_speed_10m,wind_direction_10m"},
+                              timeout=8)
+            w = r.json()["current"]
+            result = {
+                "temp_f": w["temperature_2m"] * 9/5 + 32,
+                "wind_mph": w["wind_speed_10m"] * 0.621371,
+                "wind_deg": w["wind_direction_10m"],
+            }
+            set_cache(cache_key, result)
+            return result
+        except Exception as e:
+            print(f"  NBA weather fetch failed ({lat},{lon}): {e}")
+            return {"temp_f": 60, "wind_mph": 8, "wind_deg": 0}
+
     def calculate_win_probability(self, game: Dict) -> float:
         """
         Calculate home win probability. Same has_data discipline as
-        mlb_ace.py/nfl_ace.py.
+        mlb_ace.py: a missing stat on one side is never compared against
+        a real number on the other, and never silently defaults to
+        "average" in a way that would tilt the model toward whichever
+        team happens to have less data available.
 
-        Weight rationale (NBA-specific): the NBA has by far the LONGEST
-        regular season of the three sports (82 games vs NFL's 17, MLB's
-        162 Ã¢â‚¬â€ actually between MLB and NFL, but with much higher per-game
-        signal density: basketball has far more scoring possessions per
-        game than baseball has meaningful at-bats or football has
-        meaningful drives, so team-quality signal accumulates faster in
-        relative terms). This means season-long rating stats (off_rtg/
-        def_rtg) are trusted MORE heavily here relative to any single-
-        game factor than in NFL, where QB-specific per-game variance
-        dominates more.
-
-        There's also no single "starting pitcher" or "starting QB"
-        analog in basketball with anywhere near the same game-determining
-        weight Ã¢â‚¬â€ a star player missing matters (injury_edge below), but
-        no NBA player individually controls outcome the way an NFL QB or
-        MLB starting pitcher does, so no single-player factor gets a
-        FIP/QBR-sized weight here; the model leans more on team-level
-        aggregate stats instead.
+        Weight rationale (NBA-specific, not a copy of MLB's weights ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
+        the sports have different variance structures: a single NBA game
+        has ~16-17 games of season signal behind it at most, vs MLB's
+        162, so per-game predictive factors carry relatively more weight
+        here since there's less accumulated signal to lean on elsewhere):
+          - QB play is the single most predictive individual-player factor
+            in football, analogous to starting pitcher in baseball ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
+            given the largest per-unit weight.
+          - Turnover margin is unusually predictive in the NBA specifically
+            (more so than in most sports) because turnovers directly flip
+            field position and possession count, both of which correlate
+            strongly with scoring ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â this is a real, well-established NBA
+            analytics finding, not an arbitrary weight choice.
+          - Offense/defense YPG capture the broader team-quality signal
+            that isn't already carried by QBR or points-based team_edge.
         """
         home_abbr = game.get("home_abbr", "")
         away_abbr = game.get("away_abbr", "")
 
-        home_stats = self.fetch_team_advanced_stats(home_abbr)
-        away_stats = self.fetch_team_advanced_stats(away_abbr)
+        home_stats = self.fetch_team_season_stats(home_abbr)
+        away_stats = self.fetch_team_season_stats(away_abbr)
+        home_qb = self.fetch_qb_rating(home_abbr)
+        away_qb = self.fetch_qb_rating(away_abbr)
+        weather = self.fetch_weather(*NBA_ARENA_LOCATIONS.get(home_abbr, (39.8, -98.6)))
         home_inj = self.fetch_injuries(home_abbr)
         away_inj = self.fetch_injuries(away_abbr)
 
-        # Ã¢â€â‚¬Ã¢â€â‚¬ Rating differential (pace-independent team quality) Ã¢â‚¬â€ largest
-        #    single weight, for the reasons in the docstring above: this
-        #    is the closest NBA analog to MLB's season run differential,
-        #    but MORE reliable relative to raw points because it already
-        #    strips out pace confounding.
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ QB edge ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â largest single weight, same reasoning mlb_ace.py
+        #    gives starting pitcher FIP: the single most predictive
+        #    individual-player factor for an individual game outcome.
+        has_qb = home_qb["has_data"] and away_qb["has_data"]
+        qb_edge = (home_qb["qbr"] - away_qb["qbr"]) * 0.0030 if has_qb else 0.0
+
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Points-based team quality (season scoring margin) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the NBA
+        #    analog of MLB's season run differential. Both offense and
+        #    defense sides must have real data before this contributes,
+        #    same as mlb_ace.py's has_season_offense/has_season_pitching
+        #    pairing for runs_per_game/team_era.
         team_edge = 0.0
-        if home_stats["rtg_has_data"] and away_stats["rtg_has_data"]:
-            home_net_rtg = home_stats["off_rtg"] - home_stats["def_rtg"]
-            away_net_rtg = away_stats["off_rtg"] - away_stats["def_rtg"]
-            team_edge = (home_net_rtg - away_net_rtg) * 0.0045
+        if home_stats["ppg_has_data"] and away_stats["ppg_has_data"]:
+            home_margin = home_stats["ppg"] - home_stats["papg"]
+            away_margin = away_stats["ppg"] - away_stats["papg"]
+            team_edge = (home_margin - away_margin) * 0.0040
 
-        # Ã¢â€â‚¬Ã¢â€â‚¬ True shooting % Ã¢â‚¬â€ a distinct efficiency signal from net
-        #    rating (net rating already captures overall scoring margin
-        #    per 100 possessions, which INCLUDES shooting efficiency, so
-        #    this is weighted modestly to avoid double-counting the same
-        #    underlying "how good is this offense" fact twice Ã¢â‚¬â€ same
-        #    correlation-avoidance concern mlb_ace.py documents for
-        #    offense_edge vs. season_form_edge).
-        ts_edge = 0.0
-        if home_stats["ts_has_data"] and away_stats["ts_has_data"]:
-            ts_edge = (home_stats["ts_pct"] - away_stats["ts_pct"]) * 0.075
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Yardage-based offense/defense ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a distinct signal from
+        #    points-based team_edge above (yards is a "how good are they
+        #    mechanically" signal; points folds in red-zone efficiency,
+        #    turnovers, special teams ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â already counted separately below
+        #    for turnovers, so weighted modestly here to avoid double-
+        #    counting the turnover component specifically).
+        offense_edge = 0.0
+        defense_edge = 0.0
+        if home_stats["ypg_has_data"] and away_stats["ypg_has_data"]:
+            offense_edge = (home_stats["ypg"] - away_stats["ypg"]) * 0.000075
+            defense_edge = (away_stats["yapg"] - home_stats["yapg"]) * 0.000075
 
-        # Ã¢â€â‚¬Ã¢â€â‚¬ Injury burden Ã¢â‚¬â€ weighted MORE heavily than NFL/MLB's injury
-        #    edge, per the star-player-impact reasoning in fetch_injuries'
-        #    docstring. Still capped, since this is a coarse headline-
-        #    count signal, not a precise "which specific player and how
-        #    much do they individually matter" model.
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Turnover margin ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â unusually predictive in the NBA specifically
+        #    (see docstring rationale above). Both sides need real data.
+        turnover_edge = 0.0
+        if home_stats["to_has_data"] and away_stats["to_has_data"]:
+            turnover_edge = (home_stats["to_margin"] - away_stats["to_margin"]) * 0.010
+
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Weather ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â same directional-only-when-outdoor logic as
+        #    mlb_ace.py, forced to 0 for known dome teams rather than
+        #    computing a real-but-meaningless outdoor reading. Cold/wind
+        #    generally suppresses NBA scoring (passing especially), so the
+        #    sign here is the opposite of MLB's "warm air helps offense" ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
+        #    that's intentional, not a copy-paste error.
+        weather_edge = 0.0
+        if home_abbr not in DOME_TEAMS:
+            if weather["temp_f"] < 32 or weather["wind_mph"] > 20:
+                weather_edge = -0.01  # slight suppression, symmetric to both offenses
+
+        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Injury burden ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â coarse OUT/DOUBTFUL/QUESTIONABLE-weighted
+        #    count, capped small like mlb_ace.py caps its injury_edge.
         injury_edge = 0.0
         if home_inj["has_data"] and away_inj["has_data"]:
-            injury_edge = (away_inj["count"] - home_inj["count"]) * 0.006
-            injury_edge = max(-0.025, min(0.025, injury_edge))
+            injury_edge = (away_inj["count"] - home_inj["count"]) * 0.004
+            injury_edge = max(-0.02, min(0.02, injury_edge))
 
-        home_court_edge = 0.015  # NBA HCA reduced after de-vig
-        # (Comparable in magnitude to MLB's 0.02; commonly cited as
-        # somewhat SMALLER than NFL's in modern analytics Ã¢â‚¬â€ travel/rest
-        # patterns matter more than the specific arena environment in the
-        # NBA's dense schedule, which shows up separately as rest_edge
-        # rather than being folded into home_court_edge itself.)
+        home_field_edge = 0.018  # standard, well-established NBA home-field advantage
+        # (Slightly larger than MLB's 0.02 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â commonly cited as somewhat
+        # stronger in the NBA, partly due to crowd noise affecting
+        # opposing-team communication/snap timing in a way that has less
+        # of an analog in baseball.)
 
-        # No real back-to-back/rest-differential fetch implemented in this
-        # pass Ã¢â‚¬â€ genuinely one of the more NBA-specific, well-documented
-        # predictive factors (a team on the second night of a back-to-back
-        # is measurably worse), zeroed here rather than faked. Flagged as
-        # a clear next addition, same as nfl_ace.py's unbuilt ATS-form/h2h.
-        rest_edge = 0.0
+        # No real ATS-form or h2h fetch implemented yet in this pass ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
+        # zeroed rather than faked, same "don't fabricate a signal I
+        # haven't actually built" discipline mlb_ace.py applies to wind
+        # direction in its weather section.
+        ats_form_edge = 0.0
+        h2h_edge = 0.0
 
         market_p = game.get("market_prob", 0.5)
         logit_market = _logit(market_p)
-        edge_sum = (team_edge + ts_edge + injury_edge + home_court_edge + rest_edge)
+        edge_sum = (team_edge + qb_edge + offense_edge + defense_edge
+                     + turnover_edge + ats_form_edge + h2h_edge + weather_edge
+                     + injury_edge + home_field_edge)
         logit_adjusted = logit_market + edge_sum * 2.0
         base_prob = _sigmoid(logit_adjusted)
 
         game["_edge_components"] = {
-            "c_team_edge": team_edge, "c_off_rtg_edge": 0.0, "c_def_rtg_edge": 0.0,
-            "c_pace_edge": 0.0, "c_ts_pct_edge": ts_edge, "c_rest_edge": rest_edge,
-            "c_injury_edge": injury_edge, "c_home_court_edge": home_court_edge,
+            "c_team_edge": team_edge, "c_qb_edge": qb_edge,
+            "c_offense_edge": offense_edge, "c_defense_edge": defense_edge,
+            "c_turnover_edge": turnover_edge, "c_ats_form_edge": ats_form_edge,
+            "c_h2h_edge": h2h_edge, "c_weather_edge": weather_edge,
+            "c_rest_edge": 0.0, "c_injury_edge": injury_edge,
+            "c_home_field_edge": home_field_edge,
         }
+        # Same clamp philosophy as mlb_ace.py: a sanity bound, not a
+        # substitute for real calibration against graded outcomes.
         return max(0.12, min(0.88, base_prob))
 
     def calculate_total_points(self, game: Dict, posted_total: float) -> Tuple[str, float, float]:
         """
-        O/U direction + edge. Unlike NFL (calculate_total_points there has
-        no pace concept), NBA's total is dominated by PACE Ã¢â‚¬â€ two efficient
-        offenses playing at a slow pace can produce a LOWER total than two
-        mediocre offenses playing fast. Expected combined pace-adjusted
-        scoring = (average of both teams' pace) Ãƒâ€” (both teams' combined
-        offensive rating relative to league average) / 100 Ãƒâ€” 2, roughly
-        modeling "how many total points at this expected possession
-        count, at this expected scoring rate per possession."
+        O/U direction + edge ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â NBA analog of mlb_ace.py's expected-runs
+        model. Expected combined points = both teams' season PPG, blended
+        toward the matchup (each offense against the OTHER's defensive
+        YPG-allowed rate as a modest adjustment), rather than raw PPG
+        summed blind to opponent quality.
+
+        Simpler than MLB's model (no per-starter estimate ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â NBA doesn't
+        have an analog to "today's starting pitcher" driving the total the
+        way SP ERA does) but follows the same "model estimate vs posted
+        line, edge via normal-CDF gap" structure.
         """
         home_abbr = game.get("home_abbr", "")
         away_abbr = game.get("away_abbr", "")
-        home_stats = self.fetch_team_advanced_stats(home_abbr)
-        away_stats = self.fetch_team_advanced_stats(away_abbr)
+        home_stats = self.fetch_team_season_stats(home_abbr)
+        away_stats = self.fetch_team_season_stats(away_abbr)
 
-        _POINTS_SIGMA = 11.0  # NBA game-total std dev in raw points Ã¢â‚¬â€ larger
-                               # than NFL's ~10 (more scoring events, more
-                               # variance in raw point terms even though
-                               # per-possession variance is proportionally
-                               # lower), and vastly larger than MLB's ~1.5
-                               # runs, since this is a fundamentally
-                               # different scoring scale.
+        _POINTS_SIGMA = 10.0  # NBA game-total std dev is much larger in raw
+                               # points than MLB's ~1.5 runs ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â this is the
+                               # correct NBA-scale analog, not MLB's constant
+                               # reused unadjusted.
         _MARKET_VIG_PROB = 110.0 / 210.0
 
         def _erf_approx(x):
@@ -461,20 +692,14 @@ class NBAPredictionEngine:
         def _normal_cdf(x):
             return 0.5 * (1.0 + _erf_approx(x / (2.0 ** 0.5)))
 
-        if (home_stats["rtg_has_data"] and away_stats["rtg_has_data"]
-                and home_stats["pace_has_data"] and away_stats["pace_has_data"]):
-            avg_pace = (home_stats["pace"] + away_stats["pace"]) / 2.0
-            # Each team's expected points-per-100-possessions against a
-            # league-average opponent, scaled by the OTHER team's defensive
-            # rating relative to league average (a strong defense should
-            # suppress the opposing offense's expected output).
-            home_exp_per100 = home_stats["off_rtg"] * (away_stats["def_rtg"] / LEAGUE_AVG_DEF_RTG)
-            away_exp_per100 = away_stats["off_rtg"] * (home_stats["def_rtg"] / LEAGUE_AVG_DEF_RTG)
-            # Convert per-100-possessions rate to actual expected points at
-            # this game's expected possession count (pace is possessions
-            # per 48 min, i.e. per full game Ã¢â‚¬â€ no additional /48 scaling
-            # needed since pace is already a full-game figure).
-            model_total = (home_exp_per100 + away_exp_per100) * (avg_pace / 100.0)
+        if home_stats["ppg_has_data"] and away_stats["ppg_has_data"]:
+            # Each offense's expected points, mildly adjusted by the
+            # opponent's points-allowed rate relative to league average ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
+            # a team facing a weak defense should be expected to outscore
+            # their raw season PPG somewhat, and vice versa.
+            home_exp = home_stats["ppg"] * (away_stats["papg"] / LEAGUE_AVG_PAPG)
+            away_exp = away_stats["ppg"] * (home_stats["papg"] / LEAGUE_AVG_PAPG)
+            model_total = home_exp + away_exp
         else:
             # FIXED: return 0 edge when no data, not fake -2.3%
             return 'OVER', round(posted_total,1), 0.0
@@ -490,8 +715,22 @@ class NBAPredictionEngine:
         return pick, round(model_total, 1), edge
 
 
+def load_picks_log():
+    if not os.path.exists(PICKS_LOG_PATH):
+        return []
+    try:
+        with open(PICKS_LOG_PATH, newline='', encoding='utf-8') as f:
+            return list(csv.DictReader(f))
+    except Exception as e:
+        print(f"  picks log read failed: {e}")
+        return []
+
+
 def write_pick_to_log(pick_dict: dict):
-    """Same append-with-header-union pattern as nfl_ace.py."""
+    """Same append-with-header-union pattern as mlb_ace.py's
+    write_pick_to_log ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â preserves any existing columns in an on-disk file
+    even if this run's PICKS_LOG_COLS differs, rather than silently
+    dropping data on schema drift."""
     file_exists = os.path.exists(PICKS_LOG_PATH)
     existing_cols = []
     if file_exists:
@@ -518,7 +757,11 @@ def write_pick_to_log(pick_dict: dict):
 
 
 def _american_to_decimal(price):
-    """Same conversion as nfl_ace.py's _american_to_decimal."""
+    """Convert an American odds price to decimal, or None if price is
+    None/unparseable ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â used to turn the raw over_price/spread_price ints
+    fetched from The Odds API into the decimal format ParlayOS.html's
+    legOdds()/american() functions expect, same conversion mlb_ace.py
+    already applies to moneyline prices."""
     p = _f(price)
     if p is None:
         return None
@@ -528,9 +771,25 @@ def _american_to_decimal(price):
 
 
 def _picks_to_nba_games(picks: List) -> List:
-    """Same field-shape contract as nfl_ace.py's _picks_to_nfl_games Ã¢â‚¬â€ see
-    that function's docstring for the kLine/kPick naming note (same
-    applies here: kLine/kPick represent SPREAD, not a strikeout prop)."""
+    """
+    Convert picks to the game object shape ParlayOS.html's genNBAGames()
+    mock currently produces (a: away abbr, b: home abbr, cityA/cityB,
+    lgA/lgB, total, ouPick, kLine, kPick, mlFav, mlPriceDec, ouEdge,
+    kEdge, mlEdge, model, date, time, tv, hot) so the real-data injection
+    is a drop-in replacement for the mock, not a shape the frontend needs
+    new code to understand.
+
+    IMPORTANT NAMING NOTE: kLine/kPick are MLB-specific names (K = pitcher
+    strikeout prop) that ParlayOS.html's marketCard() also reuses for
+    NBA/NBA's spread slot, purely because the mock generators picked that
+    field name to slot into the same UI code path. For NBA, kLine/kPick
+    below represent the SPREAD, not a strikeout prop ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â there is no
+    pitcher in football. The UI-side fix (making marketCard() render
+    correct label text per sport) is handled in ParlayOS.html separately;
+    this function's job is just to match the existing field NAMES so
+    that fix can consume real data without also needing a data-shape
+    change on this side.
+    """
     v_games = []
     for idx, p in enumerate(picks):
         away = p.get('away', 'Away')
@@ -545,8 +804,8 @@ def _picks_to_nba_games(picks: List) -> List:
         else:
             ml_price_dec = round((100 / abs(odds)) + 1, 3)
 
-        abbr_a = TEAM_ABBR.get(away, away[:3].upper())
-        abbr_b = TEAM_ABBR.get(home, home[:3].upper())
+        abbr_a = NBA_TEAM_ABBR.get(away, away[:3].upper())
+        abbr_b = NBA_TEAM_ABBR.get(home, home[:3].upper())
 
         game_date_str = p.get('commence_time')
         start_at_ms = None
@@ -554,6 +813,10 @@ def _picks_to_nba_games(picks: List) -> List:
         date_display = ''
         if game_date_str:
             try:
+                # Same UTC-aware parsing fix mlb_ace.py's _picks_to_v6_games
+                # applies ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â explicit tzinfo attach, then .astimezone(), not
+                # a naive strptime().timestamp() that silently assumes
+                # local time on a UTC string.
                 dt_utc = datetime.strptime(game_date_str, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
                 start_at_ms = int(dt_utc.timestamp() * 1000)
                 dt_local = dt_utc.astimezone()
@@ -573,17 +836,27 @@ def _picks_to_nba_games(picks: List) -> List:
         ou_pick = p.get('ou_pick', 'OVER')
         ou_edge = p.get('ou_edge', 0.0)
         if total is None:
-            total = 224.5  # neutral NBA-scale placeholder ONLY when no
-                            # bookmaker has posted a total yet.
+            total = 44.5  # neutral NBA-scale placeholder ONLY when no
+                           # bookmaker has posted a total yet ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â same
+                           # "never fabricate a precise-looking fake
+                           # number" concern as mlb_ace.py, but NBA's
+                           # posted-total coverage is typically near-
+                           # universal on the major books, so this path
+                           # should rarely trigger in practice.
 
         spread = p.get('spread', 0.0)
         spread_pick_side = abbr_b if spread <= 0 else abbr_a
         spread_pick_str = f"{spread_pick_side} {'+' if spread > 0 else ''}{spread}"
         spread_edge = round(edge * 0.4, 4)
 
-        ml_fav = TEAM_ABBR.get(pick_team, pick_team[:3].upper()) if pick_team else abbr_b
+        ml_fav = NBA_TEAM_ABBR.get(pick_team, pick_team[:3].upper()) if pick_team else abbr_b
         hot = edge > 0.03 or abs(ou_edge) > 0.05
 
+        # Real per-market decimal prices, when a bookmaker actually posted
+        # one ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â None (and therefore omitted below) when unavailable, so
+        # ParlayOS.html's legOdds() correctly falls back to its flat
+        # constant rather than receiving a fabricated precise-looking
+        # number for a market that has no real quote yet.
         ou_price_dec = _american_to_decimal(p.get('ou_price'))
         spread_price_dec = _american_to_decimal(p.get('spread_price'))
 
@@ -593,7 +866,7 @@ def _picks_to_nba_games(picks: List) -> List:
             'cityA': away, 'cityB': home,
             'lgA': 'NBA', 'lgB': 'NBA',
             'total': total, 'ouPick': f'{ou_pick} {total}',
-            'kLine': spread, 'kPick': spread_pick_str,  # SPREAD Ã¢â‚¬â€ see _picks_to_nba_games docstring
+            'kLine': spread, 'kPick': spread_pick_str,  # SPREAD ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see docstring note
             'mlFav': ml_fav, 'mlPriceDec': ml_price_dec,
             'ouEdge': round(ou_edge, 4), 'kEdge': spread_edge, 'mlEdge': round(edge, 4),
             'model': round(model_prob, 4),
@@ -615,13 +888,68 @@ def _picks_to_nba_games(picks: List) -> List:
     return v_games
 
 
+
+def fetch_month_schedule_all_teams_nba(team_abbrs: list) -> dict:
+    """Fetch this month's real game results and future times for given NBA teams - same pattern as MLB/NFL."""
+    import calendar as _cal
+    now = datetime.now()
+    start_day = 1
+    end_day = _cal.monthrange(now.year, now.month)[1]
+    schedules = {a: [] for a in team_abbrs}
+    try:
+        dates_param = f"{now.year}{now.month:02d}{start_day:02d}-{now.year}{now.month:02d}{end_day:02d}"
+        url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates={dates_param}"
+        r = requests.get(url, timeout=15)
+        data = r.json()
+        for event in data.get("events", []):
+            try:
+                date_str = event.get("date","")[:10]
+                comp = event.get("competitions", [{}])[0]
+                competitors = comp.get("competitors", [])
+                if len(competitors) < 2:
+                    continue
+                home_c = next((c for c in competitors if c.get("homeAway")=="home"), None)
+                away_c = next((c for c in competitors if c.get("homeAway")=="away"), None)
+                if not home_c or not away_c:
+                    home_c, away_c = competitors[0], competitors[1]
+                home_abbr = (home_c.get("team", {}).get("abbreviation","") or "").upper()
+                away_abbr = (away_c.get("team", {}).get("abbreviation","") or "").upper()
+                home_score = int(home_c.get("score",0) or 0)
+                away_score = int(away_c.get("score",0) or 0)
+                status = event.get("status",{}).get("type",{}).get("state","")
+                final = status in ["post"] or event.get("status",{}).get("type",{}).get("completed", False)
+                for my_abbr, opp_abbr, my_s, opp_s, is_home in [
+                    (home_abbr, away_abbr, home_score, away_score, True),
+                    (away_abbr, home_abbr, away_score, home_score, False)
+                ]:
+                    if my_abbr not in schedules:
+                        continue
+                    entry = {"date": date_str, "opp": opp_abbr, "home": is_home}
+                    if final and (my_s or opp_s):
+                        entry.update({"result":"W" if my_s>opp_s else "L", "myScore":my_s, "oppScore":opp_s})
+                    else:
+                        try:
+                            gt = event.get("date","")
+                            if "T" in gt:
+                                entry["time"] = gt[11:16]
+                        except:
+                            entry["time"] = "TBD"
+                    schedules[my_abbr].append(entry)
+            except Exception as inner_e:
+                continue
+        print(f"  NBA Schedules: fetched for {sum(1 for v in schedules.values() if v)} teams, {sum(len(v) for v in schedules.values())} games")
+    except Exception as e:
+        print(f"  NBA Schedule error: {e}")
+    return schedules
+
+
+
+
 def export_to_html(picks: List, html_path: str) -> str:
-    """Injects window.PARLAYOS_NBA_DATA at <!--PARLAYOS_NBA_INJECT_POINT-->.
-    NOTE: ParlayOS.html currently only has a PARLAYOS_NFL_INJECT_POINT
-    marker, not an NBA-specific one Ã¢â‚¬â€ see the ParlayOS.html changes in
-    this same session for the added NBA marker. If that marker is ever
-    removed, this falls back to injecting before </body>, same as
-    nfl_ace.py's fallback."""
+    """
+    Inject window.PARLAYOS_NBA_DATA into ParlayOS.html including games + month schedules for calendar.
+    Same pattern as MLB/NFL.
+    """
     try:
         with open(html_path, 'r', encoding='utf-8') as f:
             html = f.read()
@@ -631,48 +959,68 @@ def export_to_html(picks: List, html_path: str) -> str:
 
     v_games = _picks_to_nba_games(picks)
     games_json = json.dumps(v_games, separators=(',', ':'))
+    all_abbrs = list(TEAM_ABBR.values())
+    schedules = fetch_month_schedule_all_teams_nba(all_abbrs)
+    schedules_json = json.dumps(schedules, separators=(',', ':'))
     run_date = datetime.now().strftime('%b %d %Y  %H:%M')
     pick_count = len(picks)
 
     html = re.sub(
-        r'[ \t]*//[^\n]*PARLAYOS NBA LIVE DATA.*?[ \t]*//[^\n]*END PARLAYOS NBA LIVE DATA[^\n]*\n?',
+        r'[ 	]*//[^
+]*PARLAYOS NBA LIVE DATA.*?[ 	]*//[^
+]*END PARLAYOS NBA LIVE DATA[^
+]*
+?',
         '', html, flags=re.DOTALL
     )
-    html = re.sub(r'\n{3,}', '\n\n', html)
+    html = re.sub(r'
+{3,}', '
+
+', html)
 
     injection_lines = [
-        "    // Ã¢â€â‚¬Ã¢â€â‚¬ PARLAYOS NBA LIVE DATA (" + run_date + ") Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬",
+        "    // â”€â”€ PARLAYOS NBA LIVE DATA (" + run_date + ") â”€â”€",
         "    window.PARLAYOS_NBA_DATA = {",
         "      runDate: \"" + run_date + "\",",
         "      pickCount: " + str(pick_count) + ",",
-        "      games: " + games_json,
+        "      games: " + games_json + ",",
+        "      schedules: " + schedules_json + ",",
         "    };",
         "    (function(){",
         "      if(typeof loadRealData==='function') loadRealData();",
         "      if(typeof renderNBADashboard==='function') renderNBADashboard();",
+        "      if(typeof renderLeagueSchedule==='function'){ try{ renderLeagueSchedule('nba'); }catch(e){} }",
         "    })();",
-        "    // Ã¢â€â‚¬Ã¢â€â‚¬ END PARLAYOS NBA LIVE DATA Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬",
+        "    // â”€â”€ END PARLAYOS NBA LIVE DATA â”€â”€",
     ]
-    injection = "\n".join(injection_lines)
+    injection = "
+".join(injection_lines)
 
     assert games_json in injection, "games_json missing from NBA injection!"
 
     MARKER = '    // <!--PARLAYOS_NBA_INJECT_POINT-->'
     if MARKER in html:
-        html = html.replace(MARKER, MARKER + '\n' + injection)
+        html = html.replace(MARKER, MARKER + '
+' + injection)
         print(f"  NBA: injected at stable marker")
     else:
-        html = html.replace('</body>', f'<script>\n{injection}\n</script>\n</body>')
+        html = html.replace('</body>', f'<script>
+{injection}
+</script>
+</body>')
         print(f"  NBA: marker not found, injected before </body> (fallback)")
 
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"Ã¢Å“â€œ {pick_count} NBA picks Ã¢â€ â€™ {html_path}")
+    print(f"âœ“ {pick_count} NBA picks + {sum(len(v) for v in schedules.values())} schedule games â†’ {html_path}")
     return html_path
 
 
+
+
+
 def run(html_path: str):
-    """Main entry point Ã¢â‚¬â€ mirrors nfl_ace.py's run()."""
+    """Main entry point ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â mirrors mlb_ace.py's __main__ block structure."""
     config, api_key = load_config()
     engine = NBAPredictionEngine(api_key)
     odds_data = engine.fetch_live_odds()
@@ -687,7 +1035,7 @@ def run(html_path: str):
                 home = game["home_team"]
                 away = game["away_team"]
 
-                if home not in TEAM_ABBR or away not in TEAM_ABBR:
+                if home not in NBA_TEAM_ABBR or away not in NBA_TEAM_ABBR:
                     skipped_non_nba_team.append(f"{away} @ {home}")
                     continue
 
@@ -699,10 +1047,11 @@ def run(html_path: str):
                 home_odds = next((o["price"] for o in h2h["outcomes"] if o["name"] == home), -110)
                 away_odds = next((o["price"] for o in h2h["outcomes"] if o["name"] == away), 100)
                 home_true, away_true = _devig_probs(home_odds, away_odds)
-                market_prob = home_true
+                market_prob_raw = home_true
+                market_prob = apply_platt_calibration(market_prob_raw)
 
-                home_abbr = TEAM_ABBR.get(home, home[:3].upper())
-                away_abbr = TEAM_ABBR.get(away, away[:3].upper())
+                home_abbr = NBA_TEAM_ABBR.get(home, home[:3].upper())
+                away_abbr = NBA_TEAM_ABBR.get(away, away[:3].upper())
 
                 real_total, over_price, under_price = None, None, None
                 totals_mkt = next((m for m in game["bookmakers"][0]["markets"] if m["key"] == "totals"), None)
@@ -762,7 +1111,7 @@ def run(html_path: str):
         pick_dec = (pick_odds/100)+1 if pick_odds > 0 else (100/abs(pick_odds))+1
         stake_frac = kelly_stake(pick_prob, pick_dec)
 
-        posted_total = g.get("real_total") if g.get("real_total") is not None else 224.5
+        posted_total = g.get("real_total") if g.get("real_total") is not None else 44.5
         ou_pick, model_total, ou_edge = engine.calculate_total_points(g, posted_total)
 
         print(f"{g['away']} @ {g['home']}: pick={pick}, prob={pick_prob:.3f}, "
@@ -777,7 +1126,12 @@ def run(html_path: str):
             "kelly_stake_pct": round(stake_frac*100, 2),
             "total": g.get("real_total") if g.get("real_total") is not None else model_total,
             "ou_pick": ou_pick, "ou_edge": ou_edge,
-            "ou_price": g.get("over_price"),
+            "ou_price": g.get("over_price"),  # American price on the OVER side,
+                                               # None if no bookmaker had posted one ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
+                                               # _picks_to_nba_games converts this to
+                                               # decimal for the frontend, or omits
+                                               # ouPriceDec entirely if None, letting
+                                               # legOdds() fall back to its constant
             "spread": g.get("real_spread") if g.get("real_spread") is not None else 0.0,
             "spread_price": g.get("spread_price"),
             "commence_time": g.get("commence_time"),
@@ -787,8 +1141,8 @@ def run(html_path: str):
             game_data[_col] = round(_val, 4)
 
         min_edge = config.get("min_edge", 0.0)
-        min_total_line = config.get("min_total_line", 190.0)
-        max_total_line = config.get("max_total_line", 250.0)
+        min_total_line = config.get("min_total_line", 30.0)
+        max_total_line = config.get("max_total_line", 60.0)
         edge_ok = edge >= min_edge
         real_total = g.get("real_total")
         line_ok = True if real_total is None else (min_total_line <= real_total <= max_total_line)
@@ -804,13 +1158,15 @@ def run(html_path: str):
 
     export_to_html(all_games_data, html_path)
     qualifying = sum(1 for gd in all_games_data if gd["qualifies"])
-    print(f"\nÃ¢Å“â€œ {len(all_games_data)} NBA games exported ({qualifying} qualify at current thresholds)")
-    print(f"Ã¢Å“â€œ Picks Ã¢â€ â€™ {PICKS_LOG_PATH}")
+    print(f"\nÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {len(all_games_data)} NBA games exported ({qualifying} qualify at current thresholds)")
+    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {PICKS_LOG_PATH}")
     return all_games_data
 
 
 if __name__ == "__main__":
-    candidates = ["parlayos_2.html", "parlayos_2_cleaned.html", "parlayos.html", "parlayos_fixed.html", "ParlayOS.html", "parlayos_v6.html", "index.html"]
+    # Look for the HTML template the same way mlb_ace.py does ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a few
+    # candidate filenames, first match wins.
+    candidates = ["parlayos.html", "parlayos_2.html", "ParlayOS.html", "parlayos_v6.html"]
     html_path = None
     for c in candidates:
         p = os.path.join(HERE, c)
