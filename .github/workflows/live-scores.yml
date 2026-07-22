@@ -3,12 +3,16 @@ name: Update Live Scores (LIVE ONLY)
 on:
   schedule:
     # Every 5 minutes, 24/7 - ESPN only returns LIVE when games are on
-    # If you want only noon-midnight ET, use: '*/5 16-23,0-4 * * *'
     - cron: '*/5 * * * *'
   workflow_dispatch:  # Allow manual trigger from GitHub UI
 
 permissions:
   contents: write
+
+# Same concurrency group as daily.yml so they don't push at exact same time
+concurrency:
+  group: parlayos-main
+  cancel-in-progress: false
 
 jobs:
   update-live-scores:
@@ -19,6 +23,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
       
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -44,10 +49,29 @@ jobs:
           git config user.name "parlayos-bot"
           git config user.email "bot@parlayos.app"
           git add live_scores.json
+
           if git diff --staged --quiet; then
             echo "No live games changed - skip commit"
-          else
-            COUNT=$(jq -r '.count' live_scores.json)
-            git commit -m "live: ${COUNT} live games - $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
-            git push
+            exit 0
           fi
+
+          COUNT=$(jq -r '.count' live_scores.json)
+          git commit -m "live: ${COUNT} live games - $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+
+          # FIX: Pull before push to avoid race with daily.yml
+          echo "Pulling latest main..."
+          git pull --rebase --autostash origin main || {
+            git rebase --abort || true
+            git pull --no-rebase origin main || true
+          }
+
+          # Retry push up to 3 times
+          for i in 1 2 3; do
+            if git push origin main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+            echo "Push failed, retry $i in 3s..."
+            sleep 3
+            git pull --rebase --autostash origin main || true
+          done
