@@ -1,20 +1,20 @@
 """
-nba_ace.py ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â NBA prediction engine for ParlayOS.
+nba_ace.py Ã¢â‚¬â€ NBA prediction engine for ParlayOS.
 
 Structural mirror of nfl_ace.py and mlb_ace.py: has_data gating, empirical-
 Bayes shrinkage for small in-season samples, required_keys cache pattern,
 config-driven qualifies gating, EDGE_COMPONENT_COLS logging.
 
-ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ IMPORTANT ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â NOT YET LIVE-TESTED ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+Ã¢â€â‚¬Ã¢â€â‚¬ IMPORTANT Ã¢â‚¬â€ NOT YET LIVE-TESTED Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 Same caveat as nfl_ace.py: written in a sandboxed environment with NO
 outbound network access, so none of the ESPN or Odds API calls below have
 been executed against live data. Every fetch is wrapped in try/except with
 has_data=False on failure. Run once, watch stdout for "fetch failed"
 lines, and spot-check a few games' stats before trusting picks.
-ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬
 
 Data sources:
-  - The Odds API (basketball_nba sport_key) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â moneyline, spreads, totals.
+  - The Odds API (basketball_nba sport_key) Ã¢â‚¬â€ moneyline, spreads, totals.
     NBA is one of the two sports the free tier has historically included
     (alongside MLB), so this one should need no plan upgrade unlike NFL.
   - ESPN's public site.api.espn.com / sports.core.api.espn.com JSON API,
@@ -73,7 +73,7 @@ CONFIG_PATH = os.path.join(HERE, "sports_config.json")
 PICKS_LOG_PATH = os.path.join(HERE, "nba_picks_log.csv")
 CACHE_DIR = os.path.join(HERE, ".nba_cache")
 
-# ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ NBA team abbreviations ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Odds API uses full city+name; ESPN/UI use
+# Ã¢â€â‚¬Ã¢â€â‚¬ NBA team abbreviations Ã¢â‚¬â€ Odds API uses full city+name; ESPN/UI use
 #    short codes. Same TEAM_ABBR-as-whitelist pattern as MLB/NFL: any
 #    home_team/away_team string not in this dict gets skipped rather than
 #    falling through to a [:3] truncation that could silently invent a
@@ -91,7 +91,7 @@ TEAM_ABBR = {
     'Portland Trail Blazers': 'POR', 'Sacramento Kings': 'SAC', 'San Antonio Spurs': 'SAS',
     'Toronto Raptors': 'TOR', 'Utah Jazz': 'UTA', 'Washington Wizards': 'WSH',
 }
-# ESPN's internal numeric team IDs ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â sports.core.api.espn.com/v2/sports/basketball/leagues/nba/teams
+# ESPN's internal numeric team IDs Ã¢â‚¬â€ sports.core.api.espn.com/v2/sports/basketball/leagues/nba/teams
 ESPN_TEAM_IDS = {
     'ATL': 1, 'BOS': 2, 'BKN': 17, 'CHA': 30, 'CHI': 4, 'CLE': 5,
     'DAL': 6, 'DEN': 7, 'DET': 8, 'GSW': 9, 'HOU': 10, 'IND': 11,
@@ -162,7 +162,7 @@ def load_config():
                 "max_legs": 16, "kelly_fraction": 0.25, "max_stake_pct": 0.05}, ""
 
 
-# League-average fallbacks (2025-26 season, updated periodically) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â used
+# League-average fallbacks (2025-26 season, updated periodically) Ã¢â‚¬â€ used
 # ONLY when a specific fetch fails, never silently substituted for a
 # "successful" real value.
 LEAGUE_AVG_OFF_RTG = 114.0    # points scored per 100 possessions
@@ -186,10 +186,10 @@ class NBAPredictionEngine:
     def __init__(self, api_key: str):
         self.api_key = api_key
         print(f"NBA engine initialized with API key: {api_key[:8]}..." if api_key else
-              "NBA engine initialized with NO API key ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â fetch_live_odds will fail")
+              "NBA engine initialized with NO API key Ã¢â‚¬â€ fetch_live_odds will fail")
 
     def fetch_live_odds(self) -> List:
-        """Fetch live NBA odds from The Odds API ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â h2h, spreads, totals."""
+        """Fetch live NBA odds from The Odds API Ã¢â‚¬â€ h2h, spreads, totals."""
         url = "https://api.the-odds-api.com/v4/sports/basketball_nba/odds"
         params = {"apiKey": self.api_key, "regions": "us",
                    "markets": "h2h,spreads,totals", "oddsFormat": "american"}
@@ -214,7 +214,7 @@ class NBAPredictionEngine:
         average fallback ONLY on a failed fetch.
 
         Offensive/defensive RATING (points per 100 possessions) is used
-        instead of raw PPG/points-allowed ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the direct NBA analog of why
+        instead of raw PPG/points-allowed Ã¢â‚¬â€ the direct NBA analog of why
         mlb_ace.py prefers FIP over raw runs-allowed: raw points are
         heavily confounded by PACE (a fast team scores and allows more
         points per game than a slow team of identical quality), so rating
@@ -303,7 +303,7 @@ class NBAPredictionEngine:
 
     def fetch_injuries(self, team_abbr: str) -> Dict:
         """Same pattern as nfl_ace.py's fetch_injuries. NBA injury reports
-        carry disproportionate weight vs. NFL/MLB ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a single missing star
+        carry disproportionate weight vs. NFL/MLB Ã¢â‚¬â€ a single missing star
         player (best-on-team OUT) swings an NBA game far more than one
         missing NFL starter (11-on-11, more redundancy) or one missing MLB
         position player (27-man lineup over 9 innings). This is reflected
@@ -342,7 +342,7 @@ class NBAPredictionEngine:
 
         Weight rationale (NBA-specific): the NBA has by far the LONGEST
         regular season of the three sports (82 games vs NFL's 17, MLB's
-        162 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â actually between MLB and NFL, but with much higher per-game
+        162 Ã¢â‚¬â€ actually between MLB and NFL, but with much higher per-game
         signal density: basketball has far more scoring possessions per
         game than baseball has meaningful at-bats or football has
         meaningful drives, so team-quality signal accumulates faster in
@@ -353,7 +353,7 @@ class NBAPredictionEngine:
 
         There's also no single "starting pitcher" or "starting QB"
         analog in basketball with anywhere near the same game-determining
-        weight ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a star player missing matters (injury_edge below), but
+        weight Ã¢â‚¬â€ a star player missing matters (injury_edge below), but
         no NBA player individually controls outcome the way an NFL QB or
         MLB starting pitcher does, so no single-player factor gets a
         FIP/QBR-sized weight here; the model leans more on team-level
@@ -367,7 +367,7 @@ class NBAPredictionEngine:
         home_inj = self.fetch_injuries(home_abbr)
         away_inj = self.fetch_injuries(away_abbr)
 
-        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Rating differential (pace-independent team quality) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â largest
+        # Ã¢â€â‚¬Ã¢â€â‚¬ Rating differential (pace-independent team quality) Ã¢â‚¬â€ largest
         #    single weight, for the reasons in the docstring above: this
         #    is the closest NBA analog to MLB's season run differential,
         #    but MORE reliable relative to raw points because it already
@@ -378,18 +378,18 @@ class NBAPredictionEngine:
             away_net_rtg = away_stats["off_rtg"] - away_stats["def_rtg"]
             team_edge = (home_net_rtg - away_net_rtg) * 0.0045
 
-        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ True shooting % ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a distinct efficiency signal from net
+        # Ã¢â€â‚¬Ã¢â€â‚¬ True shooting % Ã¢â‚¬â€ a distinct efficiency signal from net
         #    rating (net rating already captures overall scoring margin
         #    per 100 possessions, which INCLUDES shooting efficiency, so
         #    this is weighted modestly to avoid double-counting the same
-        #    underlying "how good is this offense" fact twice ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â same
+        #    underlying "how good is this offense" fact twice Ã¢â‚¬â€ same
         #    correlation-avoidance concern mlb_ace.py documents for
         #    offense_edge vs. season_form_edge).
         ts_edge = 0.0
         if home_stats["ts_has_data"] and away_stats["ts_has_data"]:
             ts_edge = (home_stats["ts_pct"] - away_stats["ts_pct"]) * 0.075
 
-        # ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Injury burden ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â weighted MORE heavily than NFL/MLB's injury
+        # Ã¢â€â‚¬Ã¢â€â‚¬ Injury burden Ã¢â‚¬â€ weighted MORE heavily than NFL/MLB's injury
         #    edge, per the star-player-impact reasoning in fetch_injuries'
         #    docstring. Still capped, since this is a coarse headline-
         #    count signal, not a precise "which specific player and how
@@ -401,13 +401,13 @@ class NBAPredictionEngine:
 
         home_court_edge = 0.015  # NBA HCA reduced after de-vig
         # (Comparable in magnitude to MLB's 0.02; commonly cited as
-        # somewhat SMALLER than NFL's in modern analytics ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â travel/rest
+        # somewhat SMALLER than NFL's in modern analytics Ã¢â‚¬â€ travel/rest
         # patterns matter more than the specific arena environment in the
         # NBA's dense schedule, which shows up separately as rest_edge
         # rather than being folded into home_court_edge itself.)
 
         # No real back-to-back/rest-differential fetch implemented in this
-        # pass ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â genuinely one of the more NBA-specific, well-documented
+        # pass Ã¢â‚¬â€ genuinely one of the more NBA-specific, well-documented
         # predictive factors (a team on the second night of a back-to-back
         # is measurably worse), zeroed here rather than faked. Flagged as
         # a clear next addition, same as nfl_ace.py's unbuilt ATS-form/h2h.
@@ -429,11 +429,11 @@ class NBAPredictionEngine:
     def calculate_total_points(self, game: Dict, posted_total: float) -> Tuple[str, float, float]:
         """
         O/U direction + edge. Unlike NFL (calculate_total_points there has
-        no pace concept), NBA's total is dominated by PACE ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â two efficient
+        no pace concept), NBA's total is dominated by PACE Ã¢â‚¬â€ two efficient
         offenses playing at a slow pace can produce a LOWER total than two
         mediocre offenses playing fast. Expected combined pace-adjusted
-        scoring = (average of both teams' pace) ÃƒÆ’Ã¢â‚¬â€ (both teams' combined
-        offensive rating relative to league average) / 100 ÃƒÆ’Ã¢â‚¬â€ 2, roughly
+        scoring = (average of both teams' pace) Ãƒâ€” (both teams' combined
+        offensive rating relative to league average) / 100 Ãƒâ€” 2, roughly
         modeling "how many total points at this expected possession
         count, at this expected scoring rate per possession."
         """
@@ -442,7 +442,7 @@ class NBAPredictionEngine:
         home_stats = self.fetch_team_advanced_stats(home_abbr)
         away_stats = self.fetch_team_advanced_stats(away_abbr)
 
-        _POINTS_SIGMA = 11.0  # NBA game-total std dev in raw points ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â larger
+        _POINTS_SIGMA = 11.0  # NBA game-total std dev in raw points Ã¢â‚¬â€ larger
                                # than NFL's ~10 (more scoring events, more
                                # variance in raw point terms even though
                                # per-possession variance is proportionally
@@ -472,7 +472,7 @@ class NBAPredictionEngine:
             away_exp_per100 = away_stats["off_rtg"] * (home_stats["def_rtg"] / LEAGUE_AVG_DEF_RTG)
             # Convert per-100-possessions rate to actual expected points at
             # this game's expected possession count (pace is possessions
-            # per 48 min, i.e. per full game ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â no additional /48 scaling
+            # per 48 min, i.e. per full game Ã¢â‚¬â€ no additional /48 scaling
             # needed since pace is already a full-game figure).
             model_total = (home_exp_per100 + away_exp_per100) * (avg_pace / 100.0)
         else:
@@ -528,7 +528,7 @@ def _american_to_decimal(price):
 
 
 def _picks_to_nba_games(picks: List) -> List:
-    """Same field-shape contract as nfl_ace.py's _picks_to_nfl_games ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see
+    """Same field-shape contract as nfl_ace.py's _picks_to_nfl_games Ã¢â‚¬â€ see
     that function's docstring for the kLine/kPick naming note (same
     applies here: kLine/kPick represent SPREAD, not a strikeout prop)."""
     v_games = []
@@ -593,7 +593,7 @@ def _picks_to_nba_games(picks: List) -> List:
             'cityA': away, 'cityB': home,
             'lgA': 'NBA', 'lgB': 'NBA',
             'total': total, 'ouPick': f'{ou_pick} {total}',
-            'kLine': spread, 'kPick': spread_pick_str,  # SPREAD ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see _picks_to_nba_games docstring
+            'kLine': spread, 'kPick': spread_pick_str,  # SPREAD Ã¢â‚¬â€ see _picks_to_nba_games docstring
             'mlFav': ml_fav, 'mlPriceDec': ml_price_dec,
             'ouEdge': round(ou_edge, 4), 'kEdge': spread_edge, 'mlEdge': round(edge, 4),
             'model': round(model_prob, 4),
@@ -618,7 +618,7 @@ def _picks_to_nba_games(picks: List) -> List:
 def export_to_html(picks: List, html_path: str) -> str:
     """Injects window.PARLAYOS_NBA_DATA at <!--PARLAYOS_NBA_INJECT_POINT-->.
     NOTE: ParlayOS.html currently only has a PARLAYOS_NFL_INJECT_POINT
-    marker, not an NBA-specific one ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see the ParlayOS.html changes in
+    marker, not an NBA-specific one Ã¢â‚¬â€ see the ParlayOS.html changes in
     this same session for the added NBA marker. If that marker is ever
     removed, this falls back to injecting before </body>, same as
     nfl_ace.py's fallback."""
@@ -641,7 +641,7 @@ def export_to_html(picks: List, html_path: str) -> str:
     html = re.sub(r'\n{3,}', '\n\n', html)
 
     injection_lines = [
-        "    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ PARLAYOS NBA LIVE DATA (" + run_date + ") ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
+        "    // Ã¢â€â‚¬Ã¢â€â‚¬ PARLAYOS NBA LIVE DATA (" + run_date + ") Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬",
         "    window.PARLAYOS_NBA_DATA = {",
         "      runDate: \"" + run_date + "\",",
         "      pickCount: " + str(pick_count) + ",",
@@ -651,7 +651,7 @@ def export_to_html(picks: List, html_path: str) -> str:
         "      if(typeof loadRealData==='function') loadRealData();",
         "      if(typeof renderNBADashboard==='function') renderNBADashboard();",
         "    })();",
-        "    // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ END PARLAYOS NBA LIVE DATA ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬",
+        "    // Ã¢â€â‚¬Ã¢â€â‚¬ END PARLAYOS NBA LIVE DATA Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬",
     ]
     injection = "\n".join(injection_lines)
 
@@ -667,12 +667,12 @@ def export_to_html(picks: List, html_path: str) -> str:
 
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {pick_count} NBA picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {html_path}")
+    print(f"Ã¢Å“â€œ {pick_count} NBA picks Ã¢â€ â€™ {html_path}")
     return html_path
 
 
 def run(html_path: str):
-    """Main entry point ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â mirrors nfl_ace.py's run()."""
+    """Main entry point Ã¢â‚¬â€ mirrors nfl_ace.py's run()."""
     config, api_key = load_config()
     engine = NBAPredictionEngine(api_key)
     odds_data = engine.fetch_live_odds()
@@ -804,13 +804,13 @@ def run(html_path: str):
 
     export_to_html(all_games_data, html_path)
     qualifying = sum(1 for gd in all_games_data if gd["qualifies"])
-    print(f"\nÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ {len(all_games_data)} NBA games exported ({qualifying} qualify at current thresholds)")
-    print(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ Picks ÃƒÂ¢Ã¢â‚¬ Ã¢â‚¬â„¢ {PICKS_LOG_PATH}")
+    print(f"\nÃ¢Å“â€œ {len(all_games_data)} NBA games exported ({qualifying} qualify at current thresholds)")
+    print(f"Ã¢Å“â€œ Picks Ã¢â€ â€™ {PICKS_LOG_PATH}")
     return all_games_data
 
 
 if __name__ == "__main__":
-    candidates = ["parlayos.html", "parlayos_2.html", "ParlayOS.html", "parlayos_v6.html"]
+    candidates = ["parlayos_2.html", "parlayos_2_cleaned.html", "parlayos.html", "parlayos_fixed.html", "ParlayOS.html", "parlayos_v6.html", "index.html"]
     html_path = None
     for c in candidates:
         p = os.path.join(HERE, c)
