@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-22T23:41:12.353933+00:00",
-  "count": 7,
+  "updated": "2026-07-22T23:44:21.376864+00:00",
+  "count": 9,
   "games": [
     {
       "id": "mlb_live_823519",
@@ -9,7 +9,7 @@
       "away": "PIT",
       "home_name": "New York Yankees",
       "away_name": "Pittsburgh Pirates",
-      "inning": "End 2",
+      "inning": "Top 3",
       "status": "Live",
       "detail": "PIT 0 - NYY 0",
       "teams": [
@@ -129,7 +129,7 @@
       "away": "LAD",
       "home_name": "Philadelphia Phillies",
       "away_name": "Los Angeles Dodgers",
-      "inning": "Middle 4",
+      "inning": "Bottom 4",
       "status": "Live",
       "detail": "LAD 1 - PHI 2",
       "teams": [
@@ -159,7 +159,7 @@
       "away": "TB",
       "home_name": "Toronto Blue Jays",
       "away_name": "Tampa Bay Rays",
-      "inning": "Middle 2",
+      "inning": "Bottom 2",
       "status": "Live",
       "detail": "TB 1 - TOR 1",
       "teams": [
@@ -211,10 +211,70 @@
       "score_away": 0,
       "score_home": 1,
       "gamePk": 824896
+    },
+    {
+      "id": "mlb_live_824650",
+      "lg": "MLB",
+      "home": "CHC",
+      "away": "DET",
+      "home_name": "Chicago Cubs",
+      "away_name": "Detroit Tigers",
+      "inning": "Top 1",
+      "status": "Live",
+      "detail": "DET 0 - CHC 0",
+      "teams": [
+        {
+          "name": "Detroit Tigers",
+          "abbr": "DET",
+          "score": 0,
+          "logo": "DET",
+          "rec": ""
+        },
+        {
+          "name": "Chicago Cubs",
+          "abbr": "CHC",
+          "score": 0,
+          "logo": "CHC",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 0,
+      "gamePk": 824650
+    },
+    {
+      "id": "mlb_live_824166",
+      "lg": "MLB",
+      "home": "HOU",
+      "away": "MIA",
+      "home_name": "Houston Astros",
+      "away_name": "Miami Marlins",
+      "inning": "Top 1",
+      "status": "Live",
+      "detail": "MIA 0 - HOU 0",
+      "teams": [
+        {
+          "name": "Miami Marlins",
+          "abbr": "MIA",
+          "score": 0,
+          "logo": "MIA",
+          "rec": ""
+        },
+        {
+          "name": "Houston Astros",
+          "abbr": "HOU",
+          "score": 0,
+          "logo": "HOU",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 0,
+      "gamePk": 824166
     }
   ],
-  "mlb_count": 7,
+  "mlb_count": 9,
   "nfl_count": 0,
   "nba_count": 0,
-  "next_check": "2026-07-22T23:46:12.353942+00:00"
+  "next_check": "2026-07-22T23:49:21.376871+00:00"
 }
