@@ -1,6 +1,6 @@
 {
-  "updated": "2026-07-22T16:57:57.487659+00:00",
-  "count": 1,
+  "updated": "2026-07-22T18:08:51.760577+00:00",
+  "count": 4,
   "games": [
     {
       "id": "mlb_live_823518",
@@ -9,7 +9,7 @@
       "away": "PIT",
       "home_name": "New York Yankees",
       "away_name": "Pittsburgh Pirates",
-      "inning": "Top 1",
+      "inning": "Top 5",
       "status": "Live",
       "detail": "PIT 0 - NYY 0",
       "teams": [
@@ -31,10 +31,100 @@
       "score_away": 0,
       "score_home": 0,
       "gamePk": 823518
+    },
+    {
+      "id": "mlb_live_824735",
+      "lg": "MLB",
+      "home": "BOS",
+      "away": "BAL",
+      "home_name": "Boston Red Sox",
+      "away_name": "Baltimore Orioles",
+      "inning": "Bottom 2",
+      "status": "Live",
+      "detail": "BAL 0 - BOS 4",
+      "teams": [
+        {
+          "name": "Baltimore Orioles",
+          "abbr": "BAL",
+          "score": 0,
+          "logo": "BAL",
+          "rec": ""
+        },
+        {
+          "name": "Boston Red Sox",
+          "abbr": "BOS",
+          "score": 4,
+          "logo": "BOS",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 4,
+      "gamePk": 824735
+    },
+    {
+      "id": "mlb_live_824083",
+      "lg": "MLB",
+      "home": "KC",
+      "away": "SF",
+      "home_name": "Kansas City Royals",
+      "away_name": "San Francisco Giants",
+      "inning": "Top 1",
+      "status": "Live",
+      "detail": "SF 0 - KC 0",
+      "teams": [
+        {
+          "name": "San Francisco Giants",
+          "abbr": "SF",
+          "score": 0,
+          "logo": "SF",
+          "rec": ""
+        },
+        {
+          "name": "Kansas City Royals",
+          "abbr": "KC",
+          "score": 0,
+          "logo": "KC",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 0,
+      "gamePk": 824083
+    },
+    {
+      "id": "mlb_live_823761",
+      "lg": "MLB",
+      "home": "MIL",
+      "away": "NYM",
+      "home_name": "Milwaukee Brewers",
+      "away_name": "New York Mets",
+      "inning": "Top 1",
+      "status": "Live",
+      "detail": "NYM 0 - MIL 0",
+      "teams": [
+        {
+          "name": "New York Mets",
+          "abbr": "NYM",
+          "score": 0,
+          "logo": "NYM",
+          "rec": ""
+        },
+        {
+          "name": "Milwaukee Brewers",
+          "abbr": "MIL",
+          "score": 0,
+          "logo": "MIL",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 0,
+      "gamePk": 823761
     }
   ],
-  "mlb_count": 1,
+  "mlb_count": 4,
   "nfl_count": 0,
   "nba_count": 0,
-  "next_check": "2026-07-22T17:02:57.487666+00:00"
+  "next_check": "2026-07-22T18:13:51.760588+00:00"
 }
