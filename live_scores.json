@@ -1,67 +1,7 @@
 {
-  "updated": "2026-07-22T20:45:18.260483+00:00",
-  "count": 8,
+  "updated": "2026-07-22T21:57:41.545061+00:00",
+  "count": 6,
   "games": [
-    {
-      "id": "mlb_live_823518",
-      "lg": "MLB",
-      "home": "NYY",
-      "away": "PIT",
-      "home_name": "New York Yankees",
-      "away_name": "Pittsburgh Pirates",
-      "inning": "Bottom 10",
-      "status": "Final",
-      "detail": "PIT 5 - NYY 3",
-      "teams": [
-        {
-          "name": "Pittsburgh Pirates",
-          "abbr": "PIT",
-          "score": 5,
-          "logo": "PIT",
-          "rec": ""
-        },
-        {
-          "name": "New York Yankees",
-          "abbr": "NYY",
-          "score": 3,
-          "logo": "NYY",
-          "rec": ""
-        }
-      ],
-      "score_away": 5,
-      "score_home": 3,
-      "gamePk": 823518
-    },
-    {
-      "id": "mlb_live_824735",
-      "lg": "MLB",
-      "home": "BOS",
-      "away": "BAL",
-      "home_name": "Boston Red Sox",
-      "away_name": "Baltimore Orioles",
-      "inning": "Top 9",
-      "status": "Final",
-      "detail": "BAL 3 - BOS 6",
-      "teams": [
-        {
-          "name": "Baltimore Orioles",
-          "abbr": "BAL",
-          "score": 3,
-          "logo": "BAL",
-          "rec": ""
-        },
-        {
-          "name": "Boston Red Sox",
-          "abbr": "BOS",
-          "score": 6,
-          "logo": "BOS",
-          "rec": ""
-        }
-      ],
-      "score_away": 3,
-      "score_home": 6,
-      "gamePk": 824735
-    },
     {
       "id": "mlb_live_824083",
       "lg": "MLB",
@@ -99,14 +39,14 @@
       "away": "NYM",
       "home_name": "Milwaukee Brewers",
       "away_name": "New York Mets",
-      "inning": "Top 8",
-      "status": "Live",
-      "detail": "NYM 2 - MIL 4",
+      "inning": "Top 9",
+      "status": "Final",
+      "detail": "NYM 3 - MIL 4",
       "teams": [
         {
           "name": "New York Mets",
           "abbr": "NYM",
-          "score": 2,
+          "score": 3,
           "logo": "NYM",
           "rec": ""
         },
@@ -118,7 +58,7 @@
           "rec": ""
         }
       ],
-      "score_away": 2,
+      "score_away": 3,
       "score_home": 4,
       "gamePk": 823761
     },
@@ -129,14 +69,14 @@
       "away": "WSH",
       "home_name": "Colorado Rockies",
       "away_name": "Washington Nationals",
-      "inning": "Bottom 5",
+      "inning": "Top 9",
       "status": "Live",
-      "detail": "WSH 1 - COL 0",
+      "detail": "WSH 8 - COL 0",
       "teams": [
         {
           "name": "Washington Nationals",
           "abbr": "WSH",
-          "score": 1,
+          "score": 8,
           "logo": "WSH",
           "rec": ""
         },
@@ -148,7 +88,7 @@
           "rec": ""
         }
       ],
-      "score_away": 1,
+      "score_away": 8,
       "score_home": 0,
       "gamePk": 824327
     },
@@ -159,27 +99,27 @@
       "away": "ATH",
       "home_name": "Arizona Diamondbacks",
       "away_name": "Athletics",
-      "inning": "Bottom 4",
+      "inning": "Bottom 6",
       "status": "Live",
-      "detail": "ATH 1 - AZ 2",
+      "detail": "ATH 2 - AZ 14",
       "teams": [
         {
           "name": "Athletics",
           "abbr": "ATH",
-          "score": 1,
+          "score": 2,
           "logo": "ATH",
           "rec": ""
         },
         {
           "name": "Arizona Diamondbacks",
           "abbr": "AZ",
-          "score": 2,
+          "score": 14,
           "logo": "AZ",
           "rec": ""
         }
       ],
-      "score_away": 1,
-      "score_home": 2,
+      "score_away": 2,
+      "score_home": 14,
       "gamePk": 825055
     },
     {
@@ -189,27 +129,27 @@
       "away": "CIN",
       "home_name": "Seattle Mariners",
       "away_name": "Cincinnati Reds",
-      "inning": "Bottom 4",
+      "inning": "Top 9",
       "status": "Live",
-      "detail": "CIN 2 - SEA 1",
+      "detail": "CIN 5 - SEA 3",
       "teams": [
         {
           "name": "Cincinnati Reds",
           "abbr": "CIN",
-          "score": 2,
+          "score": 5,
           "logo": "CIN",
           "rec": ""
         },
         {
           "name": "Seattle Mariners",
           "abbr": "SEA",
-          "score": 1,
+          "score": 3,
           "logo": "SEA",
           "rec": ""
         }
       ],
-      "score_away": 2,
-      "score_home": 1,
+      "score_away": 5,
+      "score_home": 3,
       "gamePk": 823110
     },
     {
@@ -219,14 +159,14 @@
       "away": "STL",
       "home_name": "Los Angeles Angels",
       "away_name": "St. Louis Cardinals",
-      "inning": "Bottom 3",
+      "inning": "Middle 7",
       "status": "Live",
-      "detail": "STL 0 - LAA 0",
+      "detail": "STL 1 - LAA 0",
       "teams": [
         {
           "name": "St. Louis Cardinals",
           "abbr": "STL",
-          "score": 0,
+          "score": 1,
           "logo": "STL",
           "rec": ""
         },
@@ -238,13 +178,13 @@
           "rec": ""
         }
       ],
-      "score_away": 0,
+      "score_away": 1,
       "score_home": 0,
       "gamePk": 824004
     }
   ],
-  "mlb_count": 8,
+  "mlb_count": 6,
   "nfl_count": 0,
   "nba_count": 0,
-  "next_check": "2026-07-22T20:50:18.260495+00:00"
+  "next_check": "2026-07-22T22:02:41.545070+00:00"
 }
