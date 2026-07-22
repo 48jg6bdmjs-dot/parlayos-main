@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-22T22:45:01.446075+00:00",
+  "updated": "2026-07-22T23:41:12.353933+00:00",
   "count": 7,
   "games": [
     {
@@ -9,7 +9,7 @@
       "away": "PIT",
       "home_name": "New York Yankees",
       "away_name": "Pittsburgh Pirates",
-      "inning": "Top 1",
+      "inning": "End 2",
       "status": "Live",
       "detail": "PIT 0 - NYY 0",
       "teams": [
@@ -33,94 +33,34 @@
       "gamePk": 823519
     },
     {
-      "id": "mlb_live_824327",
+      "id": "mlb_live_824732",
       "lg": "MLB",
-      "home": "COL",
-      "away": "WSH",
-      "home_name": "Colorado Rockies",
-      "away_name": "Washington Nationals",
-      "inning": "Bottom 9",
-      "status": "Final",
-      "detail": "WSH 8 - COL 0",
+      "home": "BOS",
+      "away": "BAL",
+      "home_name": "Boston Red Sox",
+      "away_name": "Baltimore Orioles",
+      "inning": "Top 2",
+      "status": "Live",
+      "detail": "BAL 4 - BOS 0",
       "teams": [
         {
-          "name": "Washington Nationals",
-          "abbr": "WSH",
-          "score": 8,
-          "logo": "WSH",
+          "name": "Baltimore Orioles",
+          "abbr": "BAL",
+          "score": 4,
+          "logo": "BAL",
           "rec": ""
         },
         {
-          "name": "Colorado Rockies",
-          "abbr": "COL",
+          "name": "Boston Red Sox",
+          "abbr": "BOS",
           "score": 0,
-          "logo": "COL",
+          "logo": "BOS",
           "rec": ""
         }
       ],
-      "score_away": 8,
+      "score_away": 4,
       "score_home": 0,
-      "gamePk": 824327
-    },
-    {
-      "id": "mlb_live_825055",
-      "lg": "MLB",
-      "home": "AZ",
-      "away": "ATH",
-      "home_name": "Arizona Diamondbacks",
-      "away_name": "Athletics",
-      "inning": "Top 9",
-      "status": "Final",
-      "detail": "ATH 5 - AZ 15",
-      "teams": [
-        {
-          "name": "Athletics",
-          "abbr": "ATH",
-          "score": 5,
-          "logo": "ATH",
-          "rec": ""
-        },
-        {
-          "name": "Arizona Diamondbacks",
-          "abbr": "AZ",
-          "score": 15,
-          "logo": "AZ",
-          "rec": ""
-        }
-      ],
-      "score_away": 5,
-      "score_home": 15,
-      "gamePk": 825055
-    },
-    {
-      "id": "mlb_live_823110",
-      "lg": "MLB",
-      "home": "SEA",
-      "away": "CIN",
-      "home_name": "Seattle Mariners",
-      "away_name": "Cincinnati Reds",
-      "inning": "Bottom 9",
-      "status": "Final",
-      "detail": "CIN 5 - SEA 3",
-      "teams": [
-        {
-          "name": "Cincinnati Reds",
-          "abbr": "CIN",
-          "score": 5,
-          "logo": "CIN",
-          "rec": ""
-        },
-        {
-          "name": "Seattle Mariners",
-          "abbr": "SEA",
-          "score": 3,
-          "logo": "SEA",
-          "rec": ""
-        }
-      ],
-      "score_away": 5,
-      "score_home": 3,
-      "gamePk": 823110
+      "gamePk": 824732
     },
     {
       "id": "mlb_live_824004",
@@ -159,27 +99,27 @@
       "away": "MIN",
       "home_name": "Cleveland Guardians",
       "away_name": "Minnesota Twins",
-      "inning": "Top 1",
+      "inning": "Bottom 3",
       "status": "Live",
-      "detail": "MIN 1 - CLE 0",
+      "detail": "MIN 3 - CLE 3",
       "teams": [
         {
           "name": "Minnesota Twins",
           "abbr": "MIN",
-          "score": 1,
+          "score": 3,
           "logo": "MIN",
           "rec": ""
         },
         {
           "name": "Cleveland Guardians",
           "abbr": "CLE",
-          "score": 0,
+          "score": 3,
           "logo": "CLE",
           "rec": ""
         }
       ],
-      "score_away": 1,
-      "score_home": 0,
+      "score_away": 3,
+      "score_home": 3,
       "gamePk": 824408
     },
     {
@@ -189,32 +129,92 @@
       "away": "LAD",
       "home_name": "Philadelphia Phillies",
       "away_name": "Los Angeles Dodgers",
-      "inning": "Top 1",
+      "inning": "Middle 4",
       "status": "Live",
-      "detail": "LAD 0 - PHI 0",
+      "detail": "LAD 1 - PHI 2",
       "teams": [
         {
           "name": "Los Angeles Dodgers",
           "abbr": "LAD",
-          "score": 0,
+          "score": 1,
           "logo": "LAD",
           "rec": ""
         },
         {
           "name": "Philadelphia Phillies",
           "abbr": "PHI",
-          "score": 0,
+          "score": 2,
           "logo": "PHI",
           "rec": ""
         }
       ],
-      "score_away": 0,
-      "score_home": 0,
+      "score_away": 1,
+      "score_home": 2,
       "gamePk": 823438
+    },
+    {
+      "id": "mlb_live_822784",
+      "lg": "MLB",
+      "home": "TOR",
+      "away": "TB",
+      "home_name": "Toronto Blue Jays",
+      "away_name": "Tampa Bay Rays",
+      "inning": "Middle 2",
+      "status": "Live",
+      "detail": "TB 1 - TOR 1",
+      "teams": [
+        {
+          "name": "Tampa Bay Rays",
+          "abbr": "TB",
+          "score": 1,
+          "logo": "TB",
+          "rec": ""
+        },
+        {
+          "name": "Toronto Blue Jays",
+          "abbr": "TOR",
+          "score": 1,
+          "logo": "TOR",
+          "rec": ""
+        }
+      ],
+      "score_away": 1,
+      "score_home": 1,
+      "gamePk": 822784
+    },
+    {
+      "id": "mlb_live_824896",
+      "lg": "MLB",
+      "home": "ATL",
+      "away": "SD",
+      "home_name": "Atlanta Braves",
+      "away_name": "San Diego Padres",
+      "inning": "Top 2",
+      "status": "Live",
+      "detail": "SD 0 - ATL 1",
+      "teams": [
+        {
+          "name": "San Diego Padres",
+          "abbr": "SD",
+          "score": 0,
+          "logo": "SD",
+          "rec": ""
+        },
+        {
+          "name": "Atlanta Braves",
+          "abbr": "ATL",
+          "score": 1,
+          "logo": "ATL",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 1,
+      "gamePk": 824896
     }
   ],
   "mlb_count": 7,
   "nfl_count": 0,
   "nba_count": 0,
-  "next_check": "2026-07-22T22:50:01.446086+00:00"
+  "next_check": "2026-07-22T23:46:12.353942+00:00"
 }
