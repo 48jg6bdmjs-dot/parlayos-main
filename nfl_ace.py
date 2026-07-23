@@ -1033,6 +1033,16 @@ def run(html_path: str):
                 home = game["home_team"]
                 away = game["away_team"]
 
+                # Filter to today's games only (commence_time is UTC ISO string)
+                _ct = game.get("commence_time", "")
+                if _ct:
+                    try:
+                        _dt_utc = datetime.strptime(_ct, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=timezone.utc)
+                        if _dt_utc.astimezone().date() != datetime.now().date():
+                            continue
+                    except Exception:
+                        pass  # unparseable → include rather than silently drop
+
                 if home not in TEAM_ABBR or away not in TEAM_ABBR:
                     skipped_non_nfl_team.append(f"{away} @ {home}")
                     continue
