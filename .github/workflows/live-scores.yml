@@ -1,77 +1,48 @@
-name: Update Live Scores (LIVE ONLY)
+name: Update Live Scores
 
 on:
   schedule:
-    # Every 5 minutes, 24/7 - ESPN only returns LIVE when games are on
-    - cron: '*/5 * * * *'
-  workflow_dispatch:  # Allow manual trigger from GitHub UI
-
-permissions:
-  contents: write
-
-# Same concurrency group as daily.yml so they don't push at exact same time
-concurrency:
-  group: parlayos-main
-  cancel-in-progress: false
+    - cron: '*/5 * * * *'  # Every 5 minutes - updates final scores for calendars
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'live_scores.yml'
+      - 'data/live_scores.yml'
+      - 'live_scores_fetcher.py'
 
 jobs:
-  update-live-scores:
+  update-scores:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-      
+        
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-          cache: 'pip'
-      
+          
       - name: Install deps
         run: |
-          pip install requests
-          sudo apt-get update -qq && sudo apt-get install -y -qq jq
-      
-      - name: Fetch LIVE games only
+          pip install requests pyyaml
+          
+      - name: Fetch live final scores for all hubs
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
+          echo "Fetching live scores for calendar final scores..."
           python live_scores_fetcher.py
-          echo "--- live_scores.json ---"
-          cat live_scores.json | head -n 150
-          echo "Count: $(jq '.count' live_scores.json)"
-          echo "Updated: $(jq -r '.updated' live_scores.json)"
-      
-      - name: Commit if changed
+          echo "Updating game data..."
+          python mlb_ace.py || echo "MLB skipped"
+          python nfl_ace.py || echo "NFL skipped"
+          python nba_ace_2.py || echo "NBA skipped"
+          
+      - name: Commit and push if changed
         run: |
-          git config user.name "parlayos-bot"
-          git config user.email "bot@parlayos.app"
-          git add live_scores.json
-
-          if git diff --staged --quiet; then
-            echo "No live games changed - skip commit"
-            exit 0
-          fi
-
-          COUNT=$(jq -r '.count' live_scores.json)
-          git commit -m "live: ${COUNT} live games - $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
-
-          # FIX: Pull before push to avoid race with daily.yml
-          echo "Pulling latest main..."
-          git pull --rebase --autostash origin main || {
-            git rebase --abort || true
-            git pull --no-rebase origin main || true
-          }
-
-          # Retry push up to 3 times
-          for i in 1 2 3; do
-            if git push origin main; then
-              echo "Push succeeded"
-              exit 0
-            fi
-            echo "Push failed, retry $i in 3s..."
-            sleep 3
-            git pull --rebase --autostash origin main || true
-          done
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action - Live Scores"
+          git add live_scores.json data/live_scores.json live_scores.yml parlayos.html 2>/dev/null || true
+          git diff --staged --quiet || (git commit -m "🔴 Update live scores - $(date -u) - Finals for calendars" && git push)
