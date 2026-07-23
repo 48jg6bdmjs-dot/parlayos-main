@@ -1,8 +1,188 @@
 {
-  "updated": "2026-07-22T19:21:19.057150",
-  "date": "2026-07-22",
+  "updated": "2026-07-23T23:17:17.096902+00:00",
+  "date": "2026-07-23",
   "count": 7,
   "games": [
+    {
+      "lg": "MLB",
+      "league": "mlb",
+      "a": "ARI",
+      "b": "STL",
+      "aScore": 4,
+      "bScore": 2,
+      "a_name": "D-backs",
+      "b_name": "Cardinals",
+      "status": "\u25b2 7th",
+      "final": false,
+      "date": "2026-07-23",
+      "id": "mlb_ari_stl_2026-07-23",
+      "home": "STL",
+      "away": "ARI",
+      "inning": "Top 7th",
+      "detail": "ARI 4 - STL 2",
+      "teams": [
+        {
+          "name": "D-backs",
+          "abbr": "ARI",
+          "score": 4,
+          "logo": "ARI",
+          "rec": ""
+        },
+        {
+          "name": "Cardinals",
+          "abbr": "STL",
+          "score": 2,
+          "logo": "STL",
+          "rec": ""
+        }
+      ],
+      "score_away": 4,
+      "score_home": 2
+    },
+    {
+      "lg": "MLB",
+      "league": "mlb",
+      "a": "KC",
+      "b": "DET",
+      "aScore": 0,
+      "bScore": 0,
+      "a_name": "Royals",
+      "b_name": "Tigers",
+      "status": "\u25b2 2nd",
+      "final": false,
+      "date": "2026-07-23",
+      "id": "mlb_kc_det_2026-07-23",
+      "home": "DET",
+      "away": "KC",
+      "inning": "Top 2nd",
+      "detail": "KC 0 - DET 0",
+      "teams": [
+        {
+          "name": "Royals",
+          "abbr": "KC",
+          "score": 0,
+          "logo": "KC",
+          "rec": ""
+        },
+        {
+          "name": "Tigers",
+          "abbr": "DET",
+          "score": 0,
+          "logo": "DET",
+          "rec": ""
+        }
+      ],
+      "score_away": 0,
+      "score_home": 0
+    },
+    {
+      "lg": "MLB",
+      "league": "mlb",
+      "a": "SD",
+      "b": "ATL",
+      "aScore": 5,
+      "bScore": 6,
+      "a_name": "Padres",
+      "b_name": "Braves",
+      "status": "Final",
+      "final": true,
+      "date": "2026-07-23",
+      "id": "mlb_sd_atl_2026-07-23",
+      "home": "ATL",
+      "away": "SD",
+      "inning": "Final",
+      "detail": "SD 5 - ATL 6",
+      "teams": [
+        {
+          "name": "Padres",
+          "abbr": "SD",
+          "score": 5,
+          "logo": "SD",
+          "rec": ""
+        },
+        {
+          "name": "Braves",
+          "abbr": "ATL",
+          "score": 6,
+          "logo": "ATL",
+          "rec": ""
+        }
+      ],
+      "score_away": 5,
+      "score_home": 6
+    },
+    {
+      "lg": "MLB",
+      "league": "mlb",
+      "a": "MIN",
+      "b": "CLE",
+      "aScore": 3,
+      "bScore": 1,
+      "a_name": "Twins",
+      "b_name": "Guardians",
+      "status": "Final/12",
+      "final": true,
+      "date": "2026-07-23",
+      "id": "mlb_min_cle_2026-07-23",
+      "home": "CLE",
+      "away": "MIN",
+      "inning": "Final/12",
+      "detail": "MIN 3 - CLE 1",
+      "teams": [
+        {
+          "name": "Twins",
+          "abbr": "MIN",
+          "score": 3,
+          "logo": "MIN",
+          "rec": ""
+        },
+        {
+          "name": "Guardians",
+          "abbr": "CLE",
+          "score": 1,
+          "logo": "CLE",
+          "rec": ""
+        }
+      ],
+      "score_away": 3,
+      "score_home": 1
+    },
+    {
+      "lg": "MLB",
+      "league": "mlb",
+      "a": "TB",
+      "b": "TOR",
+      "aScore": 1,
+      "bScore": 3,
+      "a_name": "Rays",
+      "b_name": "Blue Jays",
+      "status": "Final",
+      "final": true,
+      "date": "2026-07-23",
+      "id": "mlb_tb_tor_2026-07-23",
+      "home": "TOR",
+      "away": "TB",
+      "inning": "Final",
+      "detail": "TB 1 - TOR 3",
+      "teams": [
+        {
+          "name": "Rays",
+          "abbr": "TB",
+          "score": 1,
+          "logo": "TB",
+          "rec": ""
+        },
+        {
+          "name": "Blue Jays",
+          "abbr": "TOR",
+          "score": 3,
+          "logo": "TOR",
+          "rec": ""
+        }
+      ],
+      "score_away": 1,
+      "score_home": 3
+    },
     {
       "lg": "MLB",
       "league": "mlb",
@@ -10,26 +190,26 @@
       "b": "TEX",
       "aScore": 4,
       "bScore": 2,
+      "a_name": "White Sox",
+      "b_name": "Rangers",
       "status": "Top 7th",
       "final": false,
-      "date": "2026-07-22",
-      "id": "mlb_CWS_TEX_2026-07-22",
-      "a_name": "CWS",
-      "b_name": "TEX",
+      "date": "2026-07-23",
+      "id": "mlb_cws_tex_2026-07-23",
       "home": "TEX",
       "away": "CWS",
       "inning": "Top 7th",
       "detail": "CWS 4 - TEX 2",
       "teams": [
         {
-          "name": "CWS",
+          "name": "White Sox",
           "abbr": "CWS",
           "score": 4,
           "logo": "CWS",
           "rec": ""
         },
         {
-          "name": "TEX",
+          "name": "Rangers",
           "abbr": "TEX",
           "score": 2,
           "logo": "TEX",
@@ -42,66 +222,30 @@
     {
       "lg": "MLB",
       "league": "mlb",
-      "a": "MIA",
-      "b": "HOU",
-      "aScore": 2,
-      "bScore": 2,
-      "status": "Bottom 7th",
-      "final": false,
-      "date": "2026-07-22",
-      "id": "mlb_MIA_HOU_2026-07-22",
-      "a_name": "MIA",
-      "b_name": "HOU",
-      "home": "HOU",
-      "away": "MIA",
-      "inning": "Bottom 7th",
-      "detail": "MIA 2 - HOU 2",
-      "teams": [
-        {
-          "name": "MIA",
-          "abbr": "MIA",
-          "score": 2,
-          "logo": "MIA",
-          "rec": ""
-        },
-        {
-          "name": "HOU",
-          "abbr": "HOU",
-          "score": 2,
-          "logo": "HOU",
-          "rec": ""
-        }
-      ],
-      "score_away": 2,
-      "score_home": 2
-    },
-    {
-      "lg": "MLB",
-      "league": "mlb",
       "a": "DET",
       "b": "CHC",
       "aScore": 4,
       "bScore": 1,
+      "a_name": "Tigers",
+      "b_name": "Cubs",
       "status": "Top 8th",
       "final": false,
-      "date": "2026-07-22",
-      "id": "mlb_DET_CHC_2026-07-22",
-      "a_name": "DET",
-      "b_name": "CHC",
+      "date": "2026-07-23",
+      "id": "mlb_det_chc_2026-07-23",
       "home": "CHC",
       "away": "DET",
       "inning": "Top 8th",
       "detail": "DET 4 - CHC 1",
       "teams": [
         {
-          "name": "DET",
+          "name": "Tigers",
           "abbr": "DET",
           "score": 4,
           "logo": "DET",
           "rec": ""
         },
         {
-          "name": "CHC",
+          "name": "Cubs",
           "abbr": "CHC",
           "score": 1,
           "logo": "CHC",
@@ -110,154 +254,10 @@
       ],
       "score_away": 4,
       "score_home": 1
-    },
-    {
-      "lg": "MLB",
-      "league": "mlb",
-      "a": "PIT",
-      "b": "NYY",
-      "aScore": 5,
-      "bScore": 3,
-      "status": "Final/10",
-      "final": true,
-      "date": "2026-07-22",
-      "id": "mlb_PIT_NYY_2026-07-22",
-      "a_name": "PIT",
-      "b_name": "NYY",
-      "home": "NYY",
-      "away": "PIT",
-      "inning": "Final/10",
-      "detail": "PIT 5 - NYY 3",
-      "teams": [
-        {
-          "name": "PIT",
-          "abbr": "PIT",
-          "score": 5,
-          "logo": "PIT",
-          "rec": ""
-        },
-        {
-          "name": "NYY",
-          "abbr": "NYY",
-          "score": 3,
-          "logo": "NYY",
-          "rec": ""
-        }
-      ],
-      "score_away": 5,
-      "score_home": 3
-    },
-    {
-      "lg": "MLB",
-      "league": "mlb",
-      "a": "BAL",
-      "b": "BOS",
-      "aScore": 3,
-      "bScore": 6,
-      "status": "Final",
-      "final": true,
-      "date": "2026-07-22",
-      "id": "mlb_BAL_BOS_2026-07-22",
-      "a_name": "BAL",
-      "b_name": "BOS",
-      "home": "BOS",
-      "away": "BAL",
-      "inning": "Final",
-      "detail": "BAL 3 - BOS 6",
-      "teams": [
-        {
-          "name": "BAL",
-          "abbr": "BAL",
-          "score": 3,
-          "logo": "BAL",
-          "rec": ""
-        },
-        {
-          "name": "BOS",
-          "abbr": "BOS",
-          "score": 6,
-          "logo": "BOS",
-          "rec": ""
-        }
-      ],
-      "score_away": 3,
-      "score_home": 6
-    },
-    {
-      "lg": "MLB",
-      "league": "mlb",
-      "a": "SF",
-      "b": "KC",
-      "aScore": 4,
-      "bScore": 5,
-      "status": "Final",
-      "final": true,
-      "date": "2026-07-22",
-      "id": "mlb_SF_KC_2026-07-22",
-      "a_name": "SF",
-      "b_name": "KC",
-      "home": "KC",
-      "away": "SF",
-      "inning": "Final",
-      "detail": "SF 4 - KC 5",
-      "teams": [
-        {
-          "name": "SF",
-          "abbr": "SF",
-          "score": 4,
-          "logo": "SF",
-          "rec": ""
-        },
-        {
-          "name": "KC",
-          "abbr": "KC",
-          "score": 5,
-          "logo": "KC",
-          "rec": ""
-        }
-      ],
-      "score_away": 4,
-      "score_home": 5
-    },
-    {
-      "lg": "MLB",
-      "league": "mlb",
-      "a": "NYM",
-      "b": "MIL",
-      "aScore": 3,
-      "bScore": 4,
-      "status": "Final",
-      "final": true,
-      "date": "2026-07-22",
-      "id": "mlb_NYM_MIL_2026-07-22",
-      "a_name": "NYM",
-      "b_name": "MIL",
-      "home": "MIL",
-      "away": "NYM",
-      "inning": "Final",
-      "detail": "NYM 3 - MIL 4",
-      "teams": [
-        {
-          "name": "NYM",
-          "abbr": "NYM",
-          "score": 3,
-          "logo": "NYM",
-          "rec": ""
-        },
-        {
-          "name": "MIL",
-          "abbr": "MIL",
-          "score": 4,
-          "logo": "MIL",
-          "rec": ""
-        }
-      ],
-      "score_away": 3,
-      "score_home": 4
     }
   ],
   "mlb_count": 7,
   "nfl_count": 0,
   "nba_count": 0,
-  "next_check": "2026-07-22T19:26:19.057150"
+  "next_check": "2026-07-23T23:17:17.096933+00:00"
 }
