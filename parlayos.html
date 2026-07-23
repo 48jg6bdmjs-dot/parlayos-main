@@ -9044,88 +9044,7 @@
 			body.reduce-motion .switch,html body.reduce-motion .switch,body.reduce-motion .switch i,html body.reduce-motion .switch i{transition:transform 0.22s cubic-bezier(.2,.8,.2,1),background 0.22s ease!important;animation:none!important}
 			body.reduce-motion .game,body.reduce-motion .menu-btn,body.reduce-motion .cards .game{animation:none!important;transform:none!important;opacity:1!important;transition:none!important}
 		</style>
-		<script id="fix-settings-v7-ultimate">
-			(function(){
-			  function getPrefs(){try{return JSON.parse(localStorage.getItem('parlayos_prefs')||'{}')}catch(e){return{sfx:true,fx:true,motion:false}}}
-			  function savePrefs(p){try{localStorage.setItem('parlayos_prefs',JSON.stringify(p))}catch(e){}}
-			  (function(){
-			    var origBeep=window.beep, origEnsure=window.ensureAudio, audioCtxGlobal=null;
-			    window.beep=function(type){
-			      try{
-			        var prefs=getPrefs();
-			        if(prefs.sfx===false){
-			          try{if(window.audioCtx&&window.audioCtx.suspend)window.audioCtx.suspend();if(audioCtxGlobal&&audioCtxGlobal.suspend)audioCtxGlobal.suspend()}catch(e){}
-			          return;
-			        }
-			        if(typeof origBeep==='function')return origBeep.apply(this,arguments);
-			      }catch(e){}
-			    };
-			    window.ensureAudio=function(){
-			      var prefs=getPrefs();
-			      if(prefs.sfx===false){
-			        return{state:'suspended',currentTime:0,suspend:function(){return Promise.resolve()},resume:function(){return Promise.resolve()},createOscillator:function(){return{connect:function(){},frequency:{setValueAtTime:function(){},exponentialRampToValueAtTime:function(){},linearRampToValueAtTime:function(){}},type:'sine',start:function(){},stop:function(){}}},createGain:function(){return{connect:function(){},gain:{setValueAtTime:function(){},linearRampToValueAtTime:function(){},exponentialRampToValueAtTime:function(){}}}},createBiquadFilter:function(){return{connect:function(){},frequency:{setValueAtTime:function(){}},Q:{setValueAtTime:function(){}},type:'lowpass'}},destination:{}};
-			      }
-			      if(typeof origEnsure==='function'){try{var ctx=origEnsure.apply(this,arguments);audioCtxGlobal=ctx;window.audioCtx=ctx;return ctx}catch(e){return origEnsure.apply(this,arguments)}}
-			      return null;
-			    };
-			  })();
-			  function setupToggleSlide(){
-			    document.querySelectorAll('.toggle').forEach(function(row){
-			      if(row._v7fixed) return;
-			      row._v7fixed=true;
-			      var sw=row.querySelector('.switch');
-			      if(!sw) return;
-			      row.addEventListener('click',function(e){
-			        var key=sw.dataset.key;
-			        if(!key) return;
-			        e.preventDefault();e.stopPropagation();
-			        var prefs=getPrefs();
-			        prefs[key]=!prefs[key];
-			        if(key==='dark'){prefs.dark=true;prefs.theme='dark';}
-			        savePrefs(prefs);
-			        sw.classList.toggle('on',!!prefs[key]);
-			        var knob=sw.querySelector('i');
-			        if(knob){
-			          knob.style.transition='transform 0.22s cubic-bezier(.2,.8,.2,1)';
-			          requestAnimationFrame(function(){knob.style.transform=prefs[key]?'translateX(18px)':'translateX(0px)';knob.style.webkitTransform=prefs[key]?'translateX(18px)':'translateX(0px)';});
-			        }
-			        if(key==='motion'){document.body.classList.toggle('reduce-motion',!!prefs.motion);}
-			        if(key==='fx'){document.body.classList.toggle('reduce-fx',!prefs.fx);}
-			        if(key==='sfx'){document.body.classList.toggle('muted-sfx',!prefs.sfx);}
-			        var ps=document.getElementById('prefSummary');if(ps)ps.textContent=(prefs.sfx?'SFX':'MUTE')+' • '+(prefs.dark?'DARK':'LIGHT');
-			        var pd=document.getElementById('prefDetail');if(pd)pd.textContent=(prefs.fx?'FX on':'FX off')+' • '+(prefs.motion?'Reduce motion':'Motion on')+' • persisted';
-			        if(key!=='sfx'&&prefs.sfx!==false){try{if(window.beep)window.beep('click');}catch(e){}}else if(key==='sfx'&&prefs.sfx===true){try{if(window.beep)window.beep('success');}catch(e){}}
-			      });
-			    });
-			  }
-			  function removeOldHandlers(){
-			    document.querySelectorAll('.toggle').forEach(function(row){
-			      if(!row._v7cleaned){
-			        row._v7cleaned=true;
-			        var clone=row.cloneNode(true);
-			        row.parentNode.replaceChild(clone,row);
-			      }
-			    });
-			    setupToggleSlide();
-			  }
-			  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(removeOldHandlers,100);});}else{setTimeout(removeOldHandlers,50);}
-			  setTimeout(setupToggleSlide,100);
-			  (function(){
-			    function applyMotion(){
-			      var prefs=getPrefs();
-			      document.body.classList.toggle('reduce-motion',!!prefs.motion);
-			    }
-			    function watchMotion(){
-			      var sw=document.querySelector('.switch[data-key="motion"]');
-			      if(!sw){setTimeout(watchMotion,300);return;}
-			      new MutationObserver(applyMotion).observe(sw,{attributes:true,attributeFilter:['class']});
-			      applyMotion();
-			    }
-			    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watchMotion);}else{watchMotion();}
-			    setTimeout(applyMotion,100);
-			  })();
-			})();
-		</script>
+		
 	<style>
 /* === FINAL DRIFT FIX - added by assistant === */
 .screen, .screen.active, #screen-nfl, #screen-nba, #screen-mlb {
@@ -15991,11 +15910,18 @@ html body #picksMount .game {
 		</script>
 
 		
+
 <script id="live-json-fetcher">
 (function(){
-  function teamAbbrToName(abbr){
-    const map={ CWS:'White Sox', TEX:'Rangers', MIA:'Marlins', HOU:'Astros', DET:'Tigers', CHC:'Cubs', PIT:'Pirates', NYY:'Yankees', BAL:'Orioles', BOS:'Red Sox', SF:'Giants', KC:'Royals', NYM:'Mets', MIL:'Brewers', ATL:'Braves', SD:'Padres', MIN:'Twins', CLE:'Guardians', LAD:'Dodgers', ARI:'Diamondbacks' };
-    return map[abbr]||abbr;
+  function teamAbbrToName(abbr, fallback){
+    const map={
+      'ARI':'D-backs','AZ':'D-backs','ATL':'Braves','BAL':'Orioles','BOS':'Red Sox','CHC':'Cubs','CWS':'White Sox','CHW':'White Sox',
+      'CIN':'Reds','CLE':'Guardians','COL':'Rockies','DET':'Tigers','HOU':'Astros','KC':'Royals','KCR':'Royals',
+      'LAA':'Angels','LAD':'Dodgers','MIA':'Marlins','MIL':'Brewers','MIN':'Twins','NYM':'Mets','NYY':'Yankees',
+      'OAK':'Athletics','PHI':'Phillies','PIT':'Pirates','SD':'Padres','SF':'Giants','SEA':'Mariners','STL':'Cardinals',
+      'TB':'Rays','TBR':'Rays','TEX':'Rangers','TOR':'Blue Jays','WSH':'Nationals','WSN':'Nationals'
+    };
+    return map[abbr] || fallback || abbr;
   }
 
   function renderEmpty(updated){
@@ -16015,53 +15941,43 @@ html body #picksMount .game {
                '<div class="cards" style="display:flex; flex-direction:column; gap:12px;">';
 
     games.forEach(g=>{
-      const lg = g.lg || g.league?.toUpperCase() || 'MLB';
+      const lg = g.lg || 'MLB';
       const status = g.status || g.inning || (g.final ? 'Final' : 'LIVE');
       const isFinal = !!g.final || String(status).toLowerCase().includes('final');
-      const statusClass = isFinal ? 'background:rgba(255,255,255,0.14);' : 'background:rgba(255,59,92,0.18); border:1px solid rgba(255,59,92,0.28); color:#ff8fa3;';
+      const statusStyle = isFinal ? 'background:rgba(255,255,255,0.14);' : 'background:rgba(255,59,92,0.18); border:1px solid rgba(255,59,92,0.28); color:#ff8fa3;';
 
-      // Support both data formats
       let teamsHTML = '';
-      if(g.teams && g.teams.length){
-        // old format with teams array
-        teamsHTML = g.teams.map((t,i)=>{
-          const other = g.teams[1-i] ? (g.teams[1-i].score||0) : 0;
-          const win = (t.score||0) > other;
-          return '<div class="live-team-row" style="display:flex; align-items:center; justify-content:space-between; padding:10px 4px; border-bottom:1px solid rgba(255,255,255,0.06);">'+
-                 '<div style="display:flex; align-items:center; gap:12px;"><div style="width:32px;height:32px;border-radius:50%; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.12); display:grid; place-items:center; font-weight:800; font-size:11px;">'+(t.abbr||t.logo||'').substring(0,3).toUpperCase()+'</div>'+
-                 '<div><div style="font-weight:800; font-size:14px;">'+(t.name||t.abbr||'')+'</div><div style="font-size:10px; opacity:0.6;">'+(t.rec||'')+'</div></div></div>'+
-                 '<div style="font-weight:900; font-size:18px;'+(win?' color:#fff;':' opacity:0.9;')+'">'+(t.score||0)+'</div></div>';
-        }).join('');
-      } else {
-        // new format from live_scores.json: a, b, aScore, bScore
-        const a = g.a || 'AWAY';
-        const b = g.b || 'HOME';
-        const aScore = (g.aScore!==undefined ? g.aScore : (g.a_score!==undefined?g.a_score:'-'));
-        const bScore = (g.bScore!==undefined ? g.bScore : (g.b_score!==undefined?g.b_score:'-'));
-        const aWin = typeof aScore==='number' && typeof bScore==='number' && aScore > bScore;
-        const bWin = typeof aScore==='number' && typeof bScore==='number' && bScore > aScore;
-        
-        teamsHTML = 
-          '<div class="live-team-row" style="display:flex; align-items:center; justify-content:space-between; padding:12px 4px; border-bottom:1px solid rgba(255,255,255,0.06);">'+
-            '<div style="display:flex; align-items:center; gap:12px;">'+
-              '<div style="width:36px;height:36px;border-radius:50%; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.12); display:grid; place-items:center; font-weight:800; font-size:11px; letter-spacing:-0.02em;">'+a+'</div>'+
-              '<div><div style="font-weight:800; font-size:15px; letter-spacing:-0.01em;">'+teamAbbrToName(a)+' <span style="opacity:0.6; font-weight:600; font-size:12px;">'+a+'</span></div><div style="font-size:10px; opacity:0.5;">AWAY</div></div>'+
-            '</div>'+
-            '<div style="font-weight:900; font-size:20px; letter-spacing:-0.02em;'+(aWin?' color:#fff; text-shadow:0 0 12px rgba(255,255,255,0.3);':'')+'">'+aScore+'</div>'+
-          '</div>'+
-          '<div class="live-team-row" style="display:flex; align-items:center; justify-content:space-between; padding:12px 4px;">'+
-            '<div style="display:flex; align-items:center; gap:12px;">'+
-              '<div style="width:36px;height:36px;border-radius:50%; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.12); display:grid; place-items:center; font-weight:800; font-size:11px;">'+b+'</div>'+
-              '<div><div style="font-weight:800; font-size:15px;">'+teamAbbrToName(b)+' <span style="opacity:0.6; font-weight:600; font-size:12px;">'+b+'</span></div><div style="font-size:10px; opacity:0.5;">HOME</div></div>'+
-            '</div>'+
-            '<div style="font-weight:900; font-size:20px; letter-spacing:-0.02em;'+(bWin?' color:#fff; text-shadow:0 0 12px rgba(255,255,255,0.3);':'')+'">'+bScore+'</div>'+
-          '</div>';
-      }
+      // Use a,b format primarily
+      const aAbbr = g.a || g.away || (g.teams&&g.teams[0]?.abbr) || 'AWAY';
+      const bAbbr = g.b || g.home || (g.teams&&g.teams[1]?.abbr) || 'HOME';
+      const aScore = (g.aScore!==undefined ? g.aScore : (g.score_away!==undefined ? g.score_away : (g.teams&&g.teams[0]?.score)));
+      const bScore = (g.bScore!==undefined ? g.bScore : (g.score_home!==undefined ? g.score_home : (g.teams&&g.teams[1]?.score)));
+      const aName = g.a_name || teamAbbrToName(aAbbr, g.teams&&g.teams[0]?.name);
+      const bName = g.b_name || teamAbbrToName(bAbbr, g.teams&&g.teams[1]?.name);
 
-      html += '<div class="game live-card live" style="padding:0; overflow:hidden;">'+
+      const aWin = typeof aScore==='number' && typeof bScore==='number' && aScore > bScore;
+      const bWin = typeof aScore==='number' && typeof bScore==='number' && bScore > aScore;
+
+      teamsHTML = 
+        '<div class="live-team-row" style="display:flex; align-items:center; justify-content:space-between; padding:12px 4px; border-bottom:1px solid rgba(255,255,255,0.06);">'+
+          '<div style="display:flex; align-items:center; gap:12px;">'+
+            '<div style="width:36px;height:36px;border-radius:50%; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.12); display:grid; place-items:center; font-weight:800; font-size:11px;">'+aAbbr+'</div>'+
+            '<div><div style="font-weight:800; font-size:15px;">'+aName+'</div><div style="font-size:10px; opacity:0.5;">AWAY</div></div>'+
+          '</div>'+
+          '<div style="font-weight:900; font-size:20px;'+(aWin?' color:#fff; text-shadow:0 0 12px rgba(255,255,255,0.3);':'')+'">'+(aScore!==undefined?aScore:'-')+'</div>'+
+        '</div>'+
+        '<div class="live-team-row" style="display:flex; align-items:center; justify-content:space-between; padding:12px 4px;">'+
+          '<div style="display:flex; align-items:center; gap:12px;">'+
+            '<div style="width:36px;height:36px;border-radius:50%; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.12); display:grid; place-items:center; font-weight:800; font-size:11px;">'+bAbbr+'</div>'+
+            '<div><div style="font-weight:800; font-size:15px;">'+bName+'</div><div style="font-size:10px; opacity:0.5;">HOME</div></div>'+
+          '</div>'+
+          '<div style="font-weight:900; font-size:20px;'+(bWin?' color:#fff; text-shadow:0 0 12px rgba(255,255,255,0.3);':'')+'">'+(bScore!==undefined?bScore:'-')+'</div>'+
+        '</div>';
+
+      html += '<div class="game live-card live" style="padding:0; overflow:hidden; min-height:0 !important;">'+
                 '<div class="game-head" style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px;">'+
                   '<div style="display:flex; align-items:center; gap:8px;"><span style="font-family:var(--mono); font-size:11px; font-weight:800; letter-spacing:0.08em; opacity:0.7;">'+lg+'</span><span style="opacity:0.3;">•</span><span style="font-size:11px; opacity:0.6;">'+(g.date||'')+'</span></div>'+
-                  '<div style="font-size:11px; font-weight:800; padding:6px 12px; border-radius:999px; '+statusClass+'">'+status+'</div>'+
+                  '<div style="font-size:11px; font-weight:800; padding:6px 12px; border-radius:999px; '+statusStyle+'">'+status+'</div>'+
                 '</div>'+
                 '<div style="padding:4px 12px 6px;">'+teamsHTML+'</div>'+
                 '<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; border-top:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.02);">'+
@@ -16078,13 +15994,11 @@ html body #picksMount .game {
     const mount = document.getElementById('liveScoresMount');
     if(!mount) return;
     let data = null;
-    // Try window embedded first
     if(window.__EMBEDDED_LIVE_SCORES && window.__EMBEDDED_LIVE_SCORES.games){
       data = window.__EMBEDDED_LIVE_SCORES;
     } else if(window.PARLAYOS_LIVE_SCORES && window.PARLAYOS_LIVE_SCORES.games){
       data = window.PARLAYOS_LIVE_SCORES;
     }
-    // Try fetch
     if(!data){
       const candidates = ['./live_scores.json','live_scores.json','./data/live_scores.json'];
       for(const base of candidates){
@@ -16094,7 +16008,6 @@ html body #picksMount .game {
           const json = await res.json();
           if(Array.isArray(json)) data = {games: json, updated: new Date().toISOString()};
           else if(json.games) data = json;
-          else if(json.mlb_games) data = {games: json.mlb_games, updated: json.updated};
           else data = json;
           if(data) break;
         }catch(e){}
@@ -16112,6 +16025,7 @@ html body #picksMount .game {
   window.loadLiveJSON = loadLiveJSON;
 })();
 </script>
+
 
 
 		<style id="date-modal-style">
@@ -17335,169 +17249,7 @@ html body #picksMount .game {
 			})();
 		</script>
 
-		<script id="parlayos-settings-fix">
-			/* ═══════════════════════════════════════════════════════════
-			   PARLAYOS FIX — Settings toggles + E.S. bubble
-			   ═══════════════════════════════════════════════════════════ */
-			(function () {
-
-			  /* ── 1. FX / VISUALS ── comprehensive backdrop-filter removal ── */
-			  var fxStyle = document.createElement('style');
-			  fxStyle.id = 'fix-reduce-fx-css';
-			  fxStyle.textContent = [
-			    'body.reduce-fx *,',
-			    'body.reduce-fx *::before,',
-			    'body.reduce-fx *::after {',
-			    '  backdrop-filter: none !important;',
-			    '  -webkit-backdrop-filter: none !important;',
-			    '}',
-			    /* also kill the os-window glass completely */
-			    'body.reduce-fx #themeBackground,',
-			    'body.reduce-fx [id*="themeBackground"],',
-			    'body.reduce-fx .morph-bg,',
-			    'body.reduce-fx [class*="morph"],',
-			    'body.reduce-fx .blob,',
-			    'body.reduce-fx .orb,',
-			    'body.reduce-fx .logo-glow,',
-			    'body.reduce-fx #fullPageSpace,',
-			    'body.reduce-fx [id*="fullPage"],',
-			    'body.reduce-fx .viewport::before,',
-			    'body.reduce-fx .viewport::after {',
-			    '  display:none !important;',
-			    '  opacity:0 !important;',
-			    '  visibility:hidden !important;',
-			    '  background:none !important;',
-			    '  background-image:none !important;',
-			    '}',
-			    'body.reduce-fx .os-window,',
-			    'body.reduce-fx .titlebar,',
-			    'body.reduce-fx .glass,',
-			    'body.reduce-fx .glass-blur {',
-			    '  background: rgba(22,30,46,0.97) !important;',
-			    '}'
-			  ].join('\n');
-			  document.head.appendChild(fxStyle);
-
-			  /* ── 2. REDUCE MOTION ── CSS class + class-sync watcher ── */
-			  var motionStyle = document.createElement('style');
-			  motionStyle.id = 'fix-reduce-motion-css';
-			  motionStyle.textContent = [
-			    '/* Reduce motion: static - no bounce */',
-			    'body.reduce-motion *:not(.switch):not(.switch i),',
-			    'body.reduce-motion *:not(.switch):not(.switch i)::before,',
-			    'body.reduce-motion *:not(.switch):not(.switch i)::after {',
-			    '  animation-duration: 0.01ms !important;',
-			    '  animation-iteration-count: 1 !important;',
-			    '  transition-duration: 0.01ms !important;',
-			    '  transition-delay: 0ms !important;',
-			    '}',
-			    'body.reduce-motion .game,',
-			    'body.reduce-motion .menu-btn,',
-			    'body.reduce-motion .cards .game,',
-			    'body.reduce-motion .game.tapped,',
-			    'body.reduce-motion .menu-btn.tapped {',
-			    '  animation: none !important;',
-			    '  transform: none !important;',
-			    '  opacity: 1 !important;',
-			    '}',
-			    'body.reduce-motion .switch {',
-			    '  transition: background 0.22s ease !important;',
-			    '}',
-			    'body.reduce-motion .switch i {',
-			    '  transition: transform 0.22s cubic-bezier(.2,.8,.2,1) !important;',
-			    '}'
-			  ].join('\n');
-			  document.head.appendChild(motionStyle);
-
-			  /* Watch the motion switch and mirror its state to the body class */
-			  function watchMotionSwitch() {
-			    var sw = document.querySelector('.switch[data-key="motion"]');
-			    if (!sw) { setTimeout(watchMotionSwitch, 400); return; }
-			    /* sync on every class change */
-			    new MutationObserver(function () {
-			      document.body.classList.toggle('reduce-motion', sw.classList.contains('on'));
-			    }).observe(sw, { attributes: true, attributeFilter: ['class'] });
-			    /* sync current state immediately */
-			    document.body.classList.toggle('reduce-motion', sw.classList.contains('on'));
-			  }
-
-			  if (document.readyState === 'loading') {
-			    document.addEventListener('DOMContentLoaded', watchMotionSwitch);
-			  } else {
-			    watchMotionSwitch();
-			  }
-
-			  /* ── 3. E.S. BUBBLE — bypass CSS !important display:none conflict ── */
-			  function initESBubbleFix() {
-			    var pill   = document.getElementById('edgeScannerPill');
-			    var bubble = document.getElementById('edgeScannerBubble');
-			    if (!pill || !bubble) { setTimeout(initESBubbleFix, 350); return; }
-			    if (pill.dataset.esfixed) return;  /* guard against double-init */
-			    pill.dataset.esfixed = '1';
-
-			    /* Move bubble inside pill so position:absolute works relative to it */
-			    if (bubble.parentElement !== pill) pill.appendChild(bubble);
-
-			    /* Force-hide via inline !important so CSS specificity wars don't matter */
-			    function hideBubble() {
-			      bubble.style.setProperty('display',     'none',    'important');
-			      bubble.style.setProperty('opacity',     '0',       'important');
-			      bubble.style.setProperty('visibility',  'hidden',  'important');
-			    }
-
-			    function getEdge() {
-			      try {
-			        var total = 0, count = 0;
-			        document.querySelectorAll('[data-edge],.edge-value,.ev').forEach(function (el) {
-			          var m = (el.textContent || '').match(/([+-]?\d+\.?\d*)%/);
-			          if (m) { var v = parseFloat(m[1]); if (!isNaN(v) && Math.abs(v) < 50 && Math.abs(v) > 0.1) { total += v; count++; } }
-			        });
-			        if (count === 0) return '+' + (2.8 + Math.random() * 2.2).toFixed(1) + '%';
-			        return (total / count >= 0 ? '+' : '') + (total / count).toFixed(1) + '%';
-			      } catch (e) { return '+3.2%'; }
-			    }
-
-			    /* Start hidden */
-			    hideBubble();
-			    var visible = false;
-
-			    function showBubble() {
-			      var edgeVal = document.getElementById('bubbleEdgeValue');
-			      if (edgeVal) edgeVal.textContent = getEdge();
-			      /* Use setProperty with 'important' — this beats ANY stylesheet !important rule */
-			      bubble.style.setProperty('display',     'flex',    'important');
-			      bubble.style.setProperty('visibility',  'visible', 'important');
-			      /* Trigger reflow, THEN fade in */
-			      void bubble.offsetWidth;
-			      bubble.style.setProperty('opacity',     '1',       'important');
-			      visible = true;
-			    }
-
-			    function toggleBubble(e) {
-			      e.preventDefault();
-			      e.stopPropagation();
-			      if (visible) { hideBubble(); visible = false; }
-			      else          { showBubble(); }
-			    }
-
-			    /* Attach to pill — remove any existing onclick first */
-			    pill.onclick = null;
-			    pill.addEventListener('click', toggleBubble);
-
-			    /* Click outside closes */
-			    document.addEventListener('click', function (e) {
-			      if (visible && !pill.contains(e.target)) { hideBubble(); visible = false; }
-			    });
-			  }
-
-			  if (document.readyState === 'loading') {
-			    document.addEventListener('DOMContentLoaded', function () { setTimeout(initESBubbleFix, 250); });
-			  } else {
-			    setTimeout(initESBubbleFix, 250);
-			  }
-
-			})();
-		</script>
+		
 
 		<script id="es-bubble-below">
 			(function() {
@@ -20162,87 +19914,7 @@ button[data-view-toggle],
 </script>
 
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
-<script id="final-settings-fix">
-// Final settings toggle fix - ensures toggles reflect saved prefs and work reliably
-(function(){
-  function getPrefs(){
-    try{
-      const raw = localStorage.getItem('parlayos_prefs');
-      if(!raw) return {sfx:true, fx:true, motion:false, dark:true};
-      return JSON.parse(raw);
-    }catch(e){ return {sfx:true, fx:true, motion:false, dark:true}; }
-  }
-  function applyPrefs(){
-    const prefs = getPrefs();
-    document.querySelectorAll('.switch[data-key]').forEach(sw=>{
-      const key = sw.dataset.key;
-      const on = !!prefs[key];
-      // For sfx, fx, dark defaults are true
-      const isOn = (key==='sfx' || key==='fx' || key==='dark') ? (prefs[key]!==false) : !!prefs[key];
-      sw.classList.toggle('on', isOn);
-      const knob = sw.querySelector('i');
-      if(knob){
-        knob.style.transform = isOn ? 'translateX(18px)' : 'translateX(0)';
-        knob.style.webkitTransform = isOn ? 'translateX(18px)' : 'translateX(0)';
-      }
-    });
-    document.body.classList.toggle('reduce-motion', !!prefs.motion);
-    document.body.classList.toggle('reduce-fx', prefs.fx===false);
-    document.body.classList.toggle('muted-sfx', prefs.sfx===false);
-  }
-  
-  // Apply on load
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', applyPrefs);
-  } else {
-    applyPrefs();
-  }
-  setTimeout(applyPrefs, 200);
-  setTimeout(applyPrefs, 1000);
-  
-  // Fix toggle click to be more reliable
-  document.addEventListener('click', function(e){
-    const sw = e.target.closest('.switch[data-key]');
-    if(!sw) return;
-    // Don't handle if it's the gate (gate has no data-key)
-    if(sw.id==='gateSubmit') return;
-    
-    const row = sw.closest('.toggle');
-    if(row){
-      // Prevent double handling if row also has listener
-      e.stopPropagation();
-    }
-    
-    const key = sw.dataset.key;
-    if(!key) return;
-    
-    try{
-      const prefs = getPrefs();
-      const currentOn = sw.classList.contains('on');
-      prefs[key] = !currentOn;
-      if(key==='dark'){ prefs.dark=true; prefs.theme='dark'; }
-      localStorage.setItem('parlayos_prefs', JSON.stringify(prefs));
-      
-      sw.classList.toggle('on', !currentOn);
-      const knob = sw.querySelector('i');
-      if(knob){
-        knob.style.transition = 'transform 0.22s cubic-bezier(.2,.8,.2,1)';
-        requestAnimationFrame(()=>{
-          knob.style.transform = !currentOn ? 'translateX(18px)' : 'translateX(0)';
-          knob.style.webkitTransform = !currentOn ? 'translateX(18px)' : 'translateX(0)';
-        });
-      }
-      
-      if(key==='motion') document.body.classList.toggle('reduce-motion', !currentOn);
-      if(key==='fx') document.body.classList.toggle('reduce-fx', currentOn===true ? false : true);
-      if(key==='sfx') document.body.classList.toggle('muted-sfx', currentOn===true ? false : true);
-      
-      // Haptic feedback
-      try{ if(navigator.vibrate && prefs.sfx!==false) navigator.vibrate(10); }catch{}
-    }catch(err){ console.warn('toggle err', err); }
-  }, true);
-})();
-</script>
+
 
 <script id="overflow-fix">
 (function(){
@@ -21008,75 +20680,7 @@ body.theme-spring #minecraftSplash { color: #ff69b4 !important; }
 })();
 </script>
 
-<script id="fx-one-tap-fix">
-// Make FX/Visuals toggle work with ONE tap
-(function(){
-  function getPrefs(){
-    try{
-      const raw = localStorage.getItem('parlayos_prefs');
-      if(!raw) return {sfx:true, fx:true, motion:false, dark:true};
-      return JSON.parse(raw);
-    }catch{ return {sfx:true, fx:true, motion:false, dark:true}; }
-  }
-  function savePrefs(p){
-    try{ localStorage.setItem('parlayos_prefs', JSON.stringify(p)); }catch{}
-  }
-  
-  function applyFxState(isOn){
-    try{
-      document.body.classList.toggle('reduce-fx', !isOn);
-      const bg = document.getElementById('themeBackground');
-      if(bg){
-        if(!isOn){ bg.style.display='none'; bg.style.opacity='0'; }
-        else { bg.style.display=''; bg.style.opacity=''; if(bg.classList.contains('active')) bg.style.opacity='0.72'; }
-      }
-      const morph = document.querySelector('.morph-bg');
-      const fullSpace = document.getElementById('fullPageSpace');
-      const stars = document.getElementById('starsCanvas');
-      if(morph) morph.style.display = isOn ? '' : 'none';
-      if(fullSpace) fullSpace.style.display = isOn ? '' : 'none';
-      if(stars) stars.style.display = isOn ? '' : 'none';
-      const pd = document.getElementById('prefDetail');
-      if(pd){ try{ const p=JSON.parse(localStorage.getItem('parlayos_prefs')||'{}'); pd.textContent=(isOn?'FX on':'FX off')+' • '+(p.motion?'Reduce motion':'Motion on')+' • persisted'; }catch(e){} }
-    }catch(e){}
-  }
-  
-  function toggleFxOneTap(){
-    try{
-      const prefs = JSON.parse(localStorage.getItem('parlayos_prefs')||'{}');
-      const newState = !(prefs.fx!==false ? prefs.fx : true);
-      prefs.fx = newState;
-      try{ localStorage.setItem('parlayos_prefs', JSON.stringify(prefs)); }catch(e){}
-      if(window.prefs) window.prefs.fx = newState;
-      document.querySelectorAll('.switch[data-key="fx"]').forEach(sw=>{ sw.classList.toggle('on', newState); });
-      applyFxState(newState);
-      try{ if(typeof applyPrefs==='function') applyPrefs(); }catch(e){}
-      try{ if(navigator.vibrate) navigator.vibrate(10); }catch(e){}
-      return true;
-    }catch(e){ console.error('FX toggle fail', e); return false; }
-  }
-  
-  document.addEventListener('click', function(e){
-    const sw = e.target.closest('.switch[data-key="fx"]');
-    if(!sw) return;
-    setTimeout(()=>{ toggleFxOneTap(); }, 10);
-  });
-  
-// Apply saved FX state on load
-  function initFx(){
-    const prefs = getPrefs();
-    applyFxState(prefs.fx!==false);
-  }
-  
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', initFx);
-  } else {
-    initFx();
-  }
-  setTimeout(initFx, 300);
-  setTimeout(initFx, 1000);
-})();
-</script>
+
 
 <script id="splash-try-themes-gate">
 // Make starting splash say TRY THE THEMES! for default theme for every new user after password gate unlocks
@@ -21317,67 +20921,135 @@ html body .menu-btn .arrow,
 </script>
 
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
-<script id="all-fixes-combined-js">
+
+
+
+<script id="settings-toggles-definitive-v10">
 (function(){
-  // --- TOGGLES 1 TAP ON/OFF BY LABEL ---
-  function getPrefs(){ try{ return JSON.parse(localStorage.getItem('parlayos_prefs')||'{}'); }catch{ return {sfx:true,fx:true,motion:false,dark:true}; } }
-  function savePrefs(p){ try{ localStorage.setItem('parlayos_prefs', JSON.stringify(p)); }catch{} }
-  function applyByLabel(){
-    const prefs=getPrefs();
-    if(prefs.sfx===undefined) prefs.sfx=true;
-    if(prefs.fx===undefined) prefs.fx=true;
-    if(prefs.motion===undefined) prefs.motion=false;
-    prefs.dark=true;
-    document.querySelectorAll('.toggle').forEach(row=>{
-      const b=row.querySelector('.left b');
-      const sw=row.querySelector('.switch');
-      if(!b||!sw) return;
-      const label=b.textContent.trim().toLowerCase();
-      let key=null;
-      if(label.includes('sound')) key='sfx';
-      else if(label.includes('fx') || label.includes('visual')) key='fx';
-      else if(label.includes('motion')) key='motion';
-      else key=sw.dataset.key;
-      if(!key) return;
-      sw.dataset.key=key;
-      const isOn = key==='motion' ? !!prefs.motion : (prefs[key]!==false);
-      sw.classList.toggle('on', isOn);
-      const knob=sw.querySelector('i');
-      if(knob){ knob.style.transform=isOn?'translateX(18px)':'translateX(0px)'; }
-      if(key==='sfx') document.body.classList.toggle('muted-sfx', !isOn);
-      if(key==='fx') document.body.classList.toggle('reduce-fx', !isOn);
-      if(key==='motion') document.body.classList.toggle('reduce-motion', !!prefs.motion);
-    });
+  const STORAGE_KEY = 'parlayos_prefs';
+  function getPrefs(){
+    try{
+      const p = JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+      if(p.sfx===undefined) p.sfx=true;
+      if(p.fx===undefined) p.fx=true;
+      if(p.motion===undefined) p.motion=false;
+      p.dark=true;
+      return p;
+    }catch{ return {sfx:true,fx:true,motion:false,dark:true}; }
   }
-  function bindOneTap(){
+  function savePrefs(p){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }catch{}
+  }
+  function applyToggles(){
+    const prefs = getPrefs();
     document.querySelectorAll('.toggle').forEach(row=>{
-      if(row._safeOneTap) return;
-      row._safeOneTap=true;
-      const clone=row.cloneNode(true);
-      row.parentNode.replaceChild(clone, row);
-      clone._safeOneTap=true;
-      clone.addEventListener('click', function(e){
-        e.preventDefault(); e.stopPropagation();
-        const b=this.querySelector('.left b');
-        const sw=this.querySelector('.switch');
-        if(!b||!sw) return;
-        const label=b.textContent.toLowerCase();
-        let key=null;
-        if(label.includes('sound')) key='sfx';
-        else if(label.includes('fx') || label.includes('visual')) key='fx';
-        else if(label.includes('motion')) key='motion';
-        else key=sw.dataset.key;
-        const prefs=getPrefs();
-        if(key==='motion'){ prefs.motion=!prefs.motion; }
-        else { prefs[key]=!(prefs[key]!==false); }
-        savePrefs(prefs);
-        applyByLabel();
-        try{ if(key!=='sfx' || prefs.sfx) window.beep && window.beep('click'); }catch{}
-      });
+      const sw = row.querySelector('.switch');
+      if(!sw) return;
+      const key = sw.dataset.key;
+      if(!key) return;
+      let isOn;
+      if(key==='motion'){
+        isOn = !!prefs.motion; // ON = reduce motion active
+      } else {
+        isOn = prefs[key] !== false; // true by default
+      }
+      sw.classList.toggle('on', isOn);
+      sw.setAttribute('aria-checked', isOn ? 'true' : 'false');
+      const knob = sw.querySelector('i');
+      if(knob){
+        knob.style.transition='transform 0.22s cubic-bezier(.2,.8,.2,1)';
+        knob.style.transform = isOn ? 'translateX(18px)' : 'translateX(0px)';
+        knob.style.webkitTransform = isOn ? 'translateX(18px)' : 'translateX(0px)';
+      }
+      // Apply effects
+      if(key==='sfx'){
+        document.body.classList.toggle('muted-sfx', !isOn);
+      } else if(key==='fx'){
+        document.body.classList.toggle('reduce-fx', !isOn);
+        document.body.classList.toggle('no-fx', !isOn);
+      } else if(key==='motion'){
+        document.body.classList.toggle('reduce-motion', isOn);
+      }
+    });
+    // Update summary if present
+    const prefsNow = getPrefs();
+    const ps=document.getElementById('prefSummary');
+    if(ps) ps.textContent=(prefsNow.sfx?'SFX':'MUTE')+' • '+(prefsNow.fx?'FX ON':'FX OFF');
+    const pd=document.getElementById('prefDetail');
+    if(pd) pd.textContent=(prefsNow.motion?'Reduce motion ON':'Motion ON')+' • persisted';
+  }
+
+  function toggleKey(key){
+    const prefs = getPrefs();
+    if(key==='motion'){
+      prefs.motion = !prefs.motion;
+    } else if(key==='sfx'){
+      prefs.sfx = !(prefs.sfx!==false);
+    } else if(key==='fx'){
+      prefs.fx = !(prefs.fx!==false);
+    } else {
+      prefs[key] = !(prefs[key]!==false);
+    }
+    savePrefs(prefs);
+    applyToggles();
+    // Sound feedback
+    try{
+      const p = getPrefs();
+      if(key!=='sfx' || p.sfx){
+        if(window.beep) window.beep('click');
+      }
+    }catch{}
+  }
+
+  function bindToggles(){
+    document.querySelectorAll('.toggle').forEach(row=>{
+      if(row._boundV10) return;
+      row._boundV10 = true;
+      // Ensure switch has data-key
+      const sw = row.querySelector('.switch');
+      if(!sw) return;
+      // Remove any previous listeners by cloning? We already removed scripts, but to be safe, replace with fresh element using same structure
+      // Instead of clone, just add single listener on row with stopImmediatePropagation
+      row.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        const key = sw.dataset.key;
+        if(!key) return;
+        toggleKey(key);
+      }, {capture:true});
+      // Also bind directly on switch button to catch keyboard
+      sw.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        toggleKey(sw.dataset.key);
+      }, {capture:true});
     });
   }
 
-  // --- DYNAMIC EMOJIS ---
+  function init(){
+    applyToggles();
+    bindToggles();
+    // Re-bind periodically to catch dynamically added settings
+    setInterval(bindToggles, 1000);
+    // Watch for body class changes that might affect toggles
+    setTimeout(applyToggles, 300);
+    setTimeout(applyToggles, 1000);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  window.applySettingsToggles = applyToggles;
+})();
+</script>
+
+
+<script id="emoji-behind-glass-v10">
+(function(){
   const SCENES = {
     original: { items:[{anim:'floatUp', pool:['🌌','✨','🚀','🌠','⭐','🪐','☄️','🌟','💫','🌙','🛰️'], c:20, sz:[14,36], d:[12,26], x:[-100,100]}] },
     winter: { items:[
@@ -21414,23 +21086,19 @@ html body .menu-btn .arrow,
   function currentTheme(){ const m=document.body.className.match(/theme-(original|winter|summer|autumn|halloween|spring)/); if(m) return m[1]; try{ const t=localStorage.getItem('parlayos_theme'); if(t && SCENES[t]) return t; }catch{} return 'original'; }
   function bindCards(){ document.querySelectorAll('.theme-card[data-theme]').forEach(c=>{ if(c._emojiOnly) return; c._emojiOnly=true; c.addEventListener('click', function(){ const th=this.dataset.theme; setTimeout(()=>render(th), 40); const lbl=document.getElementById('currentThemeLabel'); if(lbl) lbl.textContent=th.toUpperCase(); document.querySelectorAll('.theme-card').forEach(x=>{x.classList.remove('active'); x.style.border='1.5px solid rgba(255,255,255,0.15)';}); this.classList.add('active'); this.style.border='2px solid #5c7cff'; }); }); }
   const obs=new MutationObserver(()=>{ const t=currentTheme(); if(obs._last!==t){ obs._last=t; render(t); } });
-
-  function init(){
-    applyByLabel(); bindOneTap(); bindCards(); render(currentTheme());
-    obs.observe(document.body, {attributes:true, attributeFilter:['class']});
-    setInterval(()=>{ bindCards(); bindOneTap(); }, 1500);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-  setTimeout(init, 500);
+  function init(){ bindCards(); render(currentTheme()); obs.observe(document.body, {attributes:true, attributeFilter:['class']}); setInterval(bindCards, 1500); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>
 
-
 <script id="live-data-embedding">
-window.PARLAYOS_LIVE_SCORES = {"games": [{"lg": "MLB", "league": "mlb", "a": "CWS", "b": "TEX", "aScore": 4, "bScore": 2, "status": "Top 7th", "final": false, "date": "2026-07-22"}, {"lg": "MLB", "league": "mlb", "a": "MIA", "b": "HOU", "aScore": 2, "bScore": 2, "status": "Bottom 7th", "final": false, "date": "2026-07-22"}, {"lg": "MLB", "league": "mlb", "a": "DET", "b": "CHC", "aScore": 4, "bScore": 1, "status": "Top 8th", "final": false, "date": "2026-07-22"}, {"lg": "MLB", "league": "mlb", "a": "PIT", "b": "NYY", "aScore": 5, "bScore": 3, "status": "Final/10", "final": true, "date": "2026-07-22"}, {"lg": "MLB", "league": "mlb", "a": "BAL", "b": "BOS", "aScore": 3, "bScore": 6, "status": "Final", "final": true, "date": "2026-07-22"}, {"lg": "MLB", "league": "mlb", "a": "SF", "b": "KC", "aScore": 4, "bScore": 5, "status": "Final", "final": true, "date": "2026-07-22"}, {"lg": "MLB", "league": "mlb", "a": "NYM", "b": "MIL", "aScore": 3, "bScore": 4, "status": "Final", "final": true, "date": "2026-07-22"}], "updated": "2026-07-22T19:21:19.057150", "date": "2026-07-22"};
-window.__EMBEDDED_LIVE_SCORES = window.PARLAYOS_LIVE_SCORES;
-</script>
 
+// ── LIVE SCORES AUTO-PUSH (generated 2026-07-23T23:17:17.096902+00:00) ──
+window.PARLAYOS_LIVE_SCORES = {"updated": "2026-07-23T23:17:17.096902+00:00", "date": "2026-07-23", "count": 7, "games": [{"lg": "MLB", "league": "mlb", "a": "ARI", "b": "STL", "aScore": 4, "bScore": 2, "a_name": "D-backs", "b_name": "Cardinals", "status": "\u25b2 7th", "final": false, "date": "2026-07-23", "id": "mlb_ari_stl_2026-07-23", "home": "STL", "away": "ARI", "inning": "Top 7th", "detail": "ARI 4 - STL 2", "teams": [{"name": "D-backs", "abbr": "ARI", "score": 4, "logo": "ARI", "rec": ""}, {"name": "Cardinals", "abbr": "STL", "score": 2, "logo": "STL", "rec": ""}], "score_away": 4, "score_home": 2}, {"lg": "MLB", "league": "mlb", "a": "KC", "b": "DET", "aScore": 0, "bScore": 0, "a_name": "Royals", "b_name": "Tigers", "status": "\u25b2 2nd", "final": false, "date": "2026-07-23", "id": "mlb_kc_det_2026-07-23", "home": "DET", "away": "KC", "inning": "Top 2nd", "detail": "KC 0 - DET 0", "teams": [{"name": "Royals", "abbr": "KC", "score": 0, "logo": "KC", "rec": ""}, {"name": "Tigers", "abbr": "DET", "score": 0, "logo": "DET", "rec": ""}], "score_away": 0, "score_home": 0}, {"lg": "MLB", "league": "mlb", "a": "SD", "b": "ATL", "aScore": 5, "bScore": 6, "a_name": "Padres", "b_name": "Braves", "status": "Final", "final": true, "date": "2026-07-23", "id": "mlb_sd_atl_2026-07-23", "home": "ATL", "away": "SD", "inning": "Final", "detail": "SD 5 - ATL 6", "teams": [{"name": "Padres", "abbr": "SD", "score": 5, "logo": "SD", "rec": ""}, {"name": "Braves", "abbr": "ATL", "score": 6, "logo": "ATL", "rec": ""}], "score_away": 5, "score_home": 6}, {"lg": "MLB", "league": "mlb", "a": "MIN", "b": "CLE", "aScore": 3, "bScore": 1, "a_name": "Twins", "b_name": "Guardians", "status": "Final/12", "final": true, "date": "2026-07-23", "id": "mlb_min_cle_2026-07-23", "home": "CLE", "away": "MIN", "inning": "Final/12", "detail": "MIN 3 - CLE 1", "teams": [{"name": "Twins", "abbr": "MIN", "score": 3, "logo": "MIN", "rec": ""}, {"name": "Guardians", "abbr": "CLE", "score": 1, "logo": "CLE", "rec": ""}], "score_away": 3, "score_home": 1}, {"lg": "MLB", "league": "mlb", "a": "TB", "b": "TOR", "aScore": 1, "bScore": 3, "a_name": "Rays", "b_name": "Blue Jays", "status": "Final", "final": true, "date": "2026-07-23", "id": "mlb_tb_tor_2026-07-23", "home": "TOR", "away": "TB", "inning": "Final", "detail": "TB 1 - TOR 3", "teams": [{"name": "Rays", "abbr": "TB", "score": 1, "logo": "TB", "rec": ""}, {"name": "Blue Jays", "abbr": "TOR", "score": 3, "logo": "TOR", "rec": ""}], "score_away": 1, "score_home": 3}, {"lg": "MLB", "league": "mlb", "a": "CWS", "b": "TEX", "aScore": 4, "bScore": 2, "a_name": "White Sox", "b_name": "Rangers", "status": "Top 7th", "final": false, "date": "2026-07-23", "id": "mlb_cws_tex_2026-07-23", "home": "TEX", "away": "CWS", "inning": "Top 7th", "detail": "CWS 4 - TEX 2", "teams": [{"name": "White Sox", "abbr": "CWS", "score": 4, "logo": "CWS", "rec": ""}, {"name": "Rangers", "abbr": "TEX", "score": 2, "logo": "TEX", "rec": ""}], "score_away": 4, "score_home": 2}, {"lg": "MLB", "league": "mlb", "a": "DET", "b": "CHC", "aScore": 4, "bScore": 1, "a_name": "Tigers", "b_name": "Cubs", "status": "Top 8th", "final": false, "date": "2026-07-23", "id": "mlb_det_chc_2026-07-23", "home": "CHC", "away": "DET", "inning": "Top 8th", "detail": "DET 4 - CHC 1", "teams": [{"name": "Tigers", "abbr": "DET", "score": 4, "logo": "DET", "rec": ""}, {"name": "Cubs", "abbr": "CHC", "score": 1, "logo": "CHC", "rec": ""}], "score_away": 4, "score_home": 1}], "mlb_count": 7, "nfl_count": 0, "nba_count": 0, "next_check": "2026-07-23T23:17:17.096933+00:00"};
+window.__EMBEDDED_LIVE_SCORES = {"updated": "2026-07-23T23:17:17.096902+00:00", "date": "2026-07-23", "count": 7, "games": [{"lg": "MLB", "league": "mlb", "a": "ARI", "b": "STL", "aScore": 4, "bScore": 2, "a_name": "D-backs", "b_name": "Cardinals", "status": "\u25b2 7th", "final": false, "date": "2026-07-23", "id": "mlb_ari_stl_2026-07-23", "home": "STL", "away": "ARI", "inning": "Top 7th", "detail": "ARI 4 - STL 2", "teams": [{"name": "D-backs", "abbr": "ARI", "score": 4, "logo": "ARI", "rec": ""}, {"name": "Cardinals", "abbr": "STL", "score": 2, "logo": "STL", "rec": ""}], "score_away": 4, "score_home": 2}, {"lg": "MLB", "league": "mlb", "a": "KC", "b": "DET", "aScore": 0, "bScore": 0, "a_name": "Royals", "b_name": "Tigers", "status": "\u25b2 2nd", "final": false, "date": "2026-07-23", "id": "mlb_kc_det_2026-07-23", "home": "DET", "away": "KC", "inning": "Top 2nd", "detail": "KC 0 - DET 0", "teams": [{"name": "Royals", "abbr": "KC", "score": 0, "logo": "KC", "rec": ""}, {"name": "Tigers", "abbr": "DET", "score": 0, "logo": "DET", "rec": ""}], "score_away": 0, "score_home": 0}, {"lg": "MLB", "league": "mlb", "a": "SD", "b": "ATL", "aScore": 5, "bScore": 6, "a_name": "Padres", "b_name": "Braves", "status": "Final", "final": true, "date": "2026-07-23", "id": "mlb_sd_atl_2026-07-23", "home": "ATL", "away": "SD", "inning": "Final", "detail": "SD 5 - ATL 6", "teams": [{"name": "Padres", "abbr": "SD", "score": 5, "logo": "SD", "rec": ""}, {"name": "Braves", "abbr": "ATL", "score": 6, "logo": "ATL", "rec": ""}], "score_away": 5, "score_home": 6}, {"lg": "MLB", "league": "mlb", "a": "MIN", "b": "CLE", "aScore": 3, "bScore": 1, "a_name": "Twins", "b_name": "Guardians", "status": "Final/12", "final": true, "date": "2026-07-23", "id": "mlb_min_cle_2026-07-23", "home": "CLE", "away": "MIN", "inning": "Final/12", "detail": "MIN 3 - CLE 1", "teams": [{"name": "Twins", "abbr": "MIN", "score": 3, "logo": "MIN", "rec": ""}, {"name": "Guardians", "abbr": "CLE", "score": 1, "logo": "CLE", "rec": ""}], "score_away": 3, "score_home": 1}, {"lg": "MLB", "league": "mlb", "a": "TB", "b": "TOR", "aScore": 1, "bScore": 3, "a_name": "Rays", "b_name": "Blue Jays", "status": "Final", "final": true, "date": "2026-07-23", "id": "mlb_tb_tor_2026-07-23", "home": "TOR", "away": "TB", "inning": "Final", "detail": "TB 1 - TOR 3", "teams": [{"name": "Rays", "abbr": "TB", "score": 1, "logo": "TB", "rec": ""}, {"name": "Blue Jays", "abbr": "TOR", "score": 3, "logo": "TOR", "rec": ""}], "score_away": 1, "score_home": 3}, {"lg": "MLB", "league": "mlb", "a": "CWS", "b": "TEX", "aScore": 4, "bScore": 2, "a_name": "White Sox", "b_name": "Rangers", "status": "Top 7th", "final": false, "date": "2026-07-23", "id": "mlb_cws_tex_2026-07-23", "home": "TEX", "away": "CWS", "inning": "Top 7th", "detail": "CWS 4 - TEX 2", "teams": [{"name": "White Sox", "abbr": "CWS", "score": 4, "logo": "CWS", "rec": ""}, {"name": "Rangers", "abbr": "TEX", "score": 2, "logo": "TEX", "rec": ""}], "score_away": 4, "score_home": 2}, {"lg": "MLB", "league": "mlb", "a": "DET", "b": "CHC", "aScore": 4, "bScore": 1, "a_name": "Tigers", "b_name": "Cubs", "status": "Top 8th", "final": false, "date": "2026-07-23", "id": "mlb_det_chc_2026-07-23", "home": "CHC", "away": "DET", "inning": "Top 8th", "detail": "DET 4 - CHC 1", "teams": [{"name": "Tigers", "abbr": "DET", "score": 4, "logo": "DET", "rec": ""}, {"name": "Cubs", "abbr": "CHC", "score": 1, "logo": "CHC", "rec": ""}], "score_away": 4, "score_home": 1}], "mlb_count": 7, "nfl_count": 0, "nba_count": 0, "next_check": "2026-07-23T23:17:17.096933+00:00"};
+window.PARLAYOS_LIVE_GAMES = [{"lg": "MLB", "league": "mlb", "a": "ARI", "b": "STL", "aScore": 4, "bScore": 2, "a_name": "D-backs", "b_name": "Cardinals", "status": "\u25b2 7th", "final": false, "date": "2026-07-23", "id": "mlb_ari_stl_2026-07-23", "home": "STL", "away": "ARI", "inning": "Top 7th", "detail": "ARI 4 - STL 2", "teams": [{"name": "D-backs", "abbr": "ARI", "score": 4, "logo": "ARI", "rec": ""}, {"name": "Cardinals", "abbr": "STL", "score": 2, "logo": "STL", "rec": ""}], "score_away": 4, "score_home": 2}, {"lg": "MLB", "league": "mlb", "a": "KC", "b": "DET", "aScore": 0, "bScore": 0, "a_name": "Royals", "b_name": "Tigers", "status": "\u25b2 2nd", "final": false, "date": "2026-07-23", "id": "mlb_kc_det_2026-07-23", "home": "DET", "away": "KC", "inning": "Top 2nd", "detail": "KC 0 - DET 0", "teams": [{"name": "Royals", "abbr": "KC", "score": 0, "logo": "KC", "rec": ""}, {"name": "Tigers", "abbr": "DET", "score": 0, "logo": "DET", "rec": ""}], "score_away": 0, "score_home": 0}, {"lg": "MLB", "league": "mlb", "a": "SD", "b": "ATL", "aScore": 5, "bScore": 6, "a_name": "Padres", "b_name": "Braves", "status": "Final", "final": true, "date": "2026-07-23", "id": "mlb_sd_atl_2026-07-23", "home": "ATL", "away": "SD", "inning": "Final", "detail": "SD 5 - ATL 6", "teams": [{"name": "Padres", "abbr": "SD", "score": 5, "logo": "SD", "rec": ""}, {"name": "Braves", "abbr": "ATL", "score": 6, "logo": "ATL", "rec": ""}], "score_away": 5, "score_home": 6}, {"lg": "MLB", "league": "mlb", "a": "MIN", "b": "CLE", "aScore": 3, "bScore": 1, "a_name": "Twins", "b_name": "Guardians", "status": "Final/12", "final": true, "date": "2026-07-23", "id": "mlb_min_cle_2026-07-23", "home": "CLE", "away": "MIN", "inning": "Final/12", "detail": "MIN 3 - CLE 1", "teams": [{"name": "Twins", "abbr": "MIN", "score": 3, "logo": "MIN", "rec": ""}, {"name": "Guardians", "abbr": "CLE", "score": 1, "logo": "CLE", "rec": ""}], "score_away": 3, "score_home": 1}, {"lg": "MLB", "league": "mlb", "a": "TB", "b": "TOR", "aScore": 1, "bScore": 3, "a_name": "Rays", "b_name": "Blue Jays", "status": "Final", "final": true, "date": "2026-07-23", "id": "mlb_tb_tor_2026-07-23", "home": "TOR", "away": "TB", "inning": "Final", "detail": "TB 1 - TOR 3", "teams": [{"name": "Rays", "abbr": "TB", "score": 1, "logo": "TB", "rec": ""}, {"name": "Blue Jays", "abbr": "TOR", "score": 3, "logo": "TOR", "rec": ""}], "score_away": 1, "score_home": 3}, {"lg": "MLB", "league": "mlb", "a": "CWS", "b": "TEX", "aScore": 4, "bScore": 2, "a_name": "White Sox", "b_name": "Rangers", "status": "Top 7th", "final": false, "date": "2026-07-23", "id": "mlb_cws_tex_2026-07-23", "home": "TEX", "away": "CWS", "inning": "Top 7th", "detail": "CWS 4 - TEX 2", "teams": [{"name": "White Sox", "abbr": "CWS", "score": 4, "logo": "CWS", "rec": ""}, {"name": "Rangers", "abbr": "TEX", "score": 2, "logo": "TEX", "rec": ""}], "score_away": 4, "score_home": 2}, {"lg": "MLB", "league": "mlb", "a": "DET", "b": "CHC", "aScore": 4, "bScore": 1, "a_name": "Tigers", "b_name": "Cubs", "status": "Top 8th", "final": false, "date": "2026-07-23", "id": "mlb_det_chc_2026-07-23", "home": "CHC", "away": "DET", "inning": "Top 8th", "detail": "DET 4 - CHC 1", "teams": [{"name": "Tigers", "abbr": "DET", "score": 4, "logo": "DET", "rec": ""}, {"name": "Cubs", "abbr": "CHC", "score": 1, "logo": "CHC", "rec": ""}], "score_away": 4, "score_home": 1}];
+// ── END LIVE SCORES AUTO-PUSH ──
+
+</script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
