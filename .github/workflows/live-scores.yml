@@ -45,4 +45,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action - Live Scores"
           git add live_scores.json data/live_scores.json live_scores.yml parlayos.html 2>/dev/null || true
-          git diff --staged --quiet || (git commit -m "🔴 Update live scores - $(date -u) - Finals for calendars" && git push)
+          git diff --staged --quiet || (git commit -m "ðŸ”´ Update live scores - $(date -u) - Finals for calendars" && git push)
