@@ -1,9 +1,83 @@
 {
-  "updated": "2026-07-23T01:15:07.460922+00:00",
-  "count": 0,
-  "games": [],
-  "mlb_count": 0,
-  "nfl_count": 0,
-  "nba_count": 0,
-  "next_check": "2026-07-23T01:20:07.460934+00:00"
+  "games": [
+    {
+      "lg": "MLB",
+      "league": "mlb",
+      "a": "CWS",
+      "b": "TEX",
+      "aScore": 4,
+      "bScore": 2,
+      "status": "Top 7th",
+      "final": false,
+      "date": "2026-07-22"
+    },
+    {
+      "lg": "MLB",
+      "league": "mlb",
+      "a": "MIA",
+      "b": "HOU",
+      "aScore": 2,
+      "bScore": 2,
+      "status": "Bottom 7th",
+      "final": false,
+      "date": "2026-07-22"
+    },
+    {
+      "lg": "MLB",
+      "league": "mlb",
+      "a": "DET",
+      "b": "CHC",
+      "aScore": 4,
+      "bScore": 1,
+      "status": "Top 8th",
+      "final": false,
+      "date": "2026-07-22"
+    },
+    {
+      "lg": "MLB",
+      "league": "mlb",
+      "a": "PIT",
+      "b": "NYY",
+      "aScore": 5,
+      "bScore": 3,
+      "status": "Final/10",
+      "final": true,
+      "date": "2026-07-22"
+    },
+    {
+      "lg": "MLB",
+      "league": "mlb",
+      "a": "BAL",
+      "b": "BOS",
+      "aScore": 3,
+      "bScore": 6,
+      "status": "Final",
+      "final": true,
+      "date": "2026-07-22"
+    },
+    {
+      "lg": "MLB",
+      "league": "mlb",
+      "a": "SF",
+      "b": "KC",
+      "aScore": 4,
+      "bScore": 5,
+      "status": "Final",
+      "final": true,
+      "date": "2026-07-22"
+    },
+    {
+      "lg": "MLB",
+      "league": "mlb",
+      "a": "NYM",
+      "b": "MIL",
+      "aScore": 3,
+      "bScore": 4,
+      "status": "Final",
+      "final": true,
+      "date": "2026-07-22"
+    }
+  ],
+  "updated": "2026-07-22T19:21:19.057150",
+  "date": "2026-07-22"
 }
