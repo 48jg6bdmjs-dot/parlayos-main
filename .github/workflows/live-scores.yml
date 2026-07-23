@@ -2,22 +2,14 @@ name: Update Live Scores
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # Every 5 minutes - updates live + final scores
+    - cron: '*/5 * * * *'  # Every 5 minutes - updates final scores for calendars
   workflow_dispatch:
   push:
     branches: [ main, master ]
     paths:
-      - 'live_scores.json'
+      - 'live_scores.yml'
+      - 'data/live_scores.yml'
       - 'live_scores_fetcher.py'
-      - 'live-scores.yml'
-      - '.github/workflows/live-scores.yml'
-      - 'parlayos_3.html'
-      - 'parlayos.html'
-      - 'index.html'
-
-concurrency:
-  group: live-scores
-  cancel-in-progress: true
 
 jobs:
   update-scores:
@@ -27,8 +19,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
         
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -37,19 +27,22 @@ jobs:
           
       - name: Install deps
         run: |
-          pip install requests
+          pip install requests pyyaml
           
-      - name: Fetch live + final scores for all hubs
+      - name: Fetch live final scores for all hubs
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
-          echo "Fetching live + final scores for calendars..."
+          echo "Fetching live scores for calendar final scores..."
           python live_scores_fetcher.py
-          echo "Done. Checking output..."
-          ls -lh live_scores.json data/live_scores.json 2>/dev/null || ls -lh live_scores.json
-          cat live_scores.json | head -100
+          echo "Updating game data..."
+          python mlb_ace.py || echo "MLB skipped"
+          python nfl_ace.py || echo "NFL skipped"
+          python nba_ace_2.py || echo "NBA skipped"
           
       - name: Commit and push if changed
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action - Live Scores"
-          git add live_scores.json data/live_scores.json live-scores.yml .github/workflows/live-scores.yml parlayos_3.html parlayos.html index.html 2>/dev/null || true
-          git diff --staged --quiet && echo "No changes" || (git commit -m "ðŸ”´ Update live scores - $(date -u) - ${{ github.event_name }}" && git push)
+          git add live_scores.json data/live_scores.json live_scores.yml parlayos.html 2>/dev/null || true
+          git diff --staged --quiet || (git commit -m "🔴 Update live scores - $(date -u) - Finals for calendars" && git push)
