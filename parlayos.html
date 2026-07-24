@@ -336,6 +336,27 @@
 :where(code, pre, kbd, samp) {
   font-family: "Optimistic Mono", ui-monospace, monospace;
 }
+</style><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
 </style>
 		<style>
 			@font-face {
@@ -10856,38 +10877,8 @@ html body .menu-btn p, .menu-btn p { text-align:left !important; padding:0 40px 
 
 						<div class="settings">
 							<div class="toggle-list">
-								<div class="glass glass-blur toggle">
-									<div class="left">
-										<b>Sound FX</b
-										><span
-											>WebAudio beeps on clicks, success,
-											and system events</span
-										>
-									</div>
-									<button
-										class="switch"
-										data-key="sfx"
-										aria-label="Toggle sound"
-									>
-										<i></i>
-									</button>
-								</div>
-								<div class="glass glass-blur toggle">
-									<div class="left">
-										<b>FX / Visuals</b
-										><span
-											>Backdrop blur + glass highlights
-											(disable for low power)</span
-										>
-									</div>
-									<button
-										class="switch"
-										data-key="fx"
-										aria-label="Toggle FX"
-									>
-										<i></i>
-									</button>
-								</div>
+								
+								
 								<div class="glass glass-blur toggle">
 									<div class="left">
 										<b>Reduce Motion</b
@@ -13647,12 +13638,36 @@ html body .menu-btn p, .menu-btn p { text-align:left !important; padding:0 40px 
 			        if(input === null) return;
 			        const amount = parseFloat(input);
 			        if(!amount || amount <= 0){ alert('Enter a valid amount greater than $0.'); return; }
-			        if(current.history && current.history.length > 1 && current.pending && current.pending.length){
-			          if(!confirm(`This resets your balance to $${amount.toFixed(2)} and clears bet history/pending bets. Continue?`)) return;
-			        } else if(current.history && current.history.length > 1){
-			          if(!confirm(`This resets your balance to $${amount.toFixed(2)} and clears bet history. Continue?`)) return;
+			        const oldStart = brStartOf(current);
+			        const hasHistory = current.history && current.history.length > 1;
+			        const hasPending = current.pending && current.pending.length > 0;
+			        // Preserve slip history to account for odds discrepancies
+			        if(hasHistory || hasPending){
+			          const net = current.balance - oldStart;
+			          const projected = Math.max(0, amount + net);
+			          const msg = hasHistory && hasPending
+			            ? `Change bankroll to $${amount.toFixed(2)}? Your ${current.history.length-1} settled + ${current.pending.length} pending slips will be preserved for odds-discrepancy auditing. New balance: $${projected.toFixed(2)} (keeps current P&L of ${net>=0?'+':''}$${net.toFixed(2)}). Continue?`
+			            : hasHistory
+			            ? `Change bankroll to $${amount.toFixed(2)}? Your ${current.history.length-1} slip(s) history will be preserved to account for odds discrepancies. New balance: $${projected.toFixed(2)} (keeps P&L of ${net>=0?'+':''}$${net.toFixed(2)}). Continue?`
+			            : `Change bankroll to $${amount.toFixed(2)}? Your ${current.pending.length} pending slip(s) will be preserved. New balance: $${projected.toFixed(2)}. Continue?`;
+			          if(!confirm(msg)) return;
+			          // Build preserved data
+			          const preservedHistory = current.history.map((h,i)=>{
+			            if(i===0){
+			              return { balance: amount, label: 'Start', profit: 0, date: new Date().toLocaleDateString() };
+			            }
+			            return h;
+			          });
+			          const newData = {
+			            startingBalance: amount,
+			            balance: projected,
+			            history: preservedHistory.length ? preservedHistory : [{balance:amount, label:'Start', profit:0, date: new Date().toLocaleDateString()}],
+			            pending: current.pending || []
+			          };
+			          brSave(newData);
+			        } else {
+			          brSave(brDefault(amount));
 			        }
-			        brSave(brDefault(amount));
 			        renderBankroll();
 			        beep('click');
 			      }); }
@@ -20040,7 +20055,20 @@ button[data-view-toggle],
       }
       
       if(key==='motion') document.body.classList.toggle('reduce-motion', !currentOn);
-      if(key==='fx') document.body.classList.toggle('reduce-fx', currentOn===true ? false : true);
+      if(key==='fx') {
+        // currentOn = old state; newFxOn = !currentOn = desired new state
+        const newFxOn = !currentOn;
+        document.body.classList.toggle('reduce-fx', !newFxOn);
+        // Apply visual element visibility immediately
+        const bg = document.getElementById('themeBackground');
+        if(bg){ if(!newFxOn){ bg.style.display='none'; bg.style.opacity='0'; } else { bg.style.display=''; bg.style.opacity=''; if(bg.classList.contains('active')) bg.style.opacity='0.72'; } }
+        const _morph = document.querySelector('.morph-bg');
+        const _fs = document.getElementById('fullPageSpace');
+        const _stars = document.getElementById('starsCanvas');
+        if(_morph) _morph.style.display = newFxOn ? '' : 'none';
+        if(_fs) _fs.style.display = newFxOn ? '' : 'none';
+        if(_stars) _stars.style.display = newFxOn ? '' : 'none';
+      }
       if(key==='sfx') document.body.classList.toggle('muted-sfx', currentOn===true ? false : true);
       
       // Haptic feedback
@@ -20862,12 +20890,8 @@ body.theme-spring #minecraftSplash { color: #ff69b4 !important; }
     }catch(e){ console.error('FX toggle fail', e); return false; }
   }
   
-  document.addEventListener('click', function(e){
-    const sw = e.target.closest('.switch[data-key="fx"]');
-    if(!sw) return;
-    setTimeout(()=>{ toggleFxOneTap(); }, 10);
-  });
-  
+  // Click handler removed — handled by final-settings-fix (capture phase) with correct logic.
+
 // Apply saved FX state on load
   function initFx(){
     const prefs = getPrefs();
@@ -21978,5 +22002,251 @@ body.dark .game div[style*="background:rgba(255,255,255,0.48)"] {
 }
 
 </style>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><style id="offscreen-sprinkles-fix-v2">
+/* === MOVE BLUE & WHITE PARTICLES (SPRINKLES) WAY OFF SCREEN - DO NOT DELETE - TARGETED ONLY === */
+/* Only the tiny sprinkle dots, NOT the main FX background/canvas */
+.confetti,
+.particle,
+.floating-dot,
+.star-dot,
+.long-star,
+.shooting-star,
+.spaceship,
+.space-emoji-extra,
+.theme-winter-emoji,
+.theme-summer-emoji,
+.theme-autumn-emoji,
+.theme-halloween-emoji,
+.theme-spring-emoji,
+.theme-spring-flower,
+.theme-winter-snow,
+.theme-autumn-leaf,
+.theme-winter-sun,
+.floating-emoji {
+  position: fixed !important;
+  left: -10000px !important;
+  top: -10000px !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate3d(-20000px, -20000px, 0) !important;
+  -webkit-transform: translate3d(-20000px, -20000px, 0) !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  display: block !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip-path: inset(100%) !important;
+}
+/* Keep main FX containers VISIBLE - do NOT hide these */
+.morph-bg,
+#themeBackground,
+#fullPageSpace,
+.fullpage-stars,
+#parlayos-emoji-canvas-v7,
+#starsCanvas,
+#themeEmojiLayer {
+  left: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  -webkit-transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  width: auto !important;
+  height: auto !important;
+  clip-path: none !important;
+  display: block !important;
+}
+#themeBackground {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 0 !important;
+  display: block !important;
+}
+.morph-bg {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  display: block !important;
+}
+#parlayos-emoji-canvas-v7 {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  display: block !important;
+}
+</style>
+
+<script id="fx-persistence-enforcer">
+/* ENSURE VISUAL/FX TOGGLE STAYS ENABLED WHEN ENTERING SPORTS HUBS OR ANYWHERE */
+(function(){
+  function getPrefs(){
+    try{
+      const raw = localStorage.getItem('parlayos_prefs');
+      if(!raw) return {sfx:true, fx:true, motion:false, dark:true};
+      const p = JSON.parse(raw);
+      if(typeof p.fx === 'undefined') p.fx = true;
+      return p;
+    }catch{ return {sfx:true, fx:true, motion:false, dark:true}; }
+  }
+  function ensureFxEnabled(){
+    try{
+      const prefs = getPrefs();
+      // If user has NOT explicitly disabled FX (fx !== false), force it enabled
+      if(prefs.fx !== false){
+        // Force prefs.fx true and persist
+        if(prefs.fx !== true){
+          prefs.fx = true;
+          try{ localStorage.setItem('parlayos_prefs', JSON.stringify(prefs)); }catch{}
+        }
+        // Remove reduce-fx class that disables visuals
+        document.body.classList.remove('reduce-fx');
+        document.body.classList.remove('no-fx');
+        // Ensure main FX containers are visible
+        const bg = document.getElementById('themeBackground');
+        if(bg){ 
+          bg.style.display = '';
+          bg.style.opacity = '';
+          if(bg.classList.contains('active') && prefs.fx) bg.style.opacity = '0.72';
+        }
+        const morph = document.querySelector('.morph-bg');
+        if(morph){ morph.style.display = ''; morph.style.opacity = ''; }
+        const canvas = document.getElementById('parlayos-emoji-canvas-v7');
+        if(canvas){ canvas.style.display = 'block'; canvas.style.opacity = ''; }
+        // Update switch UI to show ON
+        document.querySelectorAll('.switch[data-key="fx"]').forEach(sw=>{
+          sw.classList.add('on');
+          const knob = sw.querySelector('i');
+          if(knob){
+            knob.style.transform = 'translateX(18px)';
+            knob.style.webkitTransform = 'translateX(18px)';
+          }
+        });
+        const pd = document.getElementById('prefDetail');
+        if(pd && prefs.fx) {
+          const motion = prefs.motion ? 'Reduce motion' : 'Motion on';
+          pd.textContent = `FX on • ${motion} • persisted`;
+        }
+      }
+    }catch(e){ console.warn('fx enforcer', e); }
+  }
+
+  // Run on load
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(ensureFxEnabled, 100); setTimeout(ensureFxEnabled, 600); });
+  } else {
+    setTimeout(ensureFxEnabled, 100);
+  }
+
+  // Re-apply after every screen switch (sports hubs, etc)
+  const origSwitch = window.switchScreen;
+  if(typeof origSwitch === 'function' && !origSwitch._fxPatched){
+    window.switchScreen = function(next){
+      const r = origSwitch.apply(this, arguments);
+      setTimeout(ensureFxEnabled, 50);
+      setTimeout(ensureFxEnabled, 300);
+      setTimeout(ensureFxEnabled, 800);
+      return r;
+    };
+    window.switchScreen._fxPatched = true;
+  } else {
+    // If switchScreen not yet defined, watch for it
+    let attempts = 0;
+    const iv = setInterval(function(){
+      attempts++;
+      if(typeof window.switchScreen === 'function' && !window.switchScreen._fxPatched){
+        const orig = window.switchScreen;
+        window.switchScreen = function(next){
+          const r = orig.apply(this, arguments);
+          setTimeout(ensureFxEnabled, 50);
+          setTimeout(ensureFxEnabled, 300);
+          setTimeout(ensureFxEnabled, 800);
+          return r;
+        };
+        window.switchScreen._fxPatched = true;
+        clearInterval(iv);
+      }
+      if(attempts>40) clearInterval(iv);
+    }, 300);
+  }
+
+  // Watch body class changes - if something adds reduce-fx while fx should be on, remove it
+  const observer = new MutationObserver(function(mutations){
+    const prefs = getPrefs();
+    if(prefs.fx !== false){
+      if(document.body.classList.contains('reduce-fx') || document.body.classList.contains('no-fx')){
+        ensureFxEnabled();
+      }
+    }
+  });
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+  // Also listen for renderScreen
+  const origRender = window.renderScreen;
+  if(typeof origRender === 'function' && !origRender._fxPatched){
+    window.renderScreen = function(name){
+      const r = origRender.apply(this, arguments);
+      setTimeout(ensureFxEnabled, 50);
+      return r;
+    };
+    window.renderScreen._fxPatched = true;
+  }
+
+  // Periodic check for hub navigation
+  setInterval(ensureFxEnabled, 1500);
+
+  window._ensureFxEnabled = ensureFxEnabled;
+})();
+</script>
+
+
+<style id="hide-fx-sfx-toggles">
+/* Hide FX/Visuals and Sound FX toggles from settings - deleted per request */
+.switch[data-key="fx"],
+.switch[data-key="sfx"],
+.toggle:has(.switch[data-key="fx"]),
+.toggle:has(.switch[data-key="sfx"]) {
+  display: none !important;
+}
+/* Fallback for browsers without :has - hide by data-key */
+button[data-key="fx"],
+button[data-key="sfx"] {
+  display: none !important;
+}
+button[data-key="fx"] { display: none !important; }
+button[data-key="sfx"] { display: none !important; }
+</style>
+<script id="force-no-sound-and-fx-on">
+(function(){
+  try{
+    const LS_KEY='parlayos_prefs';
+    let raw = localStorage.getItem(LS_KEY);
+    let p = raw ? JSON.parse(raw) : {};
+    p.fx = true;
+    p.sfx = false; // disable sound FX since button deleted
+    p.dark = true;
+    localStorage.setItem(LS_KEY, JSON.stringify(p));
+    document.body.classList.remove('reduce-fx');
+    document.body.classList.remove('no-fx');
+    document.body.classList.add('muted-sfx');
+    // Kill any audio context
+    try{
+      if(window.audioCtx && window.audioCtx.suspend) window.audioCtx.suspend();
+    }catch{}
+  }catch{}
+  // Override beep to no-op
+  window.beep = function(){};
+  window.ensureAudio = function(){ return {state:'suspended', suspend:()=>Promise.resolve(), resume:()=>Promise.resolve()}; };
+})();
+</script>
+
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
