@@ -315,48 +315,6 @@
 :where(code, pre, kbd, samp) {
   font-family: "Optimistic Mono", ui-monospace, monospace;
 }
-</style><style>
-@font-face {
-  font-family: "Optimistic";
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Optimistic Mono";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
-}
-:where(html) {
-  font-family: "Optimistic", system-ui, sans-serif;
-}
-:where(code, pre, kbd, samp) {
-  font-family: "Optimistic Mono", ui-monospace, monospace;
-}
-</style><style>
-@font-face {
-  font-family: "Optimistic";
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Optimistic Mono";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
-}
-:where(html) {
-  font-family: "Optimistic", system-ui, sans-serif;
-}
-:where(code, pre, kbd, samp) {
-  font-family: "Optimistic Mono", ui-monospace, monospace;
-}
 </style>
 		<style>
 			@font-face {
@@ -9086,7 +9044,88 @@
 			body.reduce-motion .switch,html body.reduce-motion .switch,body.reduce-motion .switch i,html body.reduce-motion .switch i{transition:transform 0.22s cubic-bezier(.2,.8,.2,1),background 0.22s ease!important;animation:none!important}
 			body.reduce-motion .game,body.reduce-motion .menu-btn,body.reduce-motion .cards .game{animation:none!important;transform:none!important;opacity:1!important;transition:none!important}
 		</style>
-		
+		<script id="fix-settings-v7-ultimate">
+			(function(){
+			  function getPrefs(){try{return JSON.parse(localStorage.getItem('parlayos_prefs')||'{}')}catch(e){return{sfx:true,fx:true,motion:false}}}
+			  function savePrefs(p){try{localStorage.setItem('parlayos_prefs',JSON.stringify(p))}catch(e){}}
+			  (function(){
+			    var origBeep=window.beep, origEnsure=window.ensureAudio, audioCtxGlobal=null;
+			    window.beep=function(type){
+			      try{
+			        var prefs=getPrefs();
+			        if(prefs.sfx===false){
+			          try{if(window.audioCtx&&window.audioCtx.suspend)window.audioCtx.suspend();if(audioCtxGlobal&&audioCtxGlobal.suspend)audioCtxGlobal.suspend()}catch(e){}
+			          return;
+			        }
+			        if(typeof origBeep==='function')return origBeep.apply(this,arguments);
+			      }catch(e){}
+			    };
+			    window.ensureAudio=function(){
+			      var prefs=getPrefs();
+			      if(prefs.sfx===false){
+			        return{state:'suspended',currentTime:0,suspend:function(){return Promise.resolve()},resume:function(){return Promise.resolve()},createOscillator:function(){return{connect:function(){},frequency:{setValueAtTime:function(){},exponentialRampToValueAtTime:function(){},linearRampToValueAtTime:function(){}},type:'sine',start:function(){},stop:function(){}}},createGain:function(){return{connect:function(){},gain:{setValueAtTime:function(){},linearRampToValueAtTime:function(){},exponentialRampToValueAtTime:function(){}}}},createBiquadFilter:function(){return{connect:function(){},frequency:{setValueAtTime:function(){}},Q:{setValueAtTime:function(){}},type:'lowpass'}},destination:{}};
+			      }
+			      if(typeof origEnsure==='function'){try{var ctx=origEnsure.apply(this,arguments);audioCtxGlobal=ctx;window.audioCtx=ctx;return ctx}catch(e){return origEnsure.apply(this,arguments)}}
+			      return null;
+			    };
+			  })();
+			  function setupToggleSlide(){
+			    document.querySelectorAll('.toggle').forEach(function(row){
+			      if(row._v7fixed) return;
+			      row._v7fixed=true;
+			      var sw=row.querySelector('.switch');
+			      if(!sw) return;
+			      row.addEventListener('click',function(e){
+			        var key=sw.dataset.key;
+			        if(!key) return;
+			        e.preventDefault();e.stopPropagation();
+			        var prefs=getPrefs();
+			        prefs[key]=!prefs[key];
+			        if(key==='dark'){prefs.dark=true;prefs.theme='dark';}
+			        savePrefs(prefs);
+			        sw.classList.toggle('on',!!prefs[key]);
+			        var knob=sw.querySelector('i');
+			        if(knob){
+			          knob.style.transition='transform 0.22s cubic-bezier(.2,.8,.2,1)';
+			          requestAnimationFrame(function(){knob.style.transform=prefs[key]?'translateX(18px)':'translateX(0px)';knob.style.webkitTransform=prefs[key]?'translateX(18px)':'translateX(0px)';});
+			        }
+			        if(key==='motion'){document.body.classList.toggle('reduce-motion',!!prefs.motion);}
+			        if(key==='fx'){document.body.classList.toggle('reduce-fx',!prefs.fx);}
+			        if(key==='sfx'){document.body.classList.toggle('muted-sfx',!prefs.sfx);}
+			        var ps=document.getElementById('prefSummary');if(ps)ps.textContent=(prefs.sfx?'SFX':'MUTE')+' • '+(prefs.dark?'DARK':'LIGHT');
+			        var pd=document.getElementById('prefDetail');if(pd)pd.textContent=(prefs.fx?'FX on':'FX off')+' • '+(prefs.motion?'Reduce motion':'Motion on')+' • persisted';
+			        if(key!=='sfx'&&prefs.sfx!==false){try{if(window.beep)window.beep('click');}catch(e){}}else if(key==='sfx'&&prefs.sfx===true){try{if(window.beep)window.beep('success');}catch(e){}}
+			      });
+			    });
+			  }
+			  function removeOldHandlers(){
+			    document.querySelectorAll('.toggle').forEach(function(row){
+			      if(!row._v7cleaned){
+			        row._v7cleaned=true;
+			        var clone=row.cloneNode(true);
+			        row.parentNode.replaceChild(clone,row);
+			      }
+			    });
+			    setupToggleSlide();
+			  }
+			  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(removeOldHandlers,100);});}else{setTimeout(removeOldHandlers,50);}
+			  setTimeout(setupToggleSlide,100);
+			  (function(){
+			    function applyMotion(){
+			      var prefs=getPrefs();
+			      document.body.classList.toggle('reduce-motion',!!prefs.motion);
+			    }
+			    function watchMotion(){
+			      var sw=document.querySelector('.switch[data-key="motion"]');
+			      if(!sw){setTimeout(watchMotion,300);return;}
+			      new MutationObserver(applyMotion).observe(sw,{attributes:true,attributeFilter:['class']});
+			      applyMotion();
+			    }
+			    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watchMotion);}else{watchMotion();}
+			    setTimeout(applyMotion,100);
+			  })();
+			})();
+		</script>
 	<style>
 /* === FINAL DRIFT FIX - added by assistant === */
 .screen, .screen.active, #screen-nfl, #screen-nba, #screen-mlb {
@@ -9504,7 +9543,6 @@ body.theme-spring #themeBackground {
 }
 
 body.reduce-fx #themeBackground { display:none !important; }
-body.no-fx #themeBackground { display:none !important; }
 body.reduce-motion #themeBackground * { animation:none !important; }
 </style>
 
@@ -9841,154 +9879,6 @@ html body .menu-btn h3, .menu-btn h3 { text-align:left !important; padding:0 36p
 html body .menu-btn p, .menu-btn p { text-align:left !important; padding:0 40px 0 0 !important; }
 .mini-table { table-layout:auto !important; }
 .mini-table th, .mini-table td { white-space:nowrap !important; word-break:normal !important; min-width:48px !important; text-align:center !important; padding:6px 6px !important; }
-</style>
-
-
-
-
-
-<style id="all-fixes-combined">
-/* === 1. UNIFY GAME CARDS TRANSPARENCY === */
-html body .game,
-html body #dashboardCards .game,
-html body #nflDashboardCards .game,
-html body #nbaDashboardCards .game,
-html body #picksMount .game,
-html body #nflPicksMount .game,
-html body #nbaPicksMount .game,
-html body #liveScoresMount .game,
-html body #liveScoresMount .live-card,
-html body .live-card,
-html body .final-score-card {
-  background: rgba(255,255,255,0.07) !important;
-  border: 1px solid rgba(255,255,255,0.13) !important;
-}
-body.dark .game,
-body.dark #dashboardCards .game,
-body.dark #nflDashboardCards .game,
-body.dark #nbaDashboardCards .game,
-body.dark #picksMount .game,
-body.dark #nflPicksMount .game,
-body.dark #nbaPicksMount .game,
-body.dark #liveScoresMount .game,
-body.dark .live-card,
-body.dark .final-score-card {
-  background: rgba(18,24,40,0.12) !important;
-  border: 1px solid rgba(255,255,255,0.10) !important;
-}
-.game-head, .matchup, .odds-grid, .game-actions { background: transparent !important; }
-
-/* === 2. REDUCE BLUR + BOOST === */
-html body .os-window,
-html body .glass,
-html body .glass-blur,
-html body .game,
-html body .menu-btn,
-html body .table-card,
-html body .live-card,
-html body .panel-pad,
-html body .search,
-html body .toolbar,
-html body .titlebar,
-html body .chip,
-html body .btn {
-  backdrop-filter: blur(2.8px) saturate(1.85) brightness(1.08) !important;
-  -webkit-backdrop-filter: blur(2.8px) saturate(1.85) brightness(1.08) !important;
-}
-html body .market { backdrop-filter: blur(1.8px) saturate(1.6) brightness(1.05) !important; -webkit-backdrop-filter: blur(1.8px) saturate(1.6) brightness(1.05) !important; }
-
-/* Default theme boost */
-body.theme-original .morph-bg,
-body.theme-original #fullPageSpace,
-body.theme-original #starsCanvas {
-  filter: saturate(2.2) brightness(1.35) contrast(1.15) !important;
-  opacity: 1 !important;
-}
-body.theme-original .os-window { background: rgba(10,14,28,0.10) !important; border-color: rgba(120,140,255,0.18) !important; }
-body.theme-original .glass, body.theme-original .game, body.theme-original .menu-btn { background: rgba(18,24,48,0.18) !important; border-color: rgba(92,124,255,0.20) !important; }
-body.theme-original .headline h1 span {
-  background: linear-gradient(90deg, #ff3b3b 0%, #ff7a2e 22%, #ffb62e 42%, #a78bfa 68%, #5c7cff 88%, #3b82ff 100%) !important;
-  -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important;
-  filter: brightness(1.6) saturate(1.5) drop-shadow(0 0 20px rgba(255,80,80,0.4)) drop-shadow(0 0 36px rgba(92,124,255,0.35)) !important;
-}
-
-/* Halloween boost */
-body.theme-halloween #themeBackground {
-  background: 
-    radial-gradient(ellipse at 50% 0%, rgba(180,40,255,0.38) 0%, transparent 58%),
-    radial-gradient(ellipse at 20% 80%, rgba(255,60,120,0.24) 0%, transparent 42%),
-    radial-gradient(ellipse at 80% 20%, rgba(255,140,0,0.24) 0%, transparent 32%),
-    linear-gradient(180deg, #0d041a 0%, #1e0a3a 20%, #2a1055 45%, #1a0b2e 75%, #080210 100%) !important;
-  filter: saturate(1.9) brightness(1.28) contrast(1.12) !important;
-}
-body.theme-halloween .theme-halloween-moon { background: radial-gradient(circle at 32% 32%, #fff7c0, #ffd86b 35%, #ff9a2e 70%) !important; box-shadow: 0 0 50px rgba(255,230,150,0.6), 0 0 100px rgba(255,160,40,0.35) !important; filter: brightness(1.3) saturate(1.4) !important; opacity: 0.95 !important; }
-body.theme-halloween .os-window { background: rgba(18,6,36,0.18) !important; border-color: rgba(180,80,255,0.22) !important; }
-body.theme-halloween .glass, body.theme-halloween .game, body.theme-halloween .menu-btn { background: rgba(30,12,60,0.22) !important; border-color: rgba(180,80,255,0.20) !important; }
-body.theme-halloween .headline h1 span {
-  background: linear-gradient(90deg, #8a2be2 0%, #b14cff 25%, #ff6a00 55%, #ff2a2a 75%, #39ff14 100%) !important;
-  -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important;
-  filter: brightness(1.7) saturate(1.6) drop-shadow(0 0 14px rgba(180,80,255,0.5)) !important;
-}
-
-/* === 3. DYNAMIC EMOJIS BEHIND GLASS === */
-#themeEmojiLayer {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-#themeBackground { z-index: -2 !important; }
-.glass, .game, .menu-btn, .panel-pad, .os-window { position: relative; z-index: 2; }
-.floating-emoji {
-  position: absolute;
-  user-select: none;
-  will-change: transform, opacity;
-  line-height: 1;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18));
-}
-@keyframes winterFall { 0%{transform:translate3d(0,-10vh,0) rotate(0deg);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translate3d(var(--dx),110vh,0) rotate(720deg);opacity:0} }
-@keyframes traverse { 0%{transform:translate3d(-20vw,0,0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translate3d(130vw,15vh,0);opacity:0} }
-@keyframes leafFall { 0%{transform:translate3d(0,-10vh,0) rotate(0deg);opacity:0}15%{opacity:1}100%{transform:translate3d(var(--dx),110vh,0) rotate(360deg);opacity:0} }
-@keyframes floatUp { 0%{transform:translate3d(0,110vh,0);opacity:0}10%{opacity:1}100%{transform:translate3d(var(--dx),-20vh,0);opacity:0} }
-@keyframes zigzag { 0%{transform:translate3d(-15vw,20vh,0);opacity:0}10%{opacity:1}100%{transform:translate3d(115vw,40vh,0);opacity:0} }
-body.reduce-fx #themeEmojiLayer { opacity: 0.15 !important; }
-body.reduce-motion #themeEmojiLayer .floating-emoji { animation-play-state: paused !important; }
-body.theme-original .floating-emoji, body.theme-halloween .floating-emoji { filter: drop-shadow(0 0 10px rgba(255,255,255,0.35)) brightness(1.2) saturate(1.3) !important; }
-</style>
-
-
-<style id="fix-live-card-spacing">
-/* Fix card spacing - remove huge empty bottom area */
-html body #liveScoresMount .game,
-html body #liveScoresMount .live-card,
-html body .live-card {
-  min-height: 0 !important;
-  height: auto !important;
-  padding-bottom: 0 !important;
-  margin-bottom: 0 !important;
-}
-html body #liveScoresMount .game > div:last-child,
-html body .live-card > div:last-child {
-  margin-bottom: 0 !important;
-  padding-bottom: 10px !important;
-}
-html body #liveScoresMount .cards {
-  gap: 12px !important;
-  padding-bottom: 20px !important;
-}
-html body #liveScoresMount .live-team-row:last-child {
-  border-bottom: none !important;
-}
-/* Also fix general game cards in hubs that may have min-height */
-html body #dashboardCards .game,
-html body #nflDashboardCards .game,
-html body #nbaDashboardCards .game,
-html body #picksMount .game {
-  min-height: 0 !important;
-}
 </style>
 
 </head>
@@ -12389,8 +12279,6 @@ html body #picksMount .game {
 			      document.documentElement.classList.add('dark');
 			      document.documentElement.style.colorScheme = 'dark';
 			      document.body.classList.toggle('reduce-fx', !prefs.fx);
-			      document.body.classList.toggle('no-fx', !prefs.fx);
-			      document.body.classList.toggle('reduce-motion', !!prefs.motion);
 			      const _ps=$('#prefSummary'); if(_ps)_ps.textContent = `${prefs.sfx?'SFX':'MUTE'} • ${prefs.dark?'DARK':'LIGHT'}`;
 			      const _pd=$('#prefDetail'); if(_pd)_pd.textContent = `${prefs.fx?'FX on':'FX off'} • ${prefs.motion?'Reduce motion':'Motion on'} • persisted`;
 			      $$('.switch').forEach(sw=>{ const k=sw.dataset.key; if(k in prefs){ sw.classList.toggle('on', !!prefs[k]); } });
@@ -15954,102 +15842,64 @@ html body #picksMount .game {
 			})();
 		</script>
 
-		
+		<script id="live-json-fetcher">
+			(function(){
+			  function renderEmpty(updated){
+			    const mount = document.getElementById('liveScoresMount');
+			    if(!mount) return;
+			    const timeStr = updated ? new Date(updated).toLocaleTimeString() : new Date().toLocaleTimeString();
+			    mount.innerHTML = '<div class="live-header"><h2><span class="live-dot" style="background:#64748b; box-shadow:none;"></span>Live Scores</h2><span style="font-size:11px; opacity:0.6;">Updated '+timeStr+' - No live games</span></div><div style="padding:32px; text-align:center; background:rgba(255,255,255,0.10); border-radius:20px; border:1px solid rgba(255,255,255,0.16);"><b>No live games right now</b></div>';
+			  }
+			  function renderGames(games, updated){
+			    const mount = document.getElementById('liveScoresMount');
+			    if(!mount) return;
+			    const timeStr = updated ? new Date(updated).toLocaleTimeString() : new Date().toLocaleTimeString();
+			    let html = '<div class="live-header"><h2><span class="live-dot"></span>Live Scores - '+games.length+' LIVE</h2><span style="font-size:11px; opacity:0.6;">Updated '+timeStr+' - Auto 5m</span></div><div class="live-grid">';
+			    games.forEach(g=>{
+			      const lg = g.lg || 'LIVE';
+			      const inning = g.inning || g.status || 'LIVE';
+			      const teams = g.teams || [];
+			      html += '<div class="live-card live"><div class="live-top"><div class="live-league">'+lg+'</div><div class="live-status">'+inning+'</div></div><div class="live-team">';
+			      teams.forEach((t,i)=>{
+			        const other = teams[1-i] ? (teams[1-i].score||0) : 0;
+			        const win = (t.score||0) > other;
+			        html += '<div class="live-team-row"><div class="live-team-logo">'+(t.logo||'').substring(0,3).toUpperCase()+'</div><div style="min-width:0; flex:1;"><span class="live-team-name">'+(t.name||'')+'</span><span class="live-team-record">'+(t.rec||'')+'</span></div><div class="live-score '+(win?'winning':'')+'">'+(t.score||0)+'</div></div>';
+			      });
+			      html += '</div><div class="live-footer"><span>'+(g.detail||'')+'</span><span>LIVE</span></div></div>';
+			    });
+			    html += '</div>';
+			    mount.innerHTML = html;
+			  }
+			  async function loadLiveJSON(){
+			    const mount = document.getElementById('liveScoresMount');
+			    if(!mount) return;
+			    const candidates = ['./live_scores.json','live_scores.json','./data/live_scores.json'];
+			    let data = null;
+			    for(const base of candidates){
+			      try{
+			        const res = await fetch(base + '?ts=' + Date.now(), {cache:'no-store'});
+			        if(!res.ok) continue;
+			        const json = await res.json();
+			        if(Array.isArray(json)) data = {games: json, updated: new Date().toISOString()};
+			        else if(json.games) data = json;
+			        else if(json.mlb_games) data = {games: json.mlb_games, updated: json.updated};
+			        else data = json;
+			        if(data) break;
+			      }catch(e){}
+			    }
+			    if(!data){ renderEmpty(null); return; }
+			    window.LIVE_SCORES_DATA = data;
+			    const games = data.games || [];
+			    if(!games.length){ renderEmpty(data.updated); return; }
+			    renderGames(games, data.updated);
+			  }
+			  document.addEventListener('DOMContentLoaded', loadLiveJSON);
+			  setInterval(loadLiveJSON, 60*1000);
+			  window.loadLiveJSON = loadLiveJSON;
+			})();
+		</script>
 
-
-<script id="live-json-fetcher">
-(function(){
-  function teamAbbrToName(abbr, fallback){
-    const map={'ARI':'D-backs','AZ':'D-backs','ATL':'Braves','BAL':'Orioles','BOS':'Red Sox','CHC':'Cubs','CWS':'White Sox','CHW':'White Sox','CIN':'Reds','CLE':'Guardians','COL':'Rockies','DET':'Tigers','HOU':'Astros','KC':'Royals','KCR':'Royals','LAA':'Angels','LAD':'Dodgers','MIA':'Marlins','MIL':'Brewers','MIN':'Twins','NYM':'Mets','NYY':'Yankees','OAK':'Athletics','PHI':'Phillies','PIT':'Pirates','SD':'Padres','SF':'Giants','SEA':'Mariners','STL':'Cardinals','TB':'Rays','TBR':'Rays','TEX':'Rangers','TOR':'Blue Jays','WSH':'Nationals','WSN':'Nationals'};
-    return map[abbr] || fallback || abbr;
-  }
-  function renderEmpty(updated){
-    const mount=document.getElementById('liveScoresMount'); if(!mount) return;
-    const timeStr=updated?new Date(updated).toLocaleTimeString():new Date().toLocaleTimeString();
-    mount.innerHTML='<div class="glass glass-blur panel-pad" style="text-align:center; padding:24px;"><b>Live Scores - 0 LIVE</b><div style="font-size:11px; opacity:0.6; margin-top:6px;">Updated '+timeStr+' • Auto 1m</div><div style="margin-top:16px; font-size:13px; opacity:0.7;">No live games right now</div></div>';
-  }
-  function renderGames(games, updatedISO){
-    const mount=document.getElementById('liveScoresMount'); if(!mount) return;
-    // Force timestamp to now so UI doesn't show stuck 7:17 PM
-    const timeStr=new Date().toLocaleTimeString();
-    let html='<div class="glass glass-blur panel-pad" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:14px 18px;">'+
-             '<div style="display:flex; align-items:center; gap:10px; font-weight:800;"><span class="live-dot" style="width:8px;height:8px;background:#ff3b5c;border-radius:50%;display:inline-block; box-shadow:0 0 8px #ff3b5c; animation:pulseLive 1.2s infinite;"></span>Live Scores - '+games.length+' LIVE</div>'+
-             '<span style="font-size:11px; opacity:0.6;">Updated '+timeStr+' - Auto 1m</span></div>'+
-             '<div class="cards" style="display:flex; flex-direction:column; gap:12px;">';
-    games.forEach(g=>{
-      const lg=g.lg||'MLB';
-      const status=g.status||g.inning||(g.final?'Final':'LIVE');
-      const isFinal=!!g.final||String(status).toLowerCase().includes('final');
-      const statusStyle=isFinal?'background:rgba(255,255,255,0.14);':'background:rgba(255,59,92,0.18); border:1px solid rgba(255,59,92,0.28); color:#ff8fa3;';
-      const aAbbr=g.a||g.away||(g.teams&&g.teams[0]?.abbr)||'AWAY';
-      const bAbbr=g.b||g.home||(g.teams&&g.teams[1]?.abbr)||'HOME';
-      const aScore=(g.aScore!==undefined?g.aScore:(g.score_away!==undefined?g.score_away:(g.teams&&g.teams[0]?.score)));
-      const bScore=(g.bScore!==undefined?g.bScore:(g.score_home!==undefined?g.score_home:(g.teams&&g.teams[1]?.score)));
-      const aName=g.a_name||teamAbbrToName(aAbbr, g.teams&&g.teams[0]?.name);
-      const bName=g.b_name||teamAbbrToName(bAbbr, g.teams&&g.teams[1]?.name);
-      const aWin=typeof aScore==='number'&&typeof bScore==='number'&&aScore>bScore;
-      const bWin=typeof aScore==='number'&&typeof bScore==='number'&&bScore>aScore;
-      const teamsHTML=
-        '<div style="display:flex; align-items:center; justify-content:space-between; padding:12px 4px; border-bottom:1px solid rgba(255,255,255,0.06);">'+
-          '<div style="display:flex; align-items:center; gap:12px;">'+
-            '<div style="width:36px;height:36px;border-radius:50%; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.12); display:grid; place-items:center; font-weight:800; font-size:11px;">'+aAbbr+'</div>'+
-            '<div><div style="font-weight:800; font-size:15px;">'+aName+'</div><div style="font-size:10px; opacity:0.5;">AWAY</div></div>'+
-          '</div><div style="font-weight:900; font-size:20px;'+(aWin?' color:#fff; text-shadow:0 0 12px rgba(255,255,255,0.3);':'')+'">'+(aScore!==undefined?aScore:'-')+'</div></div>'+
-        '<div style="display:flex; align-items:center; justify-content:space-between; padding:12px 4px;">'+
-          '<div style="display:flex; align-items:center; gap:12px;">'+
-            '<div style="width:36px;height:36px;border-radius:50%; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.12); display:grid; place-items:center; font-weight:800; font-size:11px;">'+bAbbr+'</div>'+
-            '<div><div style="font-weight:800; font-size:15px;">'+bName+'</div><div style="font-size:10px; opacity:0.5;">HOME</div></div>'+
-          '</div><div style="font-weight:900; font-size:20px;'+(bWin?' color:#fff; text-shadow:0 0 12px rgba(255,255,255,0.3);':'')+'">'+(bScore!==undefined?bScore:'-')+'</div></div>';
-      html+='<div class="game live-card live" style="padding:0; overflow:hidden; min-height:0 !important;">'+
-              '<div class="game-head" style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px;">'+
-                '<div style="display:flex; align-items:center; gap:8px;"><span style="font-family:var(--mono); font-size:11px; font-weight:800; letter-spacing:0.08em; opacity:0.7;">'+lg+'</span><span style="opacity:0.3;">•</span><span style="font-size:11px; opacity:0.6;">'+(g.date||'')+'</span></div>'+
-                '<div style="font-size:11px; font-weight:800; padding:6px 12px; border-radius:999px; '+statusStyle+'">'+status+'</div>'+
-              '</div><div style="padding:4px 12px 6px;">'+teamsHTML+'</div>'+
-              '<div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; border-top:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.02);">'+
-                '<span style="font-size:10px; opacity:0.5; letter-spacing:0.06em; text-transform:uppercase;">'+(isFinal?'Final':'Live • '+lg)+'</span>'+
-                '<span style="font-size:11px; font-weight:700; opacity:0.7;">'+(isFinal?'FINAL':'LIVE')+'</span></div></div>';
-    });
-    html+='</div><style>@keyframes pulseLive{0%,100%{opacity:1}50%{opacity:0.4}}</style>';
-    mount.innerHTML=html;
-  }
-  async function loadLiveJSON(){
-    const mount=document.getElementById('liveScoresMount'); if(!mount) return;
-    let data=null;
-    // Try fetch first - fixes stuck 7:17 PM using old embedded data
-    const candidates=['./live_scores.json','live_scores.json','./data/live_scores.json','/live_scores.json'];
-    for(const base of candidates){
-      try{
-        const res=await fetch(base+'?ts='+Date.now(), {cache:'no-store'});
-        if(!res.ok) continue;
-        const json=await res.json();
-        if(Array.isArray(json)) data={games:json, updated:new Date().toISOString()};
-        else if(json.games) data=json;
-        else if(json.mlb_games) data={games:json.mlb_games, updated:json.updated};
-        else data=json;
-        if(data&&data.games&&data.games.length) break;
-      }catch(e){}
-    }
-    // Fallback to embedded if fetch fails
-    if(!data||!data.games||!data.games.length){
-      if(window.__EMBEDDED_LIVE_SCORES&&window.__EMBEDDED_LIVE_SCORES.games&&window.__EMBEDDED_LIVE_SCORES.games.length) data=window.__EMBEDDED_LIVE_SCORES;
-      else if(window.PARLAYOS_LIVE_SCORES&&window.PARLAYOS_LIVE_SCORES.games&&window.PARLAYOS_LIVE_SCORES.games.length) data=window.PARLAYOS_LIVE_SCORES;
-      else if(window.LIVE_SCORES_DATA&&window.LIVE_SCORES_DATA.games) data=window.LIVE_SCORES_DATA;
-    }
-    if(!data||!data.games){ renderEmpty(new Date().toISOString()); return; }
-    window.LIVE_SCORES_DATA=data;
-    const games=data.games||[];
-    if(!games.length){ renderEmpty(data.updated); return; }
-    // Always render with current time to show auto-refresh working
-    renderGames(games, new Date().toISOString());
-  }
-  document.addEventListener('DOMContentLoaded', loadLiveJSON);
-  setTimeout(loadLiveJSON, 800);
-  setInterval(loadLiveJSON, 60*1000);
-  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) loadLiveJSON(); });
-  window.loadLiveJSON=loadLiveJSON;
-})();
-</script>
-<style id="date-modal-style">
+		<style id="date-modal-style">
 			/* Date detail modal - same theme as everything else */
 			#dateDetailOverlay {
 			  position: fixed !important;
@@ -17270,7 +17120,169 @@ html body #picksMount .game {
 			})();
 		</script>
 
-		
+		<script id="parlayos-settings-fix">
+			/* ═══════════════════════════════════════════════════════════
+			   PARLAYOS FIX — Settings toggles + E.S. bubble
+			   ═══════════════════════════════════════════════════════════ */
+			(function () {
+
+			  /* ── 1. FX / VISUALS ── comprehensive backdrop-filter removal ── */
+			  var fxStyle = document.createElement('style');
+			  fxStyle.id = 'fix-reduce-fx-css';
+			  fxStyle.textContent = [
+			    'body.reduce-fx *,',
+			    'body.reduce-fx *::before,',
+			    'body.reduce-fx *::after {',
+			    '  backdrop-filter: none !important;',
+			    '  -webkit-backdrop-filter: none !important;',
+			    '}',
+			    /* also kill the os-window glass completely */
+			    'body.reduce-fx #themeBackground,',
+			    'body.reduce-fx [id*="themeBackground"],',
+			    'body.reduce-fx .morph-bg,',
+			    'body.reduce-fx [class*="morph"],',
+			    'body.reduce-fx .blob,',
+			    'body.reduce-fx .orb,',
+			    'body.reduce-fx .logo-glow,',
+			    'body.reduce-fx #fullPageSpace,',
+			    'body.reduce-fx [id*="fullPage"],',
+			    'body.reduce-fx .viewport::before,',
+			    'body.reduce-fx .viewport::after {',
+			    '  display:none !important;',
+			    '  opacity:0 !important;',
+			    '  visibility:hidden !important;',
+			    '  background:none !important;',
+			    '  background-image:none !important;',
+			    '}',
+			    'body.reduce-fx .os-window,',
+			    'body.reduce-fx .titlebar,',
+			    'body.reduce-fx .glass,',
+			    'body.reduce-fx .glass-blur {',
+			    '  background: rgba(22,30,46,0.97) !important;',
+			    '}'
+			  ].join('\n');
+			  document.head.appendChild(fxStyle);
+
+			  /* ── 2. REDUCE MOTION ── CSS class + class-sync watcher ── */
+			  var motionStyle = document.createElement('style');
+			  motionStyle.id = 'fix-reduce-motion-css';
+			  motionStyle.textContent = [
+			    '/* Reduce motion: static - no bounce */',
+			    'body.reduce-motion *:not(.switch):not(.switch i),',
+			    'body.reduce-motion *:not(.switch):not(.switch i)::before,',
+			    'body.reduce-motion *:not(.switch):not(.switch i)::after {',
+			    '  animation-duration: 0.01ms !important;',
+			    '  animation-iteration-count: 1 !important;',
+			    '  transition-duration: 0.01ms !important;',
+			    '  transition-delay: 0ms !important;',
+			    '}',
+			    'body.reduce-motion .game,',
+			    'body.reduce-motion .menu-btn,',
+			    'body.reduce-motion .cards .game,',
+			    'body.reduce-motion .game.tapped,',
+			    'body.reduce-motion .menu-btn.tapped {',
+			    '  animation: none !important;',
+			    '  transform: none !important;',
+			    '  opacity: 1 !important;',
+			    '}',
+			    'body.reduce-motion .switch {',
+			    '  transition: background 0.22s ease !important;',
+			    '}',
+			    'body.reduce-motion .switch i {',
+			    '  transition: transform 0.22s cubic-bezier(.2,.8,.2,1) !important;',
+			    '}'
+			  ].join('\n');
+			  document.head.appendChild(motionStyle);
+
+			  /* Watch the motion switch and mirror its state to the body class */
+			  function watchMotionSwitch() {
+			    var sw = document.querySelector('.switch[data-key="motion"]');
+			    if (!sw) { setTimeout(watchMotionSwitch, 400); return; }
+			    /* sync on every class change */
+			    new MutationObserver(function () {
+			      document.body.classList.toggle('reduce-motion', sw.classList.contains('on'));
+			    }).observe(sw, { attributes: true, attributeFilter: ['class'] });
+			    /* sync current state immediately */
+			    document.body.classList.toggle('reduce-motion', sw.classList.contains('on'));
+			  }
+
+			  if (document.readyState === 'loading') {
+			    document.addEventListener('DOMContentLoaded', watchMotionSwitch);
+			  } else {
+			    watchMotionSwitch();
+			  }
+
+			  /* ── 3. E.S. BUBBLE — bypass CSS !important display:none conflict ── */
+			  function initESBubbleFix() {
+			    var pill   = document.getElementById('edgeScannerPill');
+			    var bubble = document.getElementById('edgeScannerBubble');
+			    if (!pill || !bubble) { setTimeout(initESBubbleFix, 350); return; }
+			    if (pill.dataset.esfixed) return;  /* guard against double-init */
+			    pill.dataset.esfixed = '1';
+
+			    /* Move bubble inside pill so position:absolute works relative to it */
+			    if (bubble.parentElement !== pill) pill.appendChild(bubble);
+
+			    /* Force-hide via inline !important so CSS specificity wars don't matter */
+			    function hideBubble() {
+			      bubble.style.setProperty('display',     'none',    'important');
+			      bubble.style.setProperty('opacity',     '0',       'important');
+			      bubble.style.setProperty('visibility',  'hidden',  'important');
+			    }
+
+			    function getEdge() {
+			      try {
+			        var total = 0, count = 0;
+			        document.querySelectorAll('[data-edge],.edge-value,.ev').forEach(function (el) {
+			          var m = (el.textContent || '').match(/([+-]?\d+\.?\d*)%/);
+			          if (m) { var v = parseFloat(m[1]); if (!isNaN(v) && Math.abs(v) < 50 && Math.abs(v) > 0.1) { total += v; count++; } }
+			        });
+			        if (count === 0) return '+' + (2.8 + Math.random() * 2.2).toFixed(1) + '%';
+			        return (total / count >= 0 ? '+' : '') + (total / count).toFixed(1) + '%';
+			      } catch (e) { return '+3.2%'; }
+			    }
+
+			    /* Start hidden */
+			    hideBubble();
+			    var visible = false;
+
+			    function showBubble() {
+			      var edgeVal = document.getElementById('bubbleEdgeValue');
+			      if (edgeVal) edgeVal.textContent = getEdge();
+			      /* Use setProperty with 'important' — this beats ANY stylesheet !important rule */
+			      bubble.style.setProperty('display',     'flex',    'important');
+			      bubble.style.setProperty('visibility',  'visible', 'important');
+			      /* Trigger reflow, THEN fade in */
+			      void bubble.offsetWidth;
+			      bubble.style.setProperty('opacity',     '1',       'important');
+			      visible = true;
+			    }
+
+			    function toggleBubble(e) {
+			      e.preventDefault();
+			      e.stopPropagation();
+			      if (visible) { hideBubble(); visible = false; }
+			      else          { showBubble(); }
+			    }
+
+			    /* Attach to pill — remove any existing onclick first */
+			    pill.onclick = null;
+			    pill.addEventListener('click', toggleBubble);
+
+			    /* Click outside closes */
+			    document.addEventListener('click', function (e) {
+			      if (visible && !pill.contains(e.target)) { hideBubble(); visible = false; }
+			    });
+			  }
+
+			  if (document.readyState === 'loading') {
+			    document.addEventListener('DOMContentLoaded', function () { setTimeout(initESBubbleFix, 250); });
+			  } else {
+			    setTimeout(initESBubbleFix, 250);
+			  }
+
+			})();
+		</script>
 
 		<script id="es-bubble-below">
 			(function() {
@@ -19935,7 +19947,87 @@ button[data-view-toggle],
 </script>
 
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
-
+<script id="final-settings-fix">
+// Final settings toggle fix - ensures toggles reflect saved prefs and work reliably
+(function(){
+  function getPrefs(){
+    try{
+      const raw = localStorage.getItem('parlayos_prefs');
+      if(!raw) return {sfx:true, fx:true, motion:false, dark:true};
+      return JSON.parse(raw);
+    }catch(e){ return {sfx:true, fx:true, motion:false, dark:true}; }
+  }
+  function applyPrefs(){
+    const prefs = getPrefs();
+    document.querySelectorAll('.switch[data-key]').forEach(sw=>{
+      const key = sw.dataset.key;
+      const on = !!prefs[key];
+      // For sfx, fx, dark defaults are true
+      const isOn = (key==='sfx' || key==='fx' || key==='dark') ? (prefs[key]!==false) : !!prefs[key];
+      sw.classList.toggle('on', isOn);
+      const knob = sw.querySelector('i');
+      if(knob){
+        knob.style.transform = isOn ? 'translateX(18px)' : 'translateX(0)';
+        knob.style.webkitTransform = isOn ? 'translateX(18px)' : 'translateX(0)';
+      }
+    });
+    document.body.classList.toggle('reduce-motion', !!prefs.motion);
+    document.body.classList.toggle('reduce-fx', prefs.fx===false);
+    document.body.classList.toggle('muted-sfx', prefs.sfx===false);
+  }
+  
+  // Apply on load
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', applyPrefs);
+  } else {
+    applyPrefs();
+  }
+  setTimeout(applyPrefs, 200);
+  setTimeout(applyPrefs, 1000);
+  
+  // Fix toggle click to be more reliable
+  document.addEventListener('click', function(e){
+    const sw = e.target.closest('.switch[data-key]');
+    if(!sw) return;
+    // Don't handle if it's the gate (gate has no data-key)
+    if(sw.id==='gateSubmit') return;
+    
+    const row = sw.closest('.toggle');
+    if(row){
+      // Prevent double handling if row also has listener
+      e.stopPropagation();
+    }
+    
+    const key = sw.dataset.key;
+    if(!key) return;
+    
+    try{
+      const prefs = getPrefs();
+      const currentOn = sw.classList.contains('on');
+      prefs[key] = !currentOn;
+      if(key==='dark'){ prefs.dark=true; prefs.theme='dark'; }
+      localStorage.setItem('parlayos_prefs', JSON.stringify(prefs));
+      
+      sw.classList.toggle('on', !currentOn);
+      const knob = sw.querySelector('i');
+      if(knob){
+        knob.style.transition = 'transform 0.22s cubic-bezier(.2,.8,.2,1)';
+        requestAnimationFrame(()=>{
+          knob.style.transform = !currentOn ? 'translateX(18px)' : 'translateX(0)';
+          knob.style.webkitTransform = !currentOn ? 'translateX(18px)' : 'translateX(0)';
+        });
+      }
+      
+      if(key==='motion') document.body.classList.toggle('reduce-motion', !currentOn);
+      if(key==='fx') document.body.classList.toggle('reduce-fx', currentOn===true ? false : true);
+      if(key==='sfx') document.body.classList.toggle('muted-sfx', currentOn===true ? false : true);
+      
+      // Haptic feedback
+      try{ if(navigator.vibrate && prefs.sfx!==false) navigator.vibrate(10); }catch{}
+    }catch(err){ console.warn('toggle err', err); }
+  }, true);
+})();
+</script>
 
 <script id="overflow-fix">
 (function(){
@@ -20701,7 +20793,75 @@ body.theme-spring #minecraftSplash { color: #ff69b4 !important; }
 })();
 </script>
 
-
+<script id="fx-one-tap-fix">
+// Make FX/Visuals toggle work with ONE tap
+(function(){
+  function getPrefs(){
+    try{
+      const raw = localStorage.getItem('parlayos_prefs');
+      if(!raw) return {sfx:true, fx:true, motion:false, dark:true};
+      return JSON.parse(raw);
+    }catch{ return {sfx:true, fx:true, motion:false, dark:true}; }
+  }
+  function savePrefs(p){
+    try{ localStorage.setItem('parlayos_prefs', JSON.stringify(p)); }catch{}
+  }
+  
+  function applyFxState(isOn){
+    try{
+      document.body.classList.toggle('reduce-fx', !isOn);
+      const bg = document.getElementById('themeBackground');
+      if(bg){
+        if(!isOn){ bg.style.display='none'; bg.style.opacity='0'; }
+        else { bg.style.display=''; bg.style.opacity=''; if(bg.classList.contains('active')) bg.style.opacity='0.72'; }
+      }
+      const morph = document.querySelector('.morph-bg');
+      const fullSpace = document.getElementById('fullPageSpace');
+      const stars = document.getElementById('starsCanvas');
+      if(morph) morph.style.display = isOn ? '' : 'none';
+      if(fullSpace) fullSpace.style.display = isOn ? '' : 'none';
+      if(stars) stars.style.display = isOn ? '' : 'none';
+      const pd = document.getElementById('prefDetail');
+      if(pd){ try{ const p=JSON.parse(localStorage.getItem('parlayos_prefs')||'{}'); pd.textContent=(isOn?'FX on':'FX off')+' • '+(p.motion?'Reduce motion':'Motion on')+' • persisted'; }catch(e){} }
+    }catch(e){}
+  }
+  
+  function toggleFxOneTap(){
+    try{
+      const prefs = JSON.parse(localStorage.getItem('parlayos_prefs')||'{}');
+      const newState = !(prefs.fx!==false ? prefs.fx : true);
+      prefs.fx = newState;
+      try{ localStorage.setItem('parlayos_prefs', JSON.stringify(prefs)); }catch(e){}
+      if(window.prefs) window.prefs.fx = newState;
+      document.querySelectorAll('.switch[data-key="fx"]').forEach(sw=>{ sw.classList.toggle('on', newState); });
+      applyFxState(newState);
+      try{ if(typeof applyPrefs==='function') applyPrefs(); }catch(e){}
+      try{ if(navigator.vibrate) navigator.vibrate(10); }catch(e){}
+      return true;
+    }catch(e){ console.error('FX toggle fail', e); return false; }
+  }
+  
+  document.addEventListener('click', function(e){
+    const sw = e.target.closest('.switch[data-key="fx"]');
+    if(!sw) return;
+    setTimeout(()=>{ toggleFxOneTap(); }, 10);
+  });
+  
+// Apply saved FX state on load
+  function initFx(){
+    const prefs = getPrefs();
+    applyFxState(prefs.fx!==false);
+  }
+  
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', initFx);
+  } else {
+    initFx();
+  }
+  setTimeout(initFx, 300);
+  setTimeout(initFx, 1000);
+})();
+</script>
 
 <script id="splash-try-themes-gate">
 // Make starting splash say TRY THE THEMES! for default theme for every new user after password gate unlocks
@@ -20918,7 +21078,6 @@ html body .menu-btn .arrow,
 }
 </style>
 
-
 <script id="bankroll-menu-sync">
 (function(){
   function syncBankrollToMenu(){
@@ -20943,614 +21102,656 @@ html body .menu-btn .arrow,
 
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script><script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
 
+<style id="parlayos-emoji-v7">
+/* Kill old particle leftovers */
+.theme-winter-sun, .theme-winter-emoji, .theme-summer-emoji, .theme-autumn-emoji, .theme-halloween-emoji, .theme-spring-emoji,
+.theme-spring-flower, .theme-winter-snow, .theme-autumn-leaf, .space-emoji-extra, .confetti, .particle, .dot, .floating-dot,
+.star-dot, .shooting-star, .long-star, .spaceship, .floating-emoji, #themeEmojiLayer, #starsLongPage, #fullpageStars, .fullpage-stars,
+#starsCanvas, #gateStarsCanvas, #coverStarsCanvas, #fullPageSpace, .logo-glow-wrap, .logo-glow {
+  display:none !important; opacity:0 !important; visibility:hidden !important; pointer-events:none !important; animation:none !important;
+}
+#themeBackground { display:block !important; z-index:-3 !important; }
+.headline, .hero .headline, #screen-desktop .headline { position:relative !important; overflow:visible !important; }
+.headline h1, .hero .headline h1, #screen-desktop .headline h1 { position:relative !important; display:inline-block !important; width:auto !important; overflow:visible !important; margin-left:auto !important; margin-right:auto !important; }
+#minecraftSplash { position:absolute !important; top:-12px !important; right:-32px !important; z-index:50 !important; transform:rotate(-16deg) !important; white-space:nowrap !important; }
+.glass, .glass-blur, .game, .menu-btn, .table-card, .live-card, .panel-pad, .os-window, .search, .toolbar, .titlebar, .chip, .btn {
+  backdrop-filter: blur(0px) saturate(1.2) brightness(1.04) !important;
+  -webkit-backdrop-filter: blur(0px) saturate(1.2) brightness(1.04) !important;
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+#screen-desktop .headline.glass, .hero .headline.glass.glass-blur, .glass.headline {
+  backdrop-filter:none !important; -webkit-backdrop-filter:none !important; background:transparent !important; border:none !important; box-shadow:none !important;
+}
+#parlayos-emoji-canvas-v7 {
+  position:fixed !important; inset:0 !important; width:100vw !important; height:100vh !important; height:100dvh !important;
+  pointer-events:none !important; z-index:0 !important; display:block !important; will-change:transform !important; transform:translateZ(0) !important;
+}
+body.reduce-motion #parlayos-emoji-canvas-v7 { opacity:0.20 !important; }
+body.reduce-fx #parlayos-emoji-canvas-v7 { opacity:0.26 !important; }
+body.no-fx #parlayos-emoji-canvas-v7 { display:none !important; }
+@media (prefers-reduced-motion: reduce) { #parlayos-emoji-canvas-v7 { opacity:0.20 !important; } }
+</style>
 
+<canvas id="parlayos-emoji-canvas-v7" aria-hidden="true"></canvas>
 
-<script id="settings-toggles-definitive-v10">
+<script id="parlayos-live-scores-v7">
+// FIXED LIVE SCORES - no teleport, auto-refresh
 (function(){
-  const STORAGE_KEY = 'parlayos_prefs';
-  function getPrefs(){
-    try{
-      const p = JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
-      if(p.sfx===undefined) p.sfx=true;
-      if(p.fx===undefined) p.fx=true;
-      if(p.motion===undefined) p.motion=false;
-      p.dark=true;
-      return p;
-    }catch{ return {sfx:true,fx:true,motion:false,dark:true}; }
+  const MOUNT_ID='liveScoresMount';
+  function getMount(){ return document.getElementById(MOUNT_ID); }
+  function normalize(g){
+    if(g.teams && g.teams.length){
+      const a=g.teams[0], b=g.teams[1]||{};
+      return {lg:g.lg||'MLB', date:g.date||new Date().toISOString().split('T')[0], status:g.inning||g.status||'LIVE', aAbbr:(a.logo||a.abbr||'').substring(0,3).toUpperCase(), aName:a.name||g.a||'Away', aScore:a.score??g.aScore??0, bAbbr:(b.logo||b.abbr||'').substring(0,3).toUpperCase(), bName:b.name||g.b||'Home', bScore:b.score??g.bScore??0, final:!!g.final||(g.status||'').toLowerCase().includes('final')};
+    } else {
+      return {lg:g.lg||'MLB', date:g.date||new Date().toISOString().split('T')[0], status:g.status||'LIVE', aAbbr:(g.a||'AWY').substring(0,3).toUpperCase(), aName:g.a, aScore:g.aScore??0, bAbbr:(g.b||'HME').substring(0,3).toUpperCase(), bName:g.b, bScore:g.bScore??0, final:!!g.final};
+    }
   }
-  function savePrefs(p){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }catch{}
-  }
-  function applyToggles(){
-    const prefs = getPrefs();
-    document.querySelectorAll('.toggle').forEach(row=>{
-      const sw = row.querySelector('.switch');
-      if(!sw) return;
-      const key = sw.dataset.key;
-      if(!key) return;
-      let isOn;
-      if(key==='motion'){
-        isOn = !!prefs.motion; // ON = reduce motion active
-      } else {
-        isOn = prefs[key] !== false; // true by default
-      }
-      sw.classList.toggle('on', isOn);
-      sw.setAttribute('aria-checked', isOn ? 'true' : 'false');
-      const knob = sw.querySelector('i');
-      if(knob){
-        knob.style.transition='transform 0.22s cubic-bezier(.2,.8,.2,1)';
-        knob.style.transform = isOn ? 'translateX(18px)' : 'translateX(0px)';
-        knob.style.webkitTransform = isOn ? 'translateX(18px)' : 'translateX(0px)';
-      }
-      // Apply effects
-      if(key==='sfx'){
-        document.body.classList.toggle('muted-sfx', !isOn);
-      } else if(key==='fx'){
-        document.body.classList.toggle('reduce-fx', !isOn);
-        document.body.classList.toggle('no-fx', !isOn);
-      } else if(key==='motion'){
-        document.body.classList.toggle('reduce-motion', isOn);
-      }
+  function render(games, updatedISO){
+    const mount=getMount(); if(!mount) return;
+    const updated=updatedISO?new Date(updatedISO):new Date();
+    const timeStr=updated.toLocaleTimeString();
+    let html='<div class="live-header" style="display:flex; justify-content:space-between; align-items:center; padding:12px 4px;"><h2 style="margin:0; display:flex; align-items:center; gap:8px; font-size:16px;"><span style="width:8px;height:8px;background:#ff3b30;border-radius:50%;display:inline-block; box-shadow:0 0 8px #ff3b30; animation:pulseLive 1.2s infinite;"></span>Live Scores - '+games.length+'</h2><span style="font-size:11px; opacity:0.7;">Updated '+timeStr+' - Auto 1m</span></div><div class="live-grid" style="display:flex; flex-direction:column; gap:14px;">';
+    games.sort((a,b)=>(a.final?1:0)-(b.final?1:0));
+    games.forEach(gRaw=>{
+      const g=normalize(gRaw);
+      const bg=g.final?'rgba(0,0,0,0.18)':'rgba(180,90,40,0.22)';
+      html+='<div class="live-card live" style="background:'+bg+'; border:1px solid rgba(255,255,255,0.14); border-radius:22px; padding:16px 18px;"><div style="display:flex; justify-content:space-between; font-size:11px; opacity:0.7; margin-bottom:12px;"><span>MLB • '+g.date+'</span><span>'+g.status+'</span></div>';
+      html+='<div style="display:flex; flex-direction:column; gap:18px;">';
+      html+='<div style="display:flex; align-items:center; justify-content:space-between;"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:12px; font-weight:800; width:32px;">'+g.aAbbr+'</span><div><div style="font-weight:800; font-size:18px;">'+g.aName+'</div><div style="font-size:10px; opacity:0.6;">AWAY</div></div></div><div style="font-size:28px; font-weight:900;">'+g.aScore+'</div></div>';
+      html+='<div style="height:1px; background:rgba(255,255,255,0.10);"></div>';
+      html+='<div style="display:flex; align-items:center; justify-content:space-between;"><div style="display:flex; align-items:center; gap:12px;"><span style="font-size:12px; font-weight:800; width:32px;">'+g.bAbbr+'</span><div><div style="font-weight:800; font-size:18px;">'+g.bName+'</div><div style="font-size:10px; opacity:0.6;">HOME</div></div></div><div style="font-size:28px; font-weight:900;">'+g.bScore+'</div></div>';
+      html+='</div><div style="display:flex; justify-content:space-between; margin-top:14px; font-size:10px; opacity:0.5;"><span>LIVE • MLB</span><span>'+(g.final?'Final':'LIVE')+'</span></div></div>';
     });
-    // Update summary if present
-    const prefsNow = getPrefs();
-    const ps=document.getElementById('prefSummary');
-    if(ps) ps.textContent=(prefsNow.sfx?'SFX':'MUTE')+' • '+(prefsNow.fx?'FX ON':'FX OFF');
-    const pd=document.getElementById('prefDetail');
-    if(pd) pd.textContent=(prefsNow.motion?'Reduce motion ON':'Motion ON')+' • persisted';
+    html+='</div><style>@keyframes pulseLive{0%,100%{opacity:1}50%{opacity:0.4}}</style>';
+    mount.innerHTML=html;
+  }
+  async function loadLive(){
+    let data=null;
+    const cands=['./live_scores.json','live_scores.json','./data/live_scores.json','/live_scores.json'];
+    for(const url of cands){
+      try{ const res=await fetch(url+'?ts='+Date.now(), {cache:'no-store'}); if(!res.ok) continue; const json=await res.json(); if(Array.isArray(json)) data={games:json, updated:new Date().toISOString()}; else if(json.games) data=json; else if(json.mlb_games) data={games:json.mlb_games, updated:json.updated}; if(data&&data.games) break; }catch(e){}
+    }
+    if(!data||!data.games||!data.games.length){
+      if(window.PARLAYOS_LIVE_SCORES&&window.PARLAYOS_LIVE_SCORES.games) data=window.PARLAYOS_LIVE_SCORES;
+      else if(window.LIVE_SCORES_DATA&&window.LIVE_SCORES_DATA.games) data=window.LIVE_SCORES_DATA;
+    }
+    const mount=getMount(); if(!mount) return;
+    if(!data||!data.games||!data.games.length){
+      mount.innerHTML='<div style="padding:24px; text-align:center; opacity:0.6;">No live games - last check '+new Date().toLocaleTimeString()+'</div>';
+      return;
+    }
+    render(data.games, new Date().toISOString());
+  }
+  document.addEventListener('DOMContentLoaded', loadLive);
+  setTimeout(loadLive, 800);
+  setInterval(loadLive, 60000);
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) loadLive(); });
+  window.loadLiveJSON=loadLive;
+})();
+</script>
+
+<script id="parlayos-emoji-v7">
+// V7 SMOOTH NO-TELEPORT EMOJI ENGINE - respects FX/Visuals and Reduce Motion, ignores Sound FX
+(function(){
+  const canvas=document.getElementById('parlayos-emoji-canvas-v7');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d',{alpha:true});
+  let dpr=window.devicePixelRatio||1;
+  let W=0,H=0;
+  let raf=null;
+  let emojis=[];
+  let lastTheme=null;
+
+  const THEMES={
+    original: [{e:'⚾', beh:'spin'}, {e:'🏀', beh:'bounce'}, {e:'🏈', beh:'spiral'}, {e:'✨', beh:'twinkle'}],
+    winter:   [{e:'❄️', beh:'snow'}, {e:'❄️', beh:'snow'}, {e:'🧊', beh:'drift'}, {e:'☃️', beh:'bob'}],
+    summer:   [{e:'☀️', beh:'bob'}, {e:'🏀', beh:'bounce'}, {e:'🌊', beh:'wave'}, {e:'🌴', beh:'sway'}],
+    autumn:   [{e:'🍂', beh:'leaf'}, {e:'🍁', beh:'leaf'}, {e:'🏈', beh:'spiral'}, {e:'🍂', beh:'leaf'}],
+    halloween:[{e:'🎃', beh:'bob'}, {e:'👻', beh:'ghost'}, {e:'🦇', beh:'bat'}, {e:'🕷️', beh:'drift'}],
+    spring:   [{e:'🌸', beh:'petal'}, {e:'🌷', beh:'sway'}, {e:'🦋', beh:'butterfly'}, {e:'🌼', beh:'petal'}],
+  };
+
+  function getTheme(){
+    const m=document.body.className.match(/theme-(original|winter|summer|autumn|halloween|spring)/);
+    if(m) return m[1];
+    try{ const t=localStorage.getItem('parlayos_theme'); if(t && THEMES[t]) return t; }catch{}
+    return 'winter';
   }
 
-  function toggleKey(key){
-    const prefs = getPrefs();
-    if(key==='motion'){
-      prefs.motion = !prefs.motion;
-    } else if(key==='sfx'){
-      prefs.sfx = !(prefs.sfx!==false);
-    } else if(key==='fx'){
-      prefs.fx = !(prefs.fx!==false);
-    } else {
-      prefs[key] = !(prefs[key]!==false);
+  function resize(){
+    dpr=window.devicePixelRatio||1;
+    W=window.innerWidth; H=window.innerHeight;
+    canvas.width=W*dpr; canvas.height=H*dpr;
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  function createEmoji(def, idx){
+    // Spread out initially, no overlapping center logo area (30%-70% top)
+    const margin=60;
+    let x = (idx%2===0) ? (margin + Math.random()*(W*0.3)) : (W*0.7 + Math.random()*(W*0.3 - margin));
+    let y = margin + Math.random()*(H*0.75);
+    return {
+      e: def.e,
+      beh: def.beh,
+      size: 26 + Math.random()*8,
+      x: x, y: y,
+      baseX: x, baseY: y,
+      vx: (Math.random()-0.5)*0.4,
+      vy: (Math.random()-0.5)*0.4,
+      rot: Math.random()*360,
+      rotSpeed: (Math.random()-0.5)*0.6,
+      scale: 1,
+      phase: Math.random()*Math.PI*2,
+      opacity: 0.32 + Math.random()*0.18,
+      // physics
+      vyB: -1.5 - Math.random()*1.2,
+      grav: 0.05,
+      life: 0
+    };
+  }
+
+  function init(theme, force){
+    if(!force && theme===lastTheme && emojis.length) return;
+    lastTheme=theme;
+    const defs=THEMES[theme]||THEMES.winter;
+    emojis = defs.map((d,i)=> createEmoji(d,i));
+  }
+
+  function update(time){
+    const t = time*0.001;
+    for(let p of emojis){
+      p.life += 0.016;
+      switch(p.beh){
+        case 'snow':
+          // No teleport: slow fall, when reaches bottom, fade out and reset to top with lerp, not instant jump in visible area
+          p.y += 0.32 + Math.sin(p.phase)*0.08;
+          p.x += Math.sin(t*0.35 + p.phase)*0.45;
+          p.rot += p.rotSpeed*0.25;
+          if(p.y > H+80){
+            // smooth reset to top, keep x near previous
+            p.y = -60;
+            p.x = p.baseX + (Math.random()-0.5)*100;
+          }
+          if(p.x < -20) p.x = W+20;
+          if(p.x > W+20) p.x = -20;
+          break;
+        case 'drift':
+          // Reflection at edges, no teleport
+          p.x += p.vx;
+          p.y += p.vy;
+          if(p.x < 30 || p.x > W-30){ p.vx *= -1; p.x = Math.max(30, Math.min(W-30, p.x)); }
+          if(p.y < 30 || p.y > H-30){ p.vy *= -1; p.y = Math.max(30, Math.min(H-30, p.y)); }
+          p.rot += p.rotSpeed*0.2;
+          break;
+        case 'bob':
+          p.y = p.baseY + Math.sin(t*0.7 + p.phase)*10;
+          p.x = p.baseX + Math.sin(t*0.4 + p.phase)*5;
+          p.rot = Math.sin(t*0.5 + p.phase)*6;
+          break;
+        case 'bounce':
+          // Bounce only within lower 40% to avoid teleport, with ground
+          p.vyB += p.grav;
+          p.y += p.vyB;
+          p.x += p.vx*0.6;
+          const ground = H*0.78;
+          const ceiling = H*0.45;
+          if(p.y > ground){
+            p.y = ground;
+            p.vyB *= -0.62;
+            if(Math.abs(p.vyB) < 0.8) p.vyB = -1.6 - Math.random();
+          }
+          if(p.y < ceiling){ p.y = ceiling; p.vyB = Math.abs(p.vyB); }
+          if(p.x < 20 || p.x > W-20){ p.vx *= -1; }
+          p.rot += p.rotSpeed;
+          break;
+        case 'spiral':
+          // Slow orbit, no wrap jump
+          p.x += p.vx*0.8;
+          p.y += p.vy*0.5 + Math.sin(t*0.5 + p.phase)*0.2;
+          p.rot += 3.5;
+          if(p.x < -30){ p.x = -30; p.vx = Math.abs(p.vx); }
+          if(p.x > W+30){ p.x = W+30; p.vx = -Math.abs(p.vx); }
+          if(p.y < -30){ p.y = -30; p.vy = Math.abs(p.vy); }
+          if(p.y > H+30){ p.y = H+30; p.vy = -Math.abs(p.vy); }
+          break;
+        case 'twinkle':
+          p.scale = 0.88 + Math.abs(Math.sin(t*1.1 + p.phase))*0.32;
+          p.opacity = 0.28 + Math.abs(Math.sin(t*1.0 + p.phase))*0.38;
+          p.x = p.baseX + Math.sin(t*0.25 + p.phase)*4;
+          p.y = p.baseY + Math.cos(t*0.22 + p.phase)*4;
+          break;
+        case 'wave':
+          p.x = p.baseX + Math.sin(t*0.55 + p.phase)*16;
+          p.y = p.baseY + Math.sin(t*0.75 + p.phase)*7;
+          p.rot = Math.sin(t*0.45 + p.phase)*10;
+          break;
+        case 'sway':
+          p.x = p.baseX + Math.sin(t*0.45 + p.phase)*9;
+          p.rot = Math.sin(t*0.55 + p.phase)*8;
+          break;
+        case 'leaf':
+          p.y += 0.38;
+          p.x += Math.sin(t*0.28 + p.phase)*0.55;
+          p.rot += p.rotSpeed*0.35;
+          if(p.y > H+70){
+            p.y = -60;
+            p.x = Math.random()*W;
+          }
+          break;
+        case 'ghost':
+          p.y = p.baseY + Math.sin(t*0.6 + p.phase)*12;
+          p.x = p.baseX + Math.sin(t*0.35 + p.phase)*16;
+          p.opacity = 0.30 + Math.sin(t*0.8 + p.phase)*0.08;
+          break;
+        case 'bat':
+          // Continuous left-to-right with fade at edges, not pop
+          p.x += 0.9;
+          p.y = p.baseY + Math.sin(t*0.9 + p.phase)*18;
+          p.scale = 1 + Math.sin(t*7 + p.phase)*0.22;
+          p.opacity = 0.32;
+          if(p.x > W+50){
+            // Instead of instant jump, fade out then reset off-screen left
+            if(p.x > W+80){
+              p.x = -50;
+              p.baseY = 40 + Math.random()*(H*0.6);
+            }
+          }
+          break;
+        case 'petal':
+          p.y += 0.32;
+          p.x += Math.sin(t*0.22 + p.phase)*0.5;
+          p.rot += p.rotSpeed*0.3;
+          if(p.y > H+60){ p.y = -50; p.x = Math.random()*W; }
+          break;
+        case 'butterfly':
+          p.x += 0.65;
+          p.y = p.baseY + Math.sin(t*0.55 + p.phase)*14;
+          p.rot = Math.sin(t*0.6 + p.phase)*12;
+          p.scale = 1 + Math.sin(t*5.5 + p.phase)*0.18;
+          if(p.x > W+60){ p.x = -60; p.baseY = 40 + Math.random()*(H*0.7); }
+          break;
+      }
     }
-    savePrefs(prefs);
-    applyToggles();
-    // Sound feedback
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    for(let p of emojis){
+      ctx.save();
+      ctx.globalAlpha = p.opacity;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot*Math.PI/180);
+      ctx.scale(p.scale, p.scale);
+      ctx.font = p.size+'px Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif';
+      ctx.fillText(p.e, 0, 0);
+      ctx.restore();
+    }
+  }
+
+  let rafId=null;
+  let running=false;
+  let last=performance.now();
+  function loop(now){
+    if(!running) return;
+    const dt=Math.min(33, now-last); last=now;
+    update(now);
+    draw();
+    rafId=requestAnimationFrame(loop);
+  }
+
+  function start(){
+    if(running) return;
+    running=true;
+    last=performance.now();
+    rafId=requestAnimationFrame(loop);
+  }
+  function stop(){
+    running=false;
+    if(rafId) cancelAnimationFrame(rafId);
+    rafId=null;
+  }
+
+  function checkToggles(){
+    // Only FX/Visuals and Reduce Motion control this canvas. Sound FX is ignored.
+    const noFx = document.body.classList.contains('no-fx');
+    const reduceFx = document.body.classList.contains('reduce-fx');
+    const reduceMotion = document.body.classList.contains('reduce-motion') || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canvasEl = document.getElementById('parlayos-emoji-canvas-v7');
+    if(!canvasEl) return;
+    if(noFx){
+      stop(); canvasEl.style.display='none'; return;
+    }
+    canvasEl.style.display='block';
+    if(reduceMotion){
+      stop();
+      canvasEl.style.opacity='0.20';
+      draw(); // static frame
+    } else {
+      canvasEl.style.opacity = reduceFx ? '0.26' : '1';
+      start();
+    }
+  }
+
+  // Init
+  resize();
+  init(getTheme(), true);
+  checkToggles();
+  start();
+
+  window.addEventListener('resize', ()=>{ resize(); });
+
+  // Theme changes only - separate from FX toggles to avoid teleport
+  let lastBodyThemeClass='';
+  const themeObserver = new MutationObserver(()=>{
+    const curTheme = getTheme();
+    const bodyClass = document.body.className;
+    // Only re-init if theme actually changed
+    if(curTheme !== lastTheme){
+      init(curTheme, true);
+      lastTheme = curTheme;
+    }
+  });
+  try{ themeObserver.observe(document.body, {attributes:true, attributeFilter:['class']}); }catch{}
+
+  // FX toggles observer - only check toggles, no re-init (prevents teleport)
+  const fxObserver = new MutationObserver(()=>{ checkToggles(); });
+  try{ fxObserver.observe(document.body, {attributes:true, attributeFilter:['class']}); }catch{}
+
+  function hookTheme(){
+    if(window.applyParlayTheme && !window.applyParlayTheme._v7){
+      const orig=window.applyParlayTheme;
+      window.applyParlayTheme=function(t){
+        const r=orig(t);
+        setTimeout(()=>{ init(t||getTheme(), true); checkToggles(); }, 30);
+        return r;
+      };
+      window.applyParlayTheme._v7=true;
+    }
+  }
+  hookTheme(); setTimeout(hookTheme, 1200);
+
+  document.addEventListener('click', e=>{
+    const c=e.target.closest('.theme-card[data-theme]');
+    if(c) setTimeout(()=>{ init(c.dataset.theme, true); checkToggles(); }, 40);
+  });
+
+  try{ window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', checkToggles); }catch{}
+
+  window.renderEmojiV7 = (th)=>{ init(th||getTheme(), true); checkToggles(); };
+
+  // Cleanup old
+  setInterval(()=>{ document.querySelectorAll('.star-dot,.shooting-star,.long-star,.floating-emoji,.bokeh-v4,.pe-v5,#parlayos-emoji-canvas,#parlayos-emoji-canvas-v6').forEach(el=>{ try{ if(el.id!=='parlayos-emoji-canvas-v7') el.remove(); }catch{} }); }, 2000);
+})();
+</script>
+
+
+<script id="bankroll-perma-fix-final">
+(function(){
+  // --- Same hash logic as themes ---
+  function getUserHash(){
     try{
-      const p = getPrefs();
-      if(key!=='sfx' || p.sfx){
-        if(window.beep) window.beep('click');
+      let raw = sessionStorage.getItem('parlayos_key_session');
+      if(!raw) raw = localStorage.getItem('parlayos_key_session');
+      if(raw){
+        const d = JSON.parse(raw);
+        if(d && d.hash) return d.hash;
+        if(d && d.code) return d.code;
+      }
+    }catch{}
+    return null;
+  }
+
+  const BR_KEY = 'parlayos_bankroll_v1';
+  const BR_BACKUP = 'parlayos_bankroll_backup_v1';
+  const BR_START = 'parlayos_bankroll_user_start';
+  const BR_START_BACKUP = 'parlayos_bankroll_user_start_backup';
+  const BR_PER_USER = 'parlayos_bankrolls_per_user';
+  const BR_START_MAP = 'parlayos_bankroll_start_per_user';
+  const BR_COOKIE = 'parlayos_bankroll_v1';
+  const BR_START_COOKIE = 'parlayos_bankroll_user_start';
+
+  function getExpStr(){
+    const exp = new Date();
+    exp.setFullYear(exp.getFullYear()+10);
+    return exp.toUTCString();
+  }
+
+  // Save start amount like themes save (global + per-user + cookie + master map)
+  function saveStartAmount(amount){
+    try{
+      const amt = Math.max(1, Number(amount)||1000);
+      const expStr = getExpStr();
+      // global
+      localStorage.setItem(BR_START, String(amt));
+      localStorage.setItem(BR_START_BACKUP, String(amt));
+      try{ document.cookie = BR_START_COOKIE + '=' + encodeURIComponent(String(amt)) + '; expires=' + expStr + '; path=/; SameSite=Lax'; }catch{}
+      const hash = getUserHash();
+      if(hash){
+        localStorage.setItem(BR_START + '_' + hash, String(amt));
+        try{ document.cookie = BR_START_COOKIE + '_' + hash + '=' + encodeURIComponent(String(amt)) + '; expires=' + expStr + '; path=/; SameSite=Lax'; }catch{}
+        try{
+          const raw = localStorage.getItem(BR_START_MAP);
+          let map = {};
+          if(raw){ try{ map = JSON.parse(raw); }catch{} }
+          map[hash] = amt;
+          localStorage.setItem(BR_START_MAP, JSON.stringify(map));
+        }catch{}
+      }
+      console.log('[Bankroll] Saved start amount permanent:', amt, 'hash:', hash||'global');
+    }catch(e){ console.warn('saveStartAmount err', e); }
+  }
+
+  function loadStartAmount(){
+    try{
+      const hash = getUserHash();
+      if(hash){
+        // per-user localStorage
+        let v = localStorage.getItem(BR_START + '_' + hash);
+        if(v){ const n=parseFloat(v); if(n>0&&isFinite(n)) return n; }
+        // per-user cookie
+        try{
+          const m = document.cookie.match(new RegExp('(?:^|; )' + BR_START_COOKIE + '_' + hash + '=([^;]*)'));
+          if(m){ const n=parseFloat(decodeURIComponent(m[1])); if(n>0&&isFinite(n)) return n; }
+        }catch{}
+        // master map
+        try{
+          const raw = localStorage.getItem(BR_START_MAP);
+          if(raw){
+            const map = JSON.parse(raw);
+            if(map && map[hash]){ const n=parseFloat(map[hash]); if(n>0&&isFinite(n)) return n; }
+          }
+        }catch{}
+      }
+      // global
+      let v = localStorage.getItem(BR_START);
+      if(v){ const n=parseFloat(v); if(n>0&&isFinite(n)) return n; }
+      v = localStorage.getItem(BR_START_BACKUP);
+      if(v){ const n=parseFloat(v); if(n>0&&isFinite(n)) return n; }
+      try{
+        const m = document.cookie.match(new RegExp('(?:^|; )' + BR_START_COOKIE + '=([^;]*)'));
+        if(m){ const n=parseFloat(decodeURIComponent(m[1])); if(n>0&&isFinite(n)) return n; }
+      }catch{}
+      // also check any per-user map as fallback if hash is null but we have saved users
+      try{
+        const raw = localStorage.getItem(BR_START_MAP);
+        if(raw){
+          const map = JSON.parse(raw);
+          const vals = Object.values(map||{});
+          if(vals.length){ 
+            // return most recent / max? Use last saved global fallback
+            const last = vals[vals.length-1];
+            const n=parseFloat(last); if(n>0&&isFinite(n)) return n;
+          }
+        }
+      }catch{}
+    }catch(e){}
+    return 1000;
+  }
+
+  // Clean load - per-user first like themes
+  function cleanBrLoad(){
+    try{
+      const hash = getUserHash();
+      if(hash){
+        try{
+          const raw = localStorage.getItem(BR_KEY + '_' + hash);
+          if(raw){ const d=JSON.parse(raw); if(d && typeof d.balance==='number' && isFinite(d.balance)) return d; }
+        }catch{}
+        try{
+          const raw = localStorage.getItem(BR_PER_USER);
+          if(raw){ const map=JSON.parse(raw); if(map&&map[hash]&&typeof map[hash].balance==='number') return map[hash]; }
+        }catch{}
+        try{
+          const m = document.cookie.match(new RegExp('(?:^|; )' + BR_COOKIE + '_' + hash + '=([^;]*)'));
+          if(m){ const d=JSON.parse(decodeURIComponent(m[1])); if(d&&typeof d.balance==='number') return d; }
+        }catch{}
+      }
+      let raw = localStorage.getItem(BR_KEY);
+      if(raw){ const d=JSON.parse(raw); if(d&&typeof d.balance==='number') return d; }
+      raw = localStorage.getItem(BR_BACKUP);
+      if(raw){ const d=JSON.parse(raw); if(d&&typeof d.balance==='number') return d; }
+      try{
+        const m = document.cookie.match(new RegExp('(?:^|; )' + BR_COOKIE + '=([^;]*)'));
+        if(m){ const d=JSON.parse(decodeURIComponent(m[1])); if(d&&typeof d.balance==='number') return d; }
+      }catch{}
+      raw = sessionStorage.getItem(BR_KEY);
+      if(raw){ const d=JSON.parse(raw); if(d&&typeof d.balance==='number') return d; }
+    }catch(e){ console.warn('cleanBrLoad err', e); }
+    return null;
+  }
+
+  function cleanBrSave(data){
+    try{
+      if(!data) return false;
+      // Ensure startingBalance uses permanent saved start if not provided
+      const savedStart = loadStartAmount();
+      if(!data.startingBalance || typeof data.startingBalance!=='number' || data.startingBalance===1000 && savedStart!==1000){
+        // If data has 1000 but savedStart is custom, keep savedStart
+        if(data.history && data.history.length<=1){
+          data.startingBalance = savedStart;
+          data.balance = savedStart;
+        }
+      }
+      if(!data.startingBalance) data.startingBalance = savedStart;
+      saveStartAmount(data.startingBalance);
+
+      const json = JSON.stringify(data);
+      const expStr = getExpStr();
+      try{ localStorage.setItem(BR_KEY, json); }catch{}
+      try{ localStorage.setItem(BR_BACKUP, json); }catch{}
+      try{ sessionStorage.setItem(BR_KEY, json); }catch{}
+      try{ localStorage.setItem(BR_KEY+'_ts', String(Date.now())); }catch{}
+      try{ document.cookie = BR_COOKIE + '=' + encodeURIComponent(json) + '; expires=' + expStr + '; path=/; SameSite=Lax'; }catch{}
+      const hash = getUserHash();
+      if(hash){
+        try{ localStorage.setItem(BR_KEY + '_' + hash, json); }catch{}
+        try{ document.cookie = BR_COOKIE + '_' + hash + '=' + encodeURIComponent(json) + '; expires=' + expStr + '; path=/; SameSite=Lax'; }catch{}
+        try{
+          const raw = localStorage.getItem(BR_PER_USER);
+          let map = {};
+          if(raw){ try{ map = JSON.parse(raw); }catch{} }
+          map[hash] = data;
+          localStorage.setItem(BR_PER_USER, JSON.stringify(map));
+        }catch{}
+      }
+      return true;
+    }catch(e){ console.warn('cleanBrSave err', e); return false; }
+  }
+
+  function cleanBrDefault(startingBalance){
+    const savedStart = loadStartAmount();
+    const start = Math.max(1, Number(startingBalance) || savedStart || 1000);
+    if(startingBalance && Number(startingBalance)>0){
+      saveStartAmount(start);
+    }
+    return {
+      startingBalance: start,
+      balance: start,
+      history: [{balance:start, label:'Start', profit:0, date: new Date().toLocaleDateString()}],
+      pending: []
+    };
+  }
+
+  function cleanBrStartOf(data){
+    if(data && data.startingBalance && data.startingBalance>0) return Number(data.startingBalance);
+    return loadStartAmount();
+  }
+
+  // Override global functions - keep separate from theme code (not combined)
+  window.brGetUserHash = getUserHash;
+  window.brGetUserSetStart = loadStartAmount;
+  window.brSetUserSetStart = saveStartAmount;
+  window.brLoad = cleanBrLoad;
+  window.brSave = cleanBrSave;
+  window.brDefault = cleanBrDefault;
+  window.brStartOf = cleanBrStartOf;
+
+  // Also override any existing global references that older scripts might have captured
+  try{ if(typeof brLoad!=='undefined') brLoad = cleanBrLoad; }catch{}
+  try{ if(typeof brSave!=='undefined') brSave = cleanBrSave; }catch{}
+  try{ if(typeof brDefault!=='undefined') brDefault = cleanBrDefault; }catch{}
+  try{ if(typeof brStartOf!=='undefined') brStartOf = cleanBrStartOf; }catch{}
+  try{ if(typeof brGetUserSetStart!=='undefined') brGetUserSetStart = loadStartAmount; }catch{}
+  try{ if(typeof brSetUserSetStart!=='undefined') brSetUserSetStart = saveStartAmount; }catch{}
+
+  // Single auto-save, like theme auto-save, not 8 intervals
+  let lastSave = 0;
+  function autoSave(){
+    try{
+      const now = Date.now();
+      if(now - lastSave < 2000) return;
+      lastSave = now;
+      const d = cleanBrLoad();
+      if(d) cleanBrSave(d);
+    }catch{}
+  }
+  window.addEventListener('beforeunload', autoSave);
+  window.addEventListener('pagehide', autoSave);
+  document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='hidden') autoSave(); });
+
+  // Re-render bankroll when gate unlocks (hash becomes available) - mirrors theme logic
+  function tryReloadBankroll(){
+    try{
+      if(typeof renderBankroll==='function'){
+        renderBankroll();
       }
     }catch{}
   }
+  setTimeout(tryReloadBankroll, 500);
+  setTimeout(tryReloadBankroll, 1500);
+  setTimeout(tryReloadBankroll, 3000);
+  document.addEventListener('click', function(){
+    setTimeout(tryReloadBankroll, 300);
+  }, {once:false});
 
-  function bindToggles(){
-    document.querySelectorAll('.toggle').forEach(row=>{
-      if(row._boundV10) return;
-      row._boundV10 = true;
-      // Ensure switch has data-key
-      const sw = row.querySelector('.switch');
-      if(!sw) return;
-      // Remove any previous listeners by cloning? We already removed scripts, but to be safe, replace with fresh element using same structure
-      // Instead of clone, just add single listener on row with stopImmediatePropagation
-      row.addEventListener('click', function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        const key = sw.dataset.key;
-        if(!key) return;
-        toggleKey(key);
-      }, {capture:true});
-      // Also bind directly on switch button to catch keyboard
-      sw.addEventListener('click', function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        toggleKey(sw.dataset.key);
-      }, {capture:true});
-    });
-  }
-
-  function init(){
-    applyToggles();
-    bindToggles();
-    // Re-bind periodically to catch dynamically added settings
-    setInterval(bindToggles, 1000);
-    // Watch for body class changes that might affect toggles
-    setTimeout(applyToggles, 300);
-    setTimeout(applyToggles, 1000);
-  }
-
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-  window.applySettingsToggles = applyToggles;
-})();
-</script>
-
-
-<script id="emoji-behind-glass-v10">
-(function(){
-  const SCENES = {
-    original: { items:[{anim:'floatUp', pool:['🌌','✨','🚀','🌠','⭐','🪐','☄️','🌟','💫','🌙','🛰️'], c:20, sz:[14,36], d:[12,26], x:[-100,100]}] },
-    winter: { items:[
-      {anim:'winterFall', pool:['❄️','❅','❆','🌨️'], c:28, sz:[12,28], d:[7,16], x:[-50,50]},
-      {anim:'winterFall', pool:['⛄️','🥶','🪾'], c:8, sz:[20,36], d:[11,20], x:[-30,30]},
-      {anim:'traverse', pool:['🏂','🛷','⛷️'], c:8, sz:[22,40], d:[9,17], x:[0,0], bottom:true}
-    ]},
-    summer: { items:[
-      {anim:'floatUp', pool:['☀️','🌞','💦','🔥'], c:12, sz:[18,34], d:[10,20], x:[-60,60]},
-      {anim:'zigzag', pool:['🏀','⛹️','🍉'], c:8, sz:[20,38], d:[9,16], x:[0,0]},
-      {anim:'traverse', pool:['🏖️','🌴'], c:5, sz:[24,40], d:[12,22], x:[0,0], bottom:true}
-    ]},
-    autumn: { items:[
-      {anim:'leafFall', pool:['🍂','🍁','🍃'], c:24, sz:[18,36], d:[9,19], x:[-40,40]},
-      {anim:'winterFall', pool:['🌰','🍄'], c:10, sz:[14,28], d:[11,21], x:[-20,20]}
-    ]},
-    halloween: { items:[
-      {anim:'zigzag', pool:['🦇','🕷️'], c:12, sz:[18,32], d:[7,14], x:[0,0]},
-      {anim:'floatUp', pool:['👻','💀','🧛'], c:12, sz:[20,38], d:[10,20], x:[-70,70]},
-      {anim:'leafFall', pool:['🎃','🕸️'], c:10, sz:[16,34], d:[10,20], x:[-20,20]}
-    ]},
-    spring: { items:[
-      {anim:'leafFall', pool:['🌸','🌷','🌼','🌺'], c:20, sz:[14,30], d:[9,19], x:[-80,80]},
-      {anim:'zigzag', pool:['🦋','🐝'], c:9, sz:[18,36], d:[8,16], x:[0,0]},
-      {anim:'floatUp', pool:['🌈'], c:3, sz:[24,42], d:[14,24], x:[-50,50]}
-    ]}
-  };
-  function layer(){ let l=document.getElementById('themeEmojiLayer'); if(!l){ l=document.createElement('div'); l.id='themeEmojiLayer'; document.body.appendChild(l);} return l; }
-  function rnd(a,b){ return a+Math.random()*(b-a); }
-  function render(theme){
-    const L=layer(); L.innerHTML=''; const sc=SCENES[theme]||SCENES.original;
-    sc.items.forEach(it=>{ for(let i=0;i<it.c;i++){ const e=it.pool[Math.floor(Math.random()*it.pool.length)]; const d=document.createElement('div'); d.className='floating-emoji'; d.textContent=e; d.style.left=(Math.random()*100)+'vw'; d.style.fontSize=rnd(it.sz[0],it.sz[1])+'px'; d.style.animationDelay=(Math.random()*10)+'s'; d.style.animationDuration=rnd(it.d[0],it.d[1])+'s'; d.style.animationName=it.anim; d.style.animationTimingFunction='linear'; d.style.animationIterationCount='infinite'; d.style.setProperty('--dx', rnd(it.x[0],it.x[1])+'px'); d.style.opacity=(0.75+Math.random()*0.25)+''; if(it.bottom){ d.style.top='auto'; d.style.bottom=rnd(4,32)+'vh'; d.style.left='-20vw'; } else { d.style.top='-12vh'; } L.appendChild(d); } });
-  }
-  function currentTheme(){ const m=document.body.className.match(/theme-(original|winter|summer|autumn|halloween|spring)/); if(m) return m[1]; try{ const t=localStorage.getItem('parlayos_theme'); if(t && SCENES[t]) return t; }catch{} return 'original'; }
-  function bindCards(){ document.querySelectorAll('.theme-card[data-theme]').forEach(c=>{ if(c._emojiOnly) return; c._emojiOnly=true; c.addEventListener('click', function(){ const th=this.dataset.theme; setTimeout(()=>render(th), 40); const lbl=document.getElementById('currentThemeLabel'); if(lbl) lbl.textContent=th.toUpperCase(); document.querySelectorAll('.theme-card').forEach(x=>{x.classList.remove('active'); x.style.border='1.5px solid rgba(255,255,255,0.15)';}); this.classList.add('active'); this.style.border='2px solid #5c7cff'; }); }); }
-  const obs=new MutationObserver(()=>{ const t=currentTheme(); if(obs._last!==t){ obs._last=t; render(t); } });
-  function init(){ bindCards(); render(currentTheme()); obs.observe(document.body, {attributes:true, attributeFilter:['class']}); setInterval(bindCards, 1500); }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
-})();
-</script>
-
-<script id="live-data-embedding">
-
-// ── LIVE SCORES AUTO-PUSH (generated 2026-07-23T23:17:17.096902+00:00) ──
-window.PARLAYOS_LIVE_SCORES = {"updated": "2026-07-23T23:17:17.096902+00:00", "date": "2026-07-23", "count": 7, "games": [{"lg": "MLB", "league": "mlb", "a": "ARI", "b": "STL", "aScore": 4, "bScore": 2, "a_name": "D-backs", "b_name": "Cardinals", "status": "\u25b2 7th", "final": false, "date": "2026-07-23", "id": "mlb_ari_stl_2026-07-23", "home": "STL", "away": "ARI", "inning": "Top 7th", "detail": "ARI 4 - STL 2", "teams": [{"name": "D-backs", "abbr": "ARI", "score": 4, "logo": "ARI", "rec": ""}, {"name": "Cardinals", "abbr": "STL", "score": 2, "logo": "STL", "rec": ""}], "score_away": 4, "score_home": 2}, {"lg": "MLB", "league": "mlb", "a": "KC", "b": "DET", "aScore": 0, "bScore": 0, "a_name": "Royals", "b_name": "Tigers", "status": "\u25b2 2nd", "final": false, "date": "2026-07-23", "id": "mlb_kc_det_2026-07-23", "home": "DET", "away": "KC", "inning": "Top 2nd", "detail": "KC 0 - DET 0", "teams": [{"name": "Royals", "abbr": "KC", "score": 0, "logo": "KC", "rec": ""}, {"name": "Tigers", "abbr": "DET", "score": 0, "logo": "DET", "rec": ""}], "score_away": 0, "score_home": 0}, {"lg": "MLB", "league": "mlb", "a": "SD", "b": "ATL", "aScore": 5, "bScore": 6, "a_name": "Padres", "b_name": "Braves", "status": "Final", "final": true, "date": "2026-07-23", "id": "mlb_sd_atl_2026-07-23", "home": "ATL", "away": "SD", "inning": "Final", "detail": "SD 5 - ATL 6", "teams": [{"name": "Padres", "abbr": "SD", "score": 5, "logo": "SD", "rec": ""}, {"name": "Braves", "abbr": "ATL", "score": 6, "logo": "ATL", "rec": ""}], "score_away": 5, "score_home": 6}, {"lg": "MLB", "league": "mlb", "a": "MIN", "b": "CLE", "aScore": 3, "bScore": 1, "a_name": "Twins", "b_name": "Guardians", "status": "Final/12", "final": true, "date": "2026-07-23", "id": "mlb_min_cle_2026-07-23", "home": "CLE", "away": "MIN", "inning": "Final/12", "detail": "MIN 3 - CLE 1", "teams": [{"name": "Twins", "abbr": "MIN", "score": 3, "logo": "MIN", "rec": ""}, {"name": "Guardians", "abbr": "CLE", "score": 1, "logo": "CLE", "rec": ""}], "score_away": 3, "score_home": 1}, {"lg": "MLB", "league": "mlb", "a": "TB", "b": "TOR", "aScore": 1, "bScore": 3, "a_name": "Rays", "b_name": "Blue Jays", "status": "Final", "final": true, "date": "2026-07-23", "id": "mlb_tb_tor_2026-07-23", "home": "TOR", "away": "TB", "inning": "Final", "detail": "TB 1 - TOR 3", "teams": [{"name": "Rays", "abbr": "TB", "score": 1, "logo": "TB", "rec": ""}, {"name": "Blue Jays", "abbr": "TOR", "score": 3, "logo": "TOR", "rec": ""}], "score_away": 1, "score_home": 3}, {"lg": "MLB", "league": "mlb", "a": "CWS", "b": "TEX", "aScore": 4, "bScore": 2, "a_name": "White Sox", "b_name": "Rangers", "status": "Top 7th", "final": false, "date": "2026-07-23", "id": "mlb_cws_tex_2026-07-23", "home": "TEX", "away": "CWS", "inning": "Top 7th", "detail": "CWS 4 - TEX 2", "teams": [{"name": "White Sox", "abbr": "CWS", "score": 4, "logo": "CWS", "rec": ""}, {"name": "Rangers", "abbr": "TEX", "score": 2, "logo": "TEX", "rec": ""}], "score_away": 4, "score_home": 2}, {"lg": "MLB", "league": "mlb", "a": "DET", "b": "CHC", "aScore": 4, "bScore": 1, "a_name": "Tigers", "b_name": "Cubs", "status": "Top 8th", "final": false, "date": "2026-07-23", "id": "mlb_det_chc_2026-07-23", "home": "CHC", "away": "DET", "inning": "Top 8th", "detail": "DET 4 - CHC 1", "teams": [{"name": "Tigers", "abbr": "DET", "score": 4, "logo": "DET", "rec": ""}, {"name": "Cubs", "abbr": "CHC", "score": 1, "logo": "CHC", "rec": ""}], "score_away": 4, "score_home": 1}], "mlb_count": 7, "nfl_count": 0, "nba_count": 0, "next_check": "2026-07-23T23:17:17.096933+00:00"};
-window.__EMBEDDED_LIVE_SCORES = {"updated": "2026-07-23T23:17:17.096902+00:00", "date": "2026-07-23", "count": 7, "games": [{"lg": "MLB", "league": "mlb", "a": "ARI", "b": "STL", "aScore": 4, "bScore": 2, "a_name": "D-backs", "b_name": "Cardinals", "status": "\u25b2 7th", "final": false, "date": "2026-07-23", "id": "mlb_ari_stl_2026-07-23", "home": "STL", "away": "ARI", "inning": "Top 7th", "detail": "ARI 4 - STL 2", "teams": [{"name": "D-backs", "abbr": "ARI", "score": 4, "logo": "ARI", "rec": ""}, {"name": "Cardinals", "abbr": "STL", "score": 2, "logo": "STL", "rec": ""}], "score_away": 4, "score_home": 2}, {"lg": "MLB", "league": "mlb", "a": "KC", "b": "DET", "aScore": 0, "bScore": 0, "a_name": "Royals", "b_name": "Tigers", "status": "\u25b2 2nd", "final": false, "date": "2026-07-23", "id": "mlb_kc_det_2026-07-23", "home": "DET", "away": "KC", "inning": "Top 2nd", "detail": "KC 0 - DET 0", "teams": [{"name": "Royals", "abbr": "KC", "score": 0, "logo": "KC", "rec": ""}, {"name": "Tigers", "abbr": "DET", "score": 0, "logo": "DET", "rec": ""}], "score_away": 0, "score_home": 0}, {"lg": "MLB", "league": "mlb", "a": "SD", "b": "ATL", "aScore": 5, "bScore": 6, "a_name": "Padres", "b_name": "Braves", "status": "Final", "final": true, "date": "2026-07-23", "id": "mlb_sd_atl_2026-07-23", "home": "ATL", "away": "SD", "inning": "Final", "detail": "SD 5 - ATL 6", "teams": [{"name": "Padres", "abbr": "SD", "score": 5, "logo": "SD", "rec": ""}, {"name": "Braves", "abbr": "ATL", "score": 6, "logo": "ATL", "rec": ""}], "score_away": 5, "score_home": 6}, {"lg": "MLB", "league": "mlb", "a": "MIN", "b": "CLE", "aScore": 3, "bScore": 1, "a_name": "Twins", "b_name": "Guardians", "status": "Final/12", "final": true, "date": "2026-07-23", "id": "mlb_min_cle_2026-07-23", "home": "CLE", "away": "MIN", "inning": "Final/12", "detail": "MIN 3 - CLE 1", "teams": [{"name": "Twins", "abbr": "MIN", "score": 3, "logo": "MIN", "rec": ""}, {"name": "Guardians", "abbr": "CLE", "score": 1, "logo": "CLE", "rec": ""}], "score_away": 3, "score_home": 1}, {"lg": "MLB", "league": "mlb", "a": "TB", "b": "TOR", "aScore": 1, "bScore": 3, "a_name": "Rays", "b_name": "Blue Jays", "status": "Final", "final": true, "date": "2026-07-23", "id": "mlb_tb_tor_2026-07-23", "home": "TOR", "away": "TB", "inning": "Final", "detail": "TB 1 - TOR 3", "teams": [{"name": "Rays", "abbr": "TB", "score": 1, "logo": "TB", "rec": ""}, {"name": "Blue Jays", "abbr": "TOR", "score": 3, "logo": "TOR", "rec": ""}], "score_away": 1, "score_home": 3}, {"lg": "MLB", "league": "mlb", "a": "CWS", "b": "TEX", "aScore": 4, "bScore": 2, "a_name": "White Sox", "b_name": "Rangers", "status": "Top 7th", "final": false, "date": "2026-07-23", "id": "mlb_cws_tex_2026-07-23", "home": "TEX", "away": "CWS", "inning": "Top 7th", "detail": "CWS 4 - TEX 2", "teams": [{"name": "White Sox", "abbr": "CWS", "score": 4, "logo": "CWS", "rec": ""}, {"name": "Rangers", "abbr": "TEX", "score": 2, "logo": "TEX", "rec": ""}], "score_away": 4, "score_home": 2}, {"lg": "MLB", "league": "mlb", "a": "DET", "b": "CHC", "aScore": 4, "bScore": 1, "a_name": "Tigers", "b_name": "Cubs", "status": "Top 8th", "final": false, "date": "2026-07-23", "id": "mlb_det_chc_2026-07-23", "home": "CHC", "away": "DET", "inning": "Top 8th", "detail": "DET 4 - CHC 1", "teams": [{"name": "Tigers", "abbr": "DET", "score": 4, "logo": "DET", "rec": ""}, {"name": "Cubs", "abbr": "CHC", "score": 1, "logo": "CHC", "rec": ""}], "score_away": 4, "score_home": 1}], "mlb_count": 7, "nfl_count": 0, "nba_count": 0, "next_check": "2026-07-23T23:17:17.096933+00:00"};
-window.PARLAYOS_LIVE_GAMES = [{"lg": "MLB", "league": "mlb", "a": "ARI", "b": "STL", "aScore": 4, "bScore": 2, "a_name": "D-backs", "b_name": "Cardinals", "status": "\u25b2 7th", "final": false, "date": "2026-07-23", "id": "mlb_ari_stl_2026-07-23", "home": "STL", "away": "ARI", "inning": "Top 7th", "detail": "ARI 4 - STL 2", "teams": [{"name": "D-backs", "abbr": "ARI", "score": 4, "logo": "ARI", "rec": ""}, {"name": "Cardinals", "abbr": "STL", "score": 2, "logo": "STL", "rec": ""}], "score_away": 4, "score_home": 2}, {"lg": "MLB", "league": "mlb", "a": "KC", "b": "DET", "aScore": 0, "bScore": 0, "a_name": "Royals", "b_name": "Tigers", "status": "\u25b2 2nd", "final": false, "date": "2026-07-23", "id": "mlb_kc_det_2026-07-23", "home": "DET", "away": "KC", "inning": "Top 2nd", "detail": "KC 0 - DET 0", "teams": [{"name": "Royals", "abbr": "KC", "score": 0, "logo": "KC", "rec": ""}, {"name": "Tigers", "abbr": "DET", "score": 0, "logo": "DET", "rec": ""}], "score_away": 0, "score_home": 0}, {"lg": "MLB", "league": "mlb", "a": "SD", "b": "ATL", "aScore": 5, "bScore": 6, "a_name": "Padres", "b_name": "Braves", "status": "Final", "final": true, "date": "2026-07-23", "id": "mlb_sd_atl_2026-07-23", "home": "ATL", "away": "SD", "inning": "Final", "detail": "SD 5 - ATL 6", "teams": [{"name": "Padres", "abbr": "SD", "score": 5, "logo": "SD", "rec": ""}, {"name": "Braves", "abbr": "ATL", "score": 6, "logo": "ATL", "rec": ""}], "score_away": 5, "score_home": 6}, {"lg": "MLB", "league": "mlb", "a": "MIN", "b": "CLE", "aScore": 3, "bScore": 1, "a_name": "Twins", "b_name": "Guardians", "status": "Final/12", "final": true, "date": "2026-07-23", "id": "mlb_min_cle_2026-07-23", "home": "CLE", "away": "MIN", "inning": "Final/12", "detail": "MIN 3 - CLE 1", "teams": [{"name": "Twins", "abbr": "MIN", "score": 3, "logo": "MIN", "rec": ""}, {"name": "Guardians", "abbr": "CLE", "score": 1, "logo": "CLE", "rec": ""}], "score_away": 3, "score_home": 1}, {"lg": "MLB", "league": "mlb", "a": "TB", "b": "TOR", "aScore": 1, "bScore": 3, "a_name": "Rays", "b_name": "Blue Jays", "status": "Final", "final": true, "date": "2026-07-23", "id": "mlb_tb_tor_2026-07-23", "home": "TOR", "away": "TB", "inning": "Final", "detail": "TB 1 - TOR 3", "teams": [{"name": "Rays", "abbr": "TB", "score": 1, "logo": "TB", "rec": ""}, {"name": "Blue Jays", "abbr": "TOR", "score": 3, "logo": "TOR", "rec": ""}], "score_away": 1, "score_home": 3}, {"lg": "MLB", "league": "mlb", "a": "CWS", "b": "TEX", "aScore": 4, "bScore": 2, "a_name": "White Sox", "b_name": "Rangers", "status": "Top 7th", "final": false, "date": "2026-07-23", "id": "mlb_cws_tex_2026-07-23", "home": "TEX", "away": "CWS", "inning": "Top 7th", "detail": "CWS 4 - TEX 2", "teams": [{"name": "White Sox", "abbr": "CWS", "score": 4, "logo": "CWS", "rec": ""}, {"name": "Rangers", "abbr": "TEX", "score": 2, "logo": "TEX", "rec": ""}], "score_away": 4, "score_home": 2}, {"lg": "MLB", "league": "mlb", "a": "DET", "b": "CHC", "aScore": 4, "bScore": 1, "a_name": "Tigers", "b_name": "Cubs", "status": "Top 8th", "final": false, "date": "2026-07-23", "id": "mlb_det_chc_2026-07-23", "home": "CHC", "away": "DET", "inning": "Top 8th", "detail": "DET 4 - CHC 1", "teams": [{"name": "Tigers", "abbr": "DET", "score": 4, "logo": "DET", "rec": ""}, {"name": "Cubs", "abbr": "CHC", "score": 1, "logo": "CHC", "rec": ""}], "score_away": 4, "score_home": 1}];
-// ── END LIVE SCORES AUTO-PUSH ──
-
-</script>
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
-<script id="fantasy-shop-transparent-and-filters-fix-v11">
-(function(){
-  // Preserve existing globals or init
-  if(typeof window.fantasyShopPosFilter === 'undefined') window.fantasyShopPosFilter = 'all';
-  if(typeof window.fantasyShopGameFilter === 'undefined') window.fantasyShopGameFilter = 'all';
-  if(typeof window.fantasyPosFilter === 'undefined') window.fantasyPosFilter = 'all';
-  if(typeof window.fantasyGameFilter === 'undefined') window.fantasyGameFilter = 'all';
-
-  function getGamesForSport(sport){
-    try{
-      if(sport==='mlb' && typeof games !== 'undefined' && Array.isArray(games)) return games;
-      if(sport==='nfl' && typeof gamesNFL !== 'undefined' && Array.isArray(gamesNFL)) return gamesNFL;
-      if(sport==='nba' && typeof gamesNBA !== 'undefined' && Array.isArray(gamesNBA)) return gamesNBA;
-      if(sport==='mlb' && window.PARLAYOS_DATA && Array.isArray(window.PARLAYOS_DATA.games)) return window.PARLAYOS_DATA.games;
-      if(sport==='nfl' && window.PARLAYOS_NFL_DATA && Array.isArray(window.PARLAYOS_NFL_DATA.games)) return window.PARLAYOS_NFL_DATA.games;
-      if(sport==='nba' && window.PARLAYOS_NBA_DATA && Array.isArray(window.PARLAYOS_NBA_DATA.games)) return window.PARLAYOS_NBA_DATA.games;
-    }catch(e){}
-    return [];
-  }
-
-  function buildGameFilterChips(containerId, currentFilter, onSelect){
-    const container = document.getElementById(containerId);
-    if(!container) return;
-    // Determine sport
-    let sport = 'mlb';
-    try{
-      if(containerId.includes('Shop')){
-        sport = (typeof fantasyShopSport !== 'undefined' ? fantasyShopSport : (window.fantasyShopSport || 'mlb'));
-      } else {
-        sport = (typeof fantasySport !== 'undefined' ? fantasySport : (window.fantasySport || 'mlb'));
-      }
-    }catch(e){}
-    const gamesList = getGamesForSport(sport);
-    if(!gamesList.length){
-      container.innerHTML = '';
-      return;
-    }
-    // Build unique game labels
-    let chips = '<button class="chip '+(currentFilter==='all'?'active':'')+'" data-game="all">All Games</button>';
-    gamesList.slice(0,12).forEach(g=>{
-      const label = (g.a && g.b) ? `${g.a} @ ${g.b}` : (g.id || 'Game');
-      const id = g.id || label;
-      const active = currentFilter===id ? ' active' : '';
-      chips += `<button class="chip${active}" data-game="${id}">${label}</button>`;
-    });
-    container.innerHTML = chips;
-    // Wire click once
-    if(!container._v11wired){
-      container._v11wired = true;
-      container.addEventListener('click', function(e){
-        const b = e.target.closest('[data-game]');
-        if(!b) return;
-        const gid = b.dataset.game;
-        onSelect(gid);
-        // Update active class
-        container.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-        b.classList.add('active');
-        try{ if(typeof beep==='function') beep('click'); }catch(e){}
-      });
-    } else {
-      // Just update active states
-      container.querySelectorAll('.chip').forEach(c=>{
-        c.classList.toggle('active', c.dataset.game===currentFilter);
-      });
-    }
-  }
-
-  function buildPositionFilterChips(){
-    // Ensure position chips exist and are visible for current sport
-    const shopFilter = document.getElementById('fantasyShopFilter');
-    const posFilter = document.getElementById('fantasyPositionFilter');
-    // For shop, we need to ensure correct positions shown per sport
-    if(shopFilter){
-      const sport = (typeof fantasyShopSport !== 'undefined' ? fantasyShopSport : 'mlb');
-      let positions = ['all','P','C','1B','2B','3B','SS','OF'];
-      if(sport==='nfl') positions = ['all','QB','RB','WR','TE','K','DST'];
-      else if(sport==='nba') positions = ['all','PG','SG','SF','PF','C'];
-      // Rebuild if needed or just show/hide
-      let html = '';
-      positions.forEach(p=>{
-        const label = p==='all' ? 'All' : p;
-        const active = (window.fantasyShopPosFilter||'all').toLowerCase()===p.toLowerCase() ? ' active' : '';
-        html += `<button class="chip${active}" data-fpos="${p}">${label}</button>`;
-      });
-      shopFilter.innerHTML = html;
-      if(!shopFilter._v11wired){
-        shopFilter._v11wired = true;
-        shopFilter.addEventListener('click', function(e){
-          const b = e.target.closest('[data-fpos]');
-          if(!b) return;
-          window.fantasyShopPosFilter = b.dataset.fpos;
-          try{ if(typeof fantasyShopPosFilter !== 'undefined') fantasyShopPosFilter = b.dataset.fpos; }catch{}
-          shopFilter.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-          b.classList.add('active');
-          renderFantasyShopFixed();
-          try{ if(typeof beep==='function') beep('click'); }catch(e){}
-        });
-      }
-    }
-    if(posFilter){
-      const sport = (typeof fantasySport !== 'undefined' ? fantasySport : 'mlb');
-      let positions = ['all','P','C','1B','2B','3B','SS','OF'];
-      if(sport==='nfl') positions = ['all','QB','RB','WR','TE'];
-      else if(sport==='nba') positions = ['all','PG','SG','SF','PF','C'];
-      let html = '';
-      positions.forEach(p=>{
-        const label = p==='all' ? 'All' : p;
-        const active = (window.fantasyPosFilter||'all').toLowerCase()===p.toLowerCase() ? ' active' : '';
-        html += `<button class="chip${active}" data-fpos2="${p}">${label}</button>`;
-      });
-      posFilter.innerHTML = html;
-      if(!posFilter._v11wired){
-        posFilter._v11wired = true;
-        posFilter.addEventListener('click', function(e){
-          const b = e.target.closest('[data-fpos2]');
-          if(!b) return;
-          window.fantasyPosFilter = b.dataset.fpos2;
-          try{ fantasyPosFilter = b.dataset.fpos2; }catch{}
-          posFilter.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-          b.classList.add('active');
-          try{ if(typeof renderFantasy==='function') renderFantasy(); }catch(e){}
-          try{ if(typeof beep==='function') beep('click'); }catch(e){}
-        });
-      }
-    }
-  }
-
-  // Fixed render for Fantasy Shop - transparent cards + filters
-  window.renderFantasyShopFixed = function(){
-    const el = document.getElementById('fantasyShopList');
-    if(!el) return;
-    try{ if(typeof ensureFantasyPool==='function') ensureFantasyPool(); }catch(e){}
-
-    // Get sport
-    const sport = (typeof fantasyShopSport !== 'undefined' ? fantasyShopSport : (window.fantasyShopSport || 'mlb'));
-    let srcPool = [];
-    try{
-      if(sport==='mlb' && typeof buildPlayerPool==='function') srcPool = buildPlayerPool();
-      else if(sport==='nfl' && typeof buildNFLPlayerPool==='function') srcPool = buildNFLPlayerPool();
-      else if(sport==='nba' && typeof buildNBAPlayerPool==='function') srcPool = buildNBAPlayerPool();
-      else if(window.fantasyPlayerPool && Array.isArray(window.fantasyPlayerPool)) srcPool = window.fantasyPlayerPool.filter(p=>p.sport===sport);
-    }catch(e){ console.warn('build pool err', e); }
-
-    // Apply filters
-    const posFilter = (window.fantasyShopPosFilter || fantasyShopPosFilter || 'all').toLowerCase();
-    const gameFilter = (window.fantasyShopGameFilter || fantasyShopGameFilter || 'all');
-
-    let filtered = srcPool.slice();
-    if(posFilter!=='all'){
-      filtered = filtered.filter(p=> (p.pos||'').toLowerCase()===posFilter || (posFilter==='p' && ['p','sp','rp'].includes((p.pos||'').toLowerCase())));
-    }
-    if(gameFilter!=='all'){
-      filtered = filtered.filter(p=>p.gameId===gameFilter);
-    }
-
-    // Build game filter chips
-    buildGameFilterChips('fantasyShopGameFilter', gameFilter, function(gid){
-      window.fantasyShopGameFilter = gid;
-      try{ fantasyShopGameFilter = gid; }catch{}
-      renderFantasyShopFixed();
-    });
-
-    // Build position chips (ensures correct per sport)
-    buildPositionFilterChips();
-
-    if(!filtered.length){
-      el.innerHTML = `<div class="glass glass-blur panel-pad" style="text-align:center; padding:24px;"><b>No ${sport.toUpperCase()} players</b><div style="font-size:11px; opacity:0.6; margin-top:6px;">${posFilter!=='all' ? 'No '+posFilter.toUpperCase()+' in filtered games' : 'Try another game filter'}</div></div>`;
-      return;
-    }
-
-    let html = '';
-    filtered.slice(0,30).forEach(function(p){
-      const edge = p.edge || p.value || 0.22;
-      const prob = p.proj ? Math.min(0.92, 0.5 + (p.proj||0)/30) : 0.72;
-      const salary = p.salary ? '$'+p.salary.toLocaleString() : '';
-      const hdr = (p.team||'') + ' • ' + (p.pos||'') + (salary ? ' • '+salary : '');
-      // Transparent card like other game cards
-      html += `
-      <article class="game glass glass-blur" style="min-height:280px; background:rgba(255,255,255,0.08) !important; backdrop-filter: blur(12px) saturate(1.2); -webkit-backdrop-filter: blur(12px) saturate(1.2); border:1px solid rgba(255,255,255,0.14);">
-        <div class="game-head" style="background:rgba(255,255,255,0.04); border-bottom:1px solid rgba(255,255,255,0.08);">
-          <div class="tv" style="font-weight:800;">${hdr}</div>
-          <span class="badge hot" style="background:rgba(255,77,103,0.18); border:1px solid rgba(255,77,103,0.28); color:#ff8fa3;">EDGE ${(edge*100).toFixed(1)}%</span>
-        </div>
-        <div style="padding:14px 16px 0">
-          <b style="font-size:16px; letter-spacing:-0.02em; color:#eef2ff;">${p.name}</b>
-          <div class="mini" style="margin-top:4px; opacity:0.7;">${p.team||''} ${p.pos||''} ${salary ? '• '+salary : ''}</div>
-          <div class="mini" style="margin-top:2px;opacity:.6;">${(p.matchup||p.opp ? (p.team+' vs '+p.opp) : (p.gameId||''))} ${p.proj ? '• PROJ '+p.proj : ''}</div>
-        </div>
-        <div class="odds-grid" style="padding:12px 16px 0">
-          <div class="market" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:10px;">
-            <div class="row" style="display:flex; justify-content:space-between; align-items:center;"><span class="label" style="font-size:10px; opacity:0.6; letter-spacing:0.08em;">MODEL PROB</span><span class="badge" style="background:rgba(255,255,255,0.12);">${Math.round(prob*100)}%</span></div>
-            <div class="meter" style="height:6px; background:rgba(255,255,255,0.08); border-radius:999px; margin-top:8px; overflow:hidden;"><i style="display:block; height:100%; width:${prob*100}%; background:linear-gradient(90deg,#ff5a79,#ffb86a,#8a7cff); border-radius:999px;"></i></div>
-          </div>
-        </div>
-        <div class="game-actions" style="padding:12px 16px 16px; display:flex; gap:8px;">
-          <button class="btn" data-add-fshop="${p.name}" style="flex:1; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.14);">Add to Crew</button>
-          <button class="btn primary" data-copy-fshop="${p.name}" style="flex:1;">Copy</button>
-        </div>
-      </article>`;
-    });
-    el.innerHTML = html;
-
-    // Wire add/copy once
-    if(!el._v11wired){
-      el._v11wired = true;
-      el.addEventListener('click', function(e){
-        const add = e.target.closest('[data-add-fshop]');
-        if(add){
-          const nm = add.dataset.addFshop;
-          let pool = [];
-          try{
-            if(sport==='mlb' && typeof buildPlayerPool==='function') pool = buildPlayerPool();
-            else if(sport==='nfl' && typeof buildNFLPlayerPool==='function') pool = buildNFLPlayerPool();
-            else if(sport==='nba' && typeof buildNBAPlayerPool==='function') pool = buildNBAPlayerPool();
-          }catch(e){}
-          const pl = pool.find(x=>x.name===nm) || filtered.find(x=>x.name===nm);
-          if(pl){
-            try{
-              const map = (typeof getCurrentContestMap==='function') ? getCurrentContestMap() : (typeof DFS_CONTESTS!=='undefined'?DFS_CONTESTS:{classic:{slots:['P','P','C','1B','2B','3B','SS','OF','OF','OF']}});
-              const contest = map[ (typeof fantasyContest!=='undefined'?fantasyContest:'classic') ] || map.classic;
-              for(let i=0;i<contest.slots.length;i++){
-                if(!fantasyCrew[i] && (contest.slots[i]===pl.pos||contest.slots[i]==='FLEX'||contest.slots[i].includes(pl.pos))){
-                  fantasyCrew[i]=pl; break;
-                }
-              }
-              if(typeof saveFantasy==='function') saveFantasy();
-              if(typeof renderFantasy==='function') renderFantasy();
-              if(typeof beep==='function') beep('click');
-            }catch(err){ console.warn(err); }
-          }
-        }
-        const cp = e.target.closest('[data-copy-fshop]');
-        if(cp){
-          const t = cp.dataset.copyFshop;
-          if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t);
-          const orig = cp.textContent;
-          cp.textContent='Copied';
-          setTimeout(()=>{cp.textContent=orig;},1200);
-        }
-      });
-    }
-  };
-
-  // Override original renderFantasyShop to use fixed version
-  if(typeof window.renderFantasyShop !== 'undefined'){
-    const orig = window.renderFantasyShop;
-    window.renderFantasyShop = function(){
-      try{ return window.renderFantasyShopFixed(); }catch(e){ console.warn('fixed shop err, fallback', e); return orig(); }
-    };
-  } else {
-    window.renderFantasyShop = window.renderFantasyShopFixed;
-  }
-
-  // Fix for Fantasy Crew game filter - add same logic as dashboards
-  const originalRenderFantasy = window.renderFantasy;
-  window.renderFantasy = function(){
-    // Build game filter for fantasy crew
-    try{
-      const gameFilterEl = document.getElementById('fantasyGameFilter');
-      if(gameFilterEl){
-        buildGameFilterChips('fantasyGameFilter', (window.fantasyGameFilter||'all'), function(gid){
-          window.fantasyGameFilter = gid;
-          try{ fantasyGameFilter = gid; }catch{}
-          try{ if(typeof renderFantasy==='function' && renderFantasy._isWrapper) throw 'loop'; }catch{}
-          // Call original without recursion
-          if(originalRenderFantasy) originalRenderFantasy();
-          else buildPositionFilterChips();
-        });
-      }
-      buildPositionFilterChips();
-    }catch(e){ console.warn('fantasy game filter build err', e); }
-    // Call original
-    if(originalRenderFantasy){
-      try{ return originalRenderFantasy(); }catch(e){ console.warn('orig fantasy err', e); }
-    }
-  };
-  window.renderFantasy._isWrapper = true;
-
-  // Sport chips for shop - ensure they trigger full rebuild
-  function wireShopSportChips(){
-    const sportRow = document.getElementById('fantasyShopSportChips');
-    if(sportRow && !sportRow._v11sportWired){
-      sportRow._v11sportWired = true;
-      sportRow.addEventListener('click', function(e){
-        const b = e.target.closest('[data-fshop-sport]');
-        if(!b) return;
-        const sport = b.dataset.fshopSport;
-        window.fantasyShopSport = sport;
-        try{ fantasyShopSport = sport; }catch{}
-        window.fantasyShopPosFilter = 'all';
-        window.fantasyShopGameFilter = 'all';
-        try{ fantasyShopPosFilter='all'; fantasyShopGameFilter='all'; }catch{}
-        sportRow.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
-        b.classList.add('active');
-        renderFantasyShopFixed();
-        try{ if(typeof beep==='function') beep('click'); }catch(e){}
-      });
-    }
-  }
-
-  // Initial wiring after DOM ready
-  function init(){
-    wireShopSportChips();
-    buildPositionFilterChips();
-    // Render once to get transparent cards
-    setTimeout(()=>{ try{ renderFantasyShopFixed(); }catch(e){} }, 300);
-    setTimeout(()=>{ try{ renderFantasyShopFixed(); }catch(e){} }, 1000);
-  }
-
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-
-  console.log('Fantasy Shop v11 fix loaded: transparent cards + pos filter + game filter');
-})();
-</script>
-<style id="fantasy-shop-transparent-fix-v11">
-/* Make fantasy shop cards transparent like other game cards */
-#fantasyShopList .game,
-#fantasyShopList .game.glass,
-#fantasyShopList .game.glass-blur {
-  background: rgba(255,255,255,0.08) !important;
-  backdrop-filter: blur(12px) saturate(1.2) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(1.2) !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.12) !important;
-}
-#fantasyShopList .game .game-head {
-  background: rgba(255,255,255,0.04) !important;
-  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-}
-#fantasyShopList .game .odds-grid .market {
-  background: rgba(255,255,255,0.06) !important;
-}
-/* Ensure position and game filter chips are visible and clickable */
-#fantasyShopFilter, #fantasyShopGameFilter, #fantasyPositionFilter, #fantasyGameFilter {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 8px !important;
-  pointer-events: auto !important;
-}
-#fantasyShopFilter .chip, #fantasyShopGameFilter .chip, #fantasyPositionFilter .chip, #fantasyGameFilter .chip {
-  pointer-events: auto !important;
-  cursor: pointer !important;
-}
-</style>
-
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script>
-<script id="fantasy-shop-first-load-fix">
-(function(){
-  function ensureGamesLoaded(){
-    try{ if(typeof loadRealData==='function') loadRealData(); }catch(e){}
-  }
-  // Override renderFantasyShop to fix first-load empty
-  const _origRenderFantasyShop = window.renderFantasyShop;
-  function fixedRenderFantasyShop(){
-    const el=document.getElementById('fantasyShopList'); if(!el) return;
-    try{ ensureGamesLoaded(); }catch(e){}
-    // Get sport
-    let sport='mlb';
-    try{ sport = (typeof fantasyShopSport!=='undefined'?fantasyShopSport:(window.fantasyShopSport||'mlb')); }catch(e){}
-    let srcPool=[];
-    try{
-      if(sport==='mlb' && typeof buildPlayerPool==='function') srcPool=buildPlayerPool();
-      else if(sport==='nfl' && typeof buildNFLPlayerPool==='function') srcPool=buildNFLPlayerPool();
-      else if(sport==='nba' && typeof buildNBAPlayerPool==='function') srcPool=buildNBAPlayerPool();
-    }catch(e){ srcPool=[]; }
-    // If empty but games exist, retry after short delay (fixes first-open bug)
-    if(!srcPool.length){
-      const hasGames = (typeof games!=='undefined'&&games.length) || (typeof gamesNFL!=='undefined'&&gamesNFL.length) || (typeof gamesNBA!=='undefined'&&gamesNBA.length);
-      if(hasGames){
-        // Try again after ensuring pool
-        try{ if(typeof ensureFantasyPool==='function') ensureFantasyPool(); }catch(e){}
+  // Patch Set bankroll button to use permanent save
+  function patchResetBtn(){
+    const btn = document.getElementById('brReset');
+    if(!btn || btn._permaPatched) return;
+    btn._permaPatched = true;
+    btn.addEventListener('click', function(e){
+      // Let original handler run first, then enforce permanent save after prompt
+      setTimeout(function(){
         try{
-          if(sport==='mlb' && typeof buildPlayerPool==='function') srcPool=buildPlayerPool();
-          else if(sport==='nfl' && typeof buildNFLPlayerPool==='function') srcPool=buildNFLPlayerPool();
-          else if(sport==='nba' && typeof buildNBAPlayerPool==='function') srcPool=buildNBAPlayerPool();
-        }catch(e){}
-      }
-      if(!srcPool.length){
-        // Schedule retry - this fixes the "No MLB players until tab switch" bug
-        setTimeout(()=>{ try{ if(window.renderFantasyShop) window.renderFantasyShop(); }catch(e){} }, 400);
-        setTimeout(()=>{ try{ if(window.renderFantasyShop) window.renderFantasyShop(); }catch(e){} }, 1200);
-        // Show loading instead of "No MLB players" on first attempt
-        if(!el.innerHTML.includes('Loading')){
-          el.innerHTML='<div class="glass glass-blur panel-pad" style="text-align:center; padding:24px;"><b>Loading '+sport.toUpperCase()+' players...</b><div style="font-size:11px; opacity:0.6; margin-top:6px;">Building pool from '+( (typeof games!=='undefined'?games.length:0) )+' games</div></div>';
-        }
-        return;
-      }
-    }
-    // Call original if it exists and has more logic, otherwise render our version
-    if(_origRenderFantasyShop && _origRenderFantasyShop.toString().includes('fantasyShopSportChips')){
-      try{ return _origRenderFantasyShop(); }catch(e){ console.warn('orig shop failed', e); }
-    }
-    // Fallback render (should be covered by original, but ensure it works)
-    // Re-invoke original after our check
-    if(_origRenderFantasyShop){
-      try{ return _origRenderFantasyShop(); }catch(e){}
-    }
+          const data = cleanBrLoad();
+          if(data && data.startingBalance){
+            saveStartAmount(data.startingBalance);
+            cleanBrSave(data);
+            console.log('[Bankroll] Enforced permanent save after set:', data.startingBalance);
+          }
+        }catch{}
+      }, 500);
+    }, true);
   }
-  // Install override after a short delay to ensure original is defined
-  function install(){
-    if(typeof window.renderFantasyShop!=='undefined'){
-      window._origRenderFantasyShopBackup = window.renderFantasyShop;
-      window.renderFantasyShop = fixedRenderFantasyShop;
-      console.log('[Fix] Fantasy Shop first-load fix installed');
-    } else {
-      setTimeout(install, 300);
-    }
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', install);
-  else install();
-  setTimeout(install, 1000);
-  setTimeout(install, 2500);
+  setInterval(patchResetBtn, 1000);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', patchResetBtn);
+  else patchResetBtn();
 
-  // Also fix renderScreen to ensure fantasy shop renders on first switch
-  const _origSwitch = window.switchScreen;
-  if(typeof _origSwitch==='function'){
-    window.switchScreen = function(next){
-      const res = _origSwitch(next);
-      if(next==='fantasyshop'){
-        setTimeout(()=>{ try{ window.renderFantasyShop(); }catch(e){} }, 100);
-        setTimeout(()=>{ try{ window.renderFantasyShop(); }catch(e){} }, 600);
-      }
-      return res;
-    };
-  }
+  console.log('[Bankroll] Permanent save fix installed - saves like themes (global + per-user + 10yr cookie)');
 })();
 </script>
 
